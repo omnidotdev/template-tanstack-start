@@ -39,7 +39,7 @@ export const Route = createRootRouteWithContext<{
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },
-      ...seo({ title: "Tanstack Start Template" }),
+      ...seo(),
     ],
     links: [
       {

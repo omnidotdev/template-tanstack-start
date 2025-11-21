@@ -4,6 +4,7 @@ import { Link, useRouteContext, useRouter } from "@tanstack/react-router";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/authClient";
+import { app } from "@/lib/config/app.config";
 
 export const Header = () => {
   const { auth } = useRouteContext({ strict: false });
@@ -28,7 +29,7 @@ export const Header = () => {
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/">
-            <h1 className="font-bold text-xl">Start Template</h1>
+            <h1 className="font-bold text-xl">{app.name}</h1>
           </Link>
 
           <div className="flex items-center gap-4">

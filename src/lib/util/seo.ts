@@ -1,25 +1,27 @@
+import { app } from "../config/app.config";
+
 export const seo = ({
   title,
   description,
   keywords,
   image,
 }: {
-  title: string;
+  title?: string;
   description?: string;
   image?: string;
   keywords?: string;
-}) => {
+} = {}) => {
   const tags = [
-    { title },
-    { name: "description", content: description },
+    { title: title ?? app.name },
+    { name: "description", content: description ?? app.description },
     { name: "keywords", content: keywords },
     { name: "twitter:title", content: title },
-    { name: "twitter:description", content: description },
+    { name: "twitter:description", content: description ?? app.description },
     { name: "twitter:creator", content: "@omnidotdev" },
     { name: "twitter:site", content: "@omnidotdev" },
     { name: "og:type", content: "website" },
-    { name: "og:title", content: title },
-    { name: "og:description", content: description },
+    { name: "og:title", content: title ?? app.name },
+    { name: "og:description", content: description ?? app.description },
     ...(image
       ? [
           { name: "twitter:image", content: image },
