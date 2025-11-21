@@ -31,6 +31,8 @@ const sharedConfig: GraphQLCodegenConfig["config"] = {
     Cursor: "string",
     BigInt: "string",
   },
+  // NB: the default type from codegen for unknown scalars is `any`. We override that with `unknown` here to require strict type casting and / or require customizing the scalar input/output above
+  defaultScalarType: "unknown",
   // NB: Reduce resulting application bundle size as const enums are inlined at compile time
   constEnum: true,
 };
