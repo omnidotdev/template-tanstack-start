@@ -8,19 +8,18 @@ import { graphql, type GraphQLResponseResolver, type RequestHandlerOptions } fro
  * @param options Options object to customize the behavior of the mock. ([see more](https://mswjs.io/docs/api/graphql#handler-options))
  * @see https://mswjs.io/docs/basics/response-resolver
  * @example
- * mockCountryQuery(
+ * mockUsersQuery(
  *   ({ query, variables }) => {
- *     const { code } = variables;
  *     return HttpResponse.json({
- *       data: { country }
+ *       data: { users }
  *     })
  *   },
  *   requestOptions
  * )
  */
-export const mockCountryQuery = (resolver: GraphQLResponseResolver<Types.CountryQuery, Types.CountryQueryVariables>, options?: RequestHandlerOptions) =>
-  graphql.query<Types.CountryQuery, Types.CountryQueryVariables>(
-    'Country',
+export const mockUsersQuery = (resolver: GraphQLResponseResolver<Types.UsersQuery, Types.UsersQueryVariables>, options?: RequestHandlerOptions) =>
+  graphql.query<Types.UsersQuery, Types.UsersQueryVariables>(
+    'Users',
     resolver,
     options
   )
