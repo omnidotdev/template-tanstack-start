@@ -1,14 +1,32 @@
+import { MenuRootProvider, useMenu } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useRouteContext, useRouter } from "@tanstack/react-router";
 
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import {
+  AvatarFallback,
+  AvatarImage,
+  AvatarRoot,
+} from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  MenuContent,
+  MenuItem,
+  MenuItemGroup,
+  MenuItemGroupLabel,
+  MenuItemText,
+  MenuPositioner,
+  MenuSeparator,
+  MenuTrigger,
+} from "@/components/ui/menu";
 import { authClient } from "@/lib/auth/authClient";
 import { app } from "@/lib/config/app.config";
 
 export const Header = () => {
   const { auth } = useRouteContext({ strict: false });
   const router = useRouter();
+
+  const accountMenu = useMenu();
 
   const { mutateAsync: signIn, isPending: isSignInPending } = useMutation({
     mutationFn: async () =>
@@ -19,8 +37,9 @@ export const Header = () => {
       }),
   });
 
-  const { mutateAsync: signOut, isPending: isSignOutPending } = useMutation({
+  const { mutateAsync: signOut } = useMutation({
     mutationFn: async () => await authClient.signOut(),
+    onMutate: () => accountMenu.api.setOpen(false),
     onSuccess: () => router.invalidate(),
   });
 
@@ -36,9 +55,36 @@ export const Header = () => {
             <ThemeToggle />
 
             {auth ? (
-              <Button onClick={() => signOut()} disabled={isSignOutPending}>
-                Sign Out
-              </Button>
+              <MenuRootProvider value={accountMenu}>
+                <MenuTrigger className="rounded-full">
+                  <AvatarRoot>
+                    <AvatarImage src={auth.user.image ?? undefined} />
+                    <AvatarFallback>{auth.user.name.charAt(0)}</AvatarFallback>
+                  </AvatarRoot>
+                </MenuTrigger>
+
+                <MenuPositioner>
+                  <MenuContent className="min-w-48">
+                    <MenuItemGroup>
+                      <MenuItemGroupLabel>My Account</MenuItemGroupLabel>
+
+                      <MenuItem value="profile" disabled>
+                        <MenuItemText>Profile</MenuItemText>
+                      </MenuItem>
+                    </MenuItemGroup>
+
+                    <MenuSeparator />
+
+                    <Button
+                      variant="destructive"
+                      onClick={() => signOut()}
+                      tabIndex={-1}
+                    >
+                      Sign Out
+                    </Button>
+                  </MenuContent>
+                </MenuPositioner>
+              </MenuRootProvider>
             ) : (
               <Button onClick={() => signIn()} disabled={isSignInPending}>
                 Sign In
