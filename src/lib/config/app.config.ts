@@ -5,6 +5,8 @@ export const app = {
   name: "Start Template",
   description:
     "Tanstack Start starter template. Designed and maintained by Omni.",
+  // ! TODO: replace with application url when this template is used.
+  url: "https://template-start.omni.dev",
   docsUrl: "https://docs.omni.dev",
   socials: {
     discord: "https://discord.gg/omnidotdev",
