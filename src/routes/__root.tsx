@@ -7,6 +7,8 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import appCss from "@/lib/styles/globals.css?url";
 import { seo } from "@/lib/util/seo";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -48,7 +50,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <Header />
+
+          <div className="relative flex h-dvh w-full flex-col gap-0 pl-[calc(100vw-100%)]">
+            <main className="flex-1">{children}</main>
+
+            <Footer />
+          </div>
+        </ThemeProvider>
+
         <TanStackDevtools
           config={{
             position: "bottom-right",
