@@ -22,6 +22,7 @@
     "@tanstack/react-router": "^1.139.0",
     "@tanstack/react-router-ssr-query": "^1.139.0",
     "@tanstack/react-start": "^1.139.0",
+    "better-auth": "^1.4.0-beta.25",
     "graphql": "^16.12.0",
     "graphql-request": "^7.3.4",
     "lucide-react": "^0.554.0",
