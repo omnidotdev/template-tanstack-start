@@ -1,0 +1,23 @@
+node_modules
+
+# tanstack
+.nitro
+.tanstack
+.output
+.vite
+dist
+
+# TLS/HTTPS
+certificates
+
+# environment
+*.env*
+# below are safe to commit
+!.env
+!.env.development
+!.env.production
+!.env.test
+!.env.local.template
+
+# misc
+.DS_Store
