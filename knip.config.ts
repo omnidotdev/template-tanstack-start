@@ -21,6 +21,8 @@ const knipConfig: KnipConfig = {
   ignoreDependencies: [
     // used for globals.css
     "tailwindcss",
+    // used for globals.css
+    "tw-animate-css",
     // used for graphql codegen scripts
     "dotenv",
   ],
