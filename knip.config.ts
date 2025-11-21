@@ -15,6 +15,8 @@ const knipConfig: KnipConfig = {
   "graphql-codegen": {
     config: ["package.json", "src/lib/graphql/codegen.config.ts"],
   },
+  // Used for proper management of thornberry components. See: https://knip.dev/reference/configuration#ignoreexportsusedinfile
+  ignoreExportsUsedInFile: true,
   ignore: ["**/*.gen.*", "**/generated/**"],
   ignoreDependencies: [
     // used for globals.css

@@ -6,6 +6,8 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 
+import { Button } from "@/components/ui/button";
+
 import type { ErrorComponentProps } from "@tanstack/react-router";
 
 export const ErrorBoundary = ({ error }: ErrorComponentProps) => {
@@ -19,14 +21,13 @@ export const ErrorBoundary = ({ error }: ErrorComponentProps) => {
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-6 p-4">
       <ErrorComponent error={error} />
       <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
+        <Button
           onClick={() => {
             router.invalidate();
           }}
         >
           Try Again
-        </button>
+        </Button>
         {isRoot ? (
           <Link to="/">Home</Link>
         ) : (
