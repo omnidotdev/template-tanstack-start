@@ -31,6 +31,8 @@ const sharedConfig: GraphQLCodegenConfig["config"] = {
     Cursor: "string",
     BigInt: "string",
   },
+  // NB: Reduce resulting application bundle size as const enums are inlined at compile time
+  constEnum: true,
 };
 
 /**
