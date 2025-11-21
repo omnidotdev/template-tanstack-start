@@ -30,8 +30,8 @@ export const Footer = () => {
           <img
             src={
               theme === "light"
-                ? "/discord-logo-black.png"
-                : "/discord-logo-white.png"
+                ? "/socials/discord-logo-black.png"
+                : "/socials/discord-logo-white.png"
             }
             alt="Discord"
             className="h-auto w-5"
@@ -43,7 +43,11 @@ export const Footer = () => {
           onClick={() => navigate({ href: app.socials.x })}
         >
           <img
-            src={theme === "light" ? "/x-logo-black.png" : "/x-logo-white.png"}
+            src={
+              theme === "light"
+                ? "/socials/x-logo-black.png"
+                : "/socials/x-logo-white.png"
+            }
             alt="X"
             className="h-auto w-4"
           />

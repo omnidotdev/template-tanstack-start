@@ -12,7 +12,7 @@ export const seo = ({
   keywords?: string;
 } = {}) => {
   const tags = [
-    { title: title ?? app.name },
+    { title: title ? `${title} | ${app.name}` : app.name },
     { name: "description", content: description ?? app.description },
     { name: "keywords", content: keywords },
     { name: "twitter:title", content: title },
