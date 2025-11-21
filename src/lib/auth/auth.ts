@@ -26,24 +26,4 @@ export const auth = betterAuth({
     // NB: must be the last plugin in the array
     reactStartCookies(),
   ],
-  session: {
-    cookieCache: {
-      enabled: true,
-      maxAge: 300, // 5 minutes
-      strategy: "jwt",
-      refreshCache: {
-        updateAge: 60, // Refresh when 60 seconds remain before expiry
-      },
-    },
-  },
-  //  TODO: replace `advanced` configuration with this when https://github.com/better-auth/better-auth/pull/6013 is merged and released
-  // account: {
-  //   storeStateStrategy: "cookie",
-  //   storeAccountCookie: true, // Store account data after OAuth flow in a cookie
-  // },
-  advanced: {
-    oauthConfig: {
-      storeStateStrategy: "cookie",
-    },
-  },
 });
