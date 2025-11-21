@@ -24,9 +24,9 @@ const sharedPlugins: GraphQLCodegenConfig["plugins"] = [
  */
 const sharedConfig: GraphQLCodegenConfig["config"] = {
   scalars: {
-    // TODO: determine if these should be cast as strings instead. Have had troubles with `Date`
-    // Date: "Date",
-    // Datetime: "Date",
+    // NB: our servers accepts `Date` as input thus we should narrow the type, but will return a string representation when querying.
+    Date: { input: "Date", output: "string" },
+    Datetime: { input: "Date", output: "string" },
     UUID: "string",
     Cursor: "string",
     BigInt: "string",
