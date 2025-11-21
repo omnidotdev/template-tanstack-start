@@ -19,6 +19,7 @@ export const auth = betterAuth({
           discoveryUrl: AUTH_DISCOVERY_URL!,
           scopes: ["openid", "profile", "email", "offline_access"],
           prompt: "consent",
+          accessType: "offline",
         },
       ],
     }),
