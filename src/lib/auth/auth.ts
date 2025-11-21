@@ -36,6 +36,11 @@ export const auth = betterAuth({
       },
     },
   },
+  //  TODO: replace `advanced` configuration with this when https://github.com/better-auth/better-auth/pull/6013 is merged and released
+  // account: {
+  //   storeStateStrategy: "cookie",
+  //   storeAccountCookie: true, // Store account data after OAuth flow in a cookie
+  // },
   advanced: {
     oauthConfig: {
       storeStateStrategy: "cookie",
