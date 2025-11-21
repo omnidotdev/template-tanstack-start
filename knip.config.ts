@@ -15,10 +15,12 @@ const knipConfig: KnipConfig = {
   "graphql-codegen": {
     config: ["package.json", "src/lib/graphql/codegen.config.ts"],
   },
-  ignore: ["**/*.gen.*"],
+  ignore: ["**/*.gen.*", "**/generated/**"],
   ignoreDependencies: [
     // used for globals.css
     "tailwindcss",
+    // used for graphql codegen scripts
+    "dotenv",
   ],
   tags: ["-knipignore"],
 };
