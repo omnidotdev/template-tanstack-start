@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import { Link, useRouteContext, useRouter } from "@tanstack/react-router";
 
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
@@ -8,12 +9,19 @@ export const Header = () => {
   const { auth } = useRouteContext({ strict: false });
   const router = useRouter();
 
-  const signIn = async () =>
-    await authClient.signIn.oauth2({
-      providerId: "omni",
-      callbackURL: "/",
-      disableRedirect: false,
-    });
+  const { mutateAsync: signIn, isPending: isSignInPending } = useMutation({
+    mutationFn: async () =>
+      await authClient.signIn.oauth2({
+        providerId: "omni",
+        callbackURL: "/",
+        disableRedirect: false,
+      }),
+  });
+
+  const { mutateAsync: signOut, isPending: isSignOutPending } = useMutation({
+    mutationFn: async () => await authClient.signOut(),
+    onSuccess: () => router.invalidate(),
+  });
 
   return (
     <header className="fixed top-0 z-50 w-full border border-b shadow-sm blur-ms">
@@ -27,16 +35,13 @@ export const Header = () => {
             <ThemeToggle />
 
             {auth ? (
-              <Button
-                onClick={async () => {
-                  await authClient.signOut();
-                  router.invalidate();
-                }}
-              >
+              <Button onClick={() => signOut()} disabled={isSignOutPending}>
                 Sign Out
               </Button>
             ) : (
-              <Button onClick={signIn}>Sign In</Button>
+              <Button onClick={() => signIn()} disabled={isSignInPending}>
+                Sign In
+              </Button>
             )}
           </div>
         </div>
