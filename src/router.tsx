@@ -52,7 +52,7 @@ export function getRouter() {
 
   const router = createRouter({
     routeTree,
-    context: { queryClient, session: null },
+    context: { queryClient, auth: null },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
     defaultPreload: "intent",
