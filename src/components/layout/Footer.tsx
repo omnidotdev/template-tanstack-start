@@ -1,12 +1,9 @@
-import { useNavigate } from "@tanstack/react-router";
-
-import { Button } from "@/components/ui/button";
+import ExternalLink from "@/components/core/ExternalLink";
 import { app } from "@/lib/config/app.config";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export const Footer = () => {
   const { theme } = useTheme();
-  const navigate = useNavigate();
 
   return (
     <footer className="flex w-full items-center justify-center gap-1 p-4 text-muted-foreground">
@@ -16,17 +13,14 @@ export const Footer = () => {
 
       <div className="h-1/2 w-px bg-muted-foreground/30" />
 
-      <Button variant="ghost" onClick={() => navigate({ href: app.docsUrl })}>
+      <ExternalLink variant="ghost" href={app.docsUrl}>
         Docs
-      </Button>
+      </ExternalLink>
 
       <div className="h-1/2 w-px bg-muted-foreground/30" />
 
       <div className="flex items-center gap-1">
-        <Button
-          variant="ghost"
-          onClick={() => navigate({ href: app.socials.discord })}
-        >
+        <ExternalLink variant="ghost" href={app.socials.discord}>
           <img
             src={
               theme === "light"
@@ -36,12 +30,9 @@ export const Footer = () => {
             alt="Discord"
             className="h-auto w-5"
           />
-        </Button>
+        </ExternalLink>
 
-        <Button
-          variant="ghost"
-          onClick={() => navigate({ href: app.socials.x })}
-        >
+        <ExternalLink variant="ghost" href={app.socials.x}>
           <img
             src={
               theme === "light"
@@ -51,7 +42,7 @@ export const Footer = () => {
             alt="X"
             className="h-auto w-4"
           />
-        </Button>
+        </ExternalLink>
       </div>
     </footer>
   );

@@ -21,6 +21,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-2 hover:underline",
         destructive:
           "bg-destructive text-background shadow-xs hover:bg-destructive/90 focus-visible:ring-red-500 aria-invalid:ring-red-500/20 dark:aria-invalid:ring-red-500/40",
+        unstyled: "",
       },
       size: {
         sm: "h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5",

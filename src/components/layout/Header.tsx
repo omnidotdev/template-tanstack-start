@@ -1,7 +1,8 @@
 import { MenuRootProvider, useMenu } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { Link, useRouteContext, useRouter } from "@tanstack/react-router";
+import { useRouteContext, useRouter } from "@tanstack/react-router";
 
+import InternalLink from "@/components/core/InternalLink";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import {
   AvatarFallback,
@@ -47,9 +48,9 @@ export const Header = () => {
     <header className="fixed top-0 z-50 w-full border border-b shadow-sm blur-ms">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/">
+          <InternalLink to="/" variant="unstyled" className="-ml-4">
             <h1 className="font-bold text-xl">{app.name}</h1>
-          </Link>
+          </InternalLink>
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
@@ -69,9 +70,13 @@ export const Header = () => {
                       <MenuItemGroupLabel>My Account</MenuItemGroupLabel>
 
                       <MenuItem value="profile" asChild>
-                        <Link to="/profile">
+                        <InternalLink
+                          to="/profile"
+                          variant="unstyled"
+                          className="justify-start"
+                        >
                           <MenuItemText>Profile</MenuItemText>
-                        </Link>
+                        </InternalLink>
                       </MenuItem>
                     </MenuItemGroup>
 
