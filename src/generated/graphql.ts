@@ -348,6 +348,22 @@ export type PostEdge = {
   node?: Maybe<Post>;
 };
 
+/** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
+export type PostFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<PostFilter>>;
+  /** Filter by the object’s `author` relation. */
+  author?: InputMaybe<UserFilter>;
+  /** Filter by the object’s `authorId` field. */
+  authorId?: InputMaybe<UuidFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<PostFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<PostFilter>>;
+  /** Filter by the object’s `rowId` field. */
+  rowId?: InputMaybe<UuidFilter>;
+};
+
 /** An input for mutations affecting `Post` */
 export type PostInput = {
   authorId: Scalars['UUID']['input'];
@@ -431,6 +447,7 @@ export type QueryPostsArgs = {
   after?: InputMaybe<Scalars['Cursor']['input']>;
   before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -461,10 +478,37 @@ export type QueryUsersArgs = {
   after?: InputMaybe<Scalars['Cursor']['input']>;
   before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<UserCondition>;
+  filter?: InputMaybe<UserFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<UserOrderBy>>;
+};
+
+/** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
+export type UuidFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['UUID']['input']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['UUID']['input']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['UUID']['input']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['UUID']['input']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['UUID']['input']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['UUID']['input']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['UUID']['input']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['UUID']['input']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['UUID']['input']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['UUID']['input']>>;
 };
 
 /** All input for the `updatePostById` mutation. */
@@ -590,6 +634,7 @@ export type UserAuthoredPostsArgs = {
   after?: InputMaybe<Scalars['Cursor']['input']>;
   before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<PostCondition>;
+  filter?: InputMaybe<PostFilter>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -626,6 +671,24 @@ export type UserEdge = {
   node?: Maybe<User>;
 };
 
+/** A filter to be used against `User` object types. All fields are combined with a logical ‘and.’ */
+export type UserFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<UserFilter>>;
+  /** Filter by the object’s `authoredPosts` relation. */
+  authoredPosts?: InputMaybe<UserToManyPostFilter>;
+  /** Some related `authoredPosts` exist. */
+  authoredPostsExist?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Filter by the object’s `identityProviderId` field. */
+  identityProviderId?: InputMaybe<UuidFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<UserFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<UserFilter>>;
+  /** Filter by the object’s `rowId` field. */
+  rowId?: InputMaybe<UuidFilter>;
+};
+
 /** An input for mutations affecting `User` */
 export type UserInput = {
   createdAt?: InputMaybe<Scalars['Datetime']['input']>;
@@ -651,6 +714,16 @@ export type UserPatch = {
   identityProviderId?: InputMaybe<Scalars['UUID']['input']>;
   rowId?: InputMaybe<Scalars['UUID']['input']>;
   updatedAt?: InputMaybe<Scalars['Datetime']['input']>;
+};
+
+/** A filter to be used against many `Post` object types. All fields are combined with a logical ‘and.’ */
+export type UserToManyPostFilter = {
+  /** Every related `Post` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  every?: InputMaybe<PostFilter>;
+  /** No related `Post` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  none?: InputMaybe<PostFilter>;
+  /** Some related `Post` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  some?: InputMaybe<PostFilter>;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
