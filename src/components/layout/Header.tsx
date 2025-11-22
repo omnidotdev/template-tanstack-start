@@ -1,6 +1,10 @@
 import { MenuRootProvider, useMenu } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext, useRouter } from "@tanstack/react-router";
+import {
+  useLocation,
+  useRouteContext,
+  useRouter,
+} from "@tanstack/react-router";
 
 import InternalLink from "@/components/core/InternalLink";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
@@ -26,6 +30,7 @@ import { app } from "@/lib/config/app.config";
 export const Header = () => {
   const { auth } = useRouteContext({ strict: false });
   const router = useRouter();
+  const location = useLocation();
 
   const accountMenu = useMenu();
 
@@ -33,7 +38,7 @@ export const Header = () => {
     mutationFn: async () =>
       await authClient.signIn.oauth2({
         providerId: "omni",
-        callbackURL: "/",
+        callbackURL: location.pathname,
         disableRedirect: false,
       }),
   });
@@ -45,7 +50,7 @@ export const Header = () => {
   });
 
   return (
-    <header className="fixed top-0 z-50 w-full border border-b shadow-sm blur-ms">
+    <header className="fixed top-0 z-50 w-full border border-b bg-background shadow-sm blur-ms">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex gap-2">
