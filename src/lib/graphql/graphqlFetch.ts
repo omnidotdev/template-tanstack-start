@@ -1,10 +1,24 @@
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { parse } from "graphql";
 import { GraphQLClient, gql } from "graphql-request";
 
+import { auth } from "@/lib/auth/auth";
 import { API_GRAPHQL_URL } from "@/lib/config/env.config";
 
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import type { Variables } from "graphql-request";
+
+const getAccessToken = createServerFn().handler(async () => {
+  const request = getRequest();
+
+  const { accessToken } = await auth.api.getAccessToken({
+    body: { providerId: "omni" },
+    headers: request.headers,
+  });
+
+  return accessToken;
+});
 
 type FetchOptions = {
   /** Request cache setting. */
@@ -22,13 +36,14 @@ export const graphqlFetch =
     options?: (HeadersInit & FetchOptions) | FetchOptions,
   ) =>
   async (): Promise<TData> => {
+    const accessToken = await getAccessToken();
+
     const { cache, ...restOptions } = options || {};
 
     const client = new GraphQLClient(API_GRAPHQL_URL!, {
       headers: {
         "Content-Type": "application/json",
-        // TODO: fetch session and provide accessToken below
-        // Authorization: `Bearer ${session?.accessToken ?? ""}`,
+        Authorization: `Bearer ${accessToken}`,
         ...restOptions,
       },
       cache,
