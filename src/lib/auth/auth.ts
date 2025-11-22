@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { genericOAuth } from "better-auth/plugins";
-import { reactStartCookies } from "better-auth/react-start";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 
 import {
   AUTH_CLIENT_ID,
@@ -24,6 +24,6 @@ export const auth = betterAuth({
       ],
     }),
     // NB: must be the last plugin in the array
-    reactStartCookies(),
+    tanstackStartCookies(),
   ],
 });
