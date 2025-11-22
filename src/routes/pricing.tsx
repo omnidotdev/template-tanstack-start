@@ -2,6 +2,7 @@ import { Format, TabsRootProvider, useTabs } from "@ark-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckIcon } from "lucide-react";
 
+import { FrequentlyAskedQuestions } from "@/components/pricing/FrequentlyAskedQuestions";
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
@@ -151,6 +152,8 @@ function PricingPage() {
           ))}
         </TabsContent>
       </TabsRootProvider>
+
+      <FrequentlyAskedQuestions className="mt-12 w-full" />
     </div>
   );
 }
