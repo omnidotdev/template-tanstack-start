@@ -11,7 +11,7 @@
         "@tanstack/react-router": "^1.139.0",
         "@tanstack/react-router-ssr-query": "^1.139.0",
         "@tanstack/react-start": "^1.139.0",
-        "better-auth": "^1.4.0-beta.25",
+        "better-auth": "^1.4.0-beta.27",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "graphql": "^16.12.0",
@@ -173,9 +173,9 @@
 
     "@babel/types": ["@babel/types@7.28.5", "", { "dependencies": { "@babel/helper-string-parser": "^7.27.1", "@babel/helper-validator-identifier": "^7.28.5" } }, "sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA=="],
 
-    "@better-auth/core": ["@better-auth/core@1.4.0-beta.25", "", { "dependencies": { "@standard-schema/spec": "^1.0.0", "zod": "^4.1.12" }, "peerDependencies": { "@better-auth/utils": "0.3.0", "@better-fetch/fetch": "1.1.18", "better-call": "1.0.28", "jose": "^6.1.0", "kysely": "^0.28.5", "nanostores": "^1.0.1" } }, "sha512-1GSi/TkzbcSKAB0MmQFEsv9WSbdWsx8qrZw3VKV4z/2hPu3BiW8PlBQwFiUbkS2steHUElHxfchb0lMOKOuTzA=="],
+    "@better-auth/core": ["@better-auth/core@1.4.0-beta.27", "", { "dependencies": { "@standard-schema/spec": "^1.0.0", "zod": "^4.1.12" }, "peerDependencies": { "@better-auth/utils": "0.3.0", "@better-fetch/fetch": "1.1.18", "better-call": "1.1.0", "jose": "^6.1.0", "kysely": "^0.28.5", "nanostores": "^1.0.1" } }, "sha512-ZNqI7Cm9L/4iTE40A+CTHe44CjXoa/LXnJXU484QgcH4qIWeLUvACNLMIQiqOPJIai/CJh9CJ7gI/rVIE4TZ5w=="],
 
-    "@better-auth/telemetry": ["@better-auth/telemetry@1.4.0-beta.25", "", { "dependencies": { "@better-auth/utils": "0.3.0", "@better-fetch/fetch": "1.1.18" }, "peerDependencies": { "@better-auth/core": "1.4.0-beta.25" } }, "sha512-fDuY1I9eJlOpLuQneC15W61/slt8MMw3yRCTf4mFLKi3hCm/WmT2uwSMfZXkYj2W5PKobFTPtkbqhiKbJHnHTw=="],
+    "@better-auth/telemetry": ["@better-auth/telemetry@1.4.0-beta.27", "", { "dependencies": { "@better-auth/utils": "0.3.0", "@better-fetch/fetch": "1.1.18" }, "peerDependencies": { "@better-auth/core": "1.4.0-beta.27" } }, "sha512-c+BvRxPhgzRkRcIcHmc2KSRoViy6kIt+RnOFa1RC1L04DCkUIumJofsX2jx7nMTlGRvq/paXCriZ9LRNKzMYHA=="],
 
     "@better-auth/utils": ["@better-auth/utils@0.3.0", "", {}, "sha512-W+Adw6ZA6mgvnSnhOki270rwJ42t4XzSK6YWGF//BbVXL6SwCLWfyzBc1lN2m/4RM28KubdBKQ4X5VMoLRNPQw=="],
 
@@ -939,9 +939,9 @@
 
     "baseline-browser-mapping": ["baseline-browser-mapping@2.8.30", "", { "bin": { "baseline-browser-mapping": "dist/cli.js" } }, "sha512-aTUKW4ptQhS64+v2d6IkPzymEzzhw+G0bA1g3uBRV3+ntkH+svttKseW5IOR4Ed6NUVKqnY7qT3dKvzQ7io4AA=="],
 
-    "better-auth": ["better-auth@1.4.0-beta.25", "", { "dependencies": { "@better-auth/core": "1.4.0-beta.25", "@better-auth/telemetry": "1.4.0-beta.25", "@better-auth/utils": "0.3.0", "@better-fetch/fetch": "1.1.18", "@noble/ciphers": "^2.0.0", "@noble/hashes": "^2.0.0", "@standard-schema/spec": "^1.0.0", "better-call": "1.0.28", "defu": "^6.1.4", "jose": "^6.1.0", "kysely": "^0.28.5", "nanostores": "^1.0.1", "zod": "^4.1.12" } }, "sha512-EVxG++DILTnfR6CZ37ya/IUIoTaOSN21xcqJJcsLUCNtJV1hX5QeFIRAVhD/ogaDeW2umFQstgNu0wSwzsuldw=="],
+    "better-auth": ["better-auth@1.4.0-beta.27", "", { "dependencies": { "@better-auth/core": "1.4.0-beta.27", "@better-auth/telemetry": "1.4.0-beta.27", "@better-auth/utils": "0.3.0", "@better-fetch/fetch": "1.1.18", "@noble/ciphers": "^2.0.0", "@noble/hashes": "^2.0.0", "@standard-schema/spec": "^1.0.0", "better-call": "1.1.0", "defu": "^6.1.4", "jose": "^6.1.0", "kysely": "^0.28.5", "nanostores": "^1.0.1", "zod": "^4.1.12" } }, "sha512-rsGlnjPV47l1WLQbsD7kdnhh8lVAzdRShTiwS74R9CNPWWNKyhXdM8sGGbaPwLtDEOW5lutNddnNzdT+Ct6RSA=="],
 
-    "better-call": ["better-call@1.0.28", "", { "dependencies": { "@better-auth/utils": "^0.3.0", "@better-fetch/fetch": "^1.1.4", "rou3": "^0.5.1", "set-cookie-parser": "^2.7.1" } }, "sha512-b2nF+LgRvqimUe31tVOIxmYVVb8vOFmXuD+rOkI3Qvqaw8OgC3kqykdz7cY40tjcMWPeHxneGgd5ukMlEs5MYQ=="],
+    "better-call": ["better-call@1.1.0", "", { "dependencies": { "@better-auth/utils": "^0.3.0", "@better-fetch/fetch": "^1.1.4", "rou3": "^0.5.1", "set-cookie-parser": "^2.7.1" } }, "sha512-7CecYG+yN8J1uBJni/Mpjryp8bW/YySYsrGEWgFe048ORASjq17keGjbKI2kHEOSc6u8pi11UxzkJ7jIovQw6w=="],
 
     "binary-extensions": ["binary-extensions@2.3.0", "", {}, "sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw=="],
 
