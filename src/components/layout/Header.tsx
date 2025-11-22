@@ -68,8 +68,10 @@ export const Header = () => {
                     <MenuItemGroup>
                       <MenuItemGroupLabel>My Account</MenuItemGroupLabel>
 
-                      <MenuItem value="profile" disabled>
-                        <MenuItemText>Profile</MenuItemText>
+                      <MenuItem value="profile" asChild>
+                        <Link to="/profile">
+                          <MenuItemText>Profile</MenuItemText>
+                        </Link>
                       </MenuItem>
                     </MenuItemGroup>
 
