@@ -331,9 +331,9 @@ export type PostCondition = {
 export type PostConnection = {
   __typename?: 'PostConnection';
   /** A list of edges which contains the `Post` and cursor to aid in pagination. */
-  edges: Array<Maybe<PostEdge>>;
+  edges: Array<PostEdge>;
   /** A list of `Post` objects. */
-  nodes: Array<Maybe<Post>>;
+  nodes: Array<Post>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Post` you could get from the connection. */
@@ -346,7 +346,7 @@ export type PostEdge = {
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Post` at the end of the edge. */
-  node?: Maybe<Post>;
+  node: Post;
 };
 
 /** A filter to be used against `Post` object types. All fields are combined with a logical ‘and.’ */
@@ -654,9 +654,9 @@ export type UserCondition = {
 export type UserConnection = {
   __typename?: 'UserConnection';
   /** A list of edges which contains the `User` and cursor to aid in pagination. */
-  edges: Array<Maybe<UserEdge>>;
+  edges: Array<UserEdge>;
   /** A list of `User` objects. */
-  nodes: Array<Maybe<User>>;
+  nodes: Array<User>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `User` you could get from the connection. */
@@ -669,7 +669,7 @@ export type UserEdge = {
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `User` at the end of the edge. */
-  node?: Maybe<User>;
+  node: User;
 };
 
 /** A filter to be used against `User` object types. All fields are combined with a logical ‘and.’ */
