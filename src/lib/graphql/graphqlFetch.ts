@@ -1,31 +1,16 @@
-import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
+import { createServerFn } from "@tanstack/react-start";
 import { parse } from "graphql";
 import { GraphQLClient, gql } from "graphql-request";
 
-import { auth } from "@/lib/auth/auth";
 import { API_GRAPHQL_URL } from "@/lib/config/env.config";
-import { authClient } from "../auth/authClient";
+import { authMiddleware } from "@/server/authMiddleware";
 
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import type { Variables } from "graphql-request";
 
-const getAccessToken = createIsomorphicFn()
-  .server(async () => {
-    const headers = getRequestHeaders();
-
-    const { accessToken } = await auth.api.getAccessToken({
-      body: { providerId: "omni" },
-      headers,
-    });
-
-    return accessToken;
-  })
-  .client(async () => {
-    const { data } = await authClient.getAccessToken({ providerId: "omni" });
-
-    return data?.accessToken;
-  });
+const getAccessToken = createServerFn()
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => context.accessToken);
 
 type FetchOptions = {
   /** Request cache setting. */

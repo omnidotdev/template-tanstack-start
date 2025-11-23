@@ -2,8 +2,6 @@ import { Format } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
-import { createRemoteJWKSet, jwtVerify } from "jose";
 import { CheckIcon } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,12 +14,12 @@ import {
   CardRoot,
   CardTitle,
 } from "@/components/ui/card";
-import { auth } from "@/lib/auth/auth";
 import { authClient } from "@/lib/auth/authClient";
-import { AUTH_ISSUER_URL, BASE_URL } from "@/lib/config/env.config";
+import { BASE_URL } from "@/lib/config/env.config";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { cn } from "@/lib/utils";
 import { stripe } from "@/payments/client";
+import { authMiddleware } from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
 import type { CardProps } from "@/components/ui/card";
@@ -33,19 +31,9 @@ const checkoutSchema = z.object({
 
 const getCheckoutUrl = createServerFn({ method: "POST" })
   .inputValidator((data) => checkoutSchema.parse(data))
-  .handler(async ({ data }) => {
+  .middleware([authMiddleware])
+  .handler(async ({ data, context }) => {
     let customerId: Stripe.Customer["id"];
-
-    const headers = getRequestHeaders();
-
-    const { idToken } = await auth.api.getAccessToken({
-      body: { providerId: "omni" },
-      headers,
-    });
-
-    const jwks = createRemoteJWKSet(new URL(`${AUTH_ISSUER_URL!}/jwks`));
-
-    const { payload } = await jwtVerify(idToken!, jwks);
 
     const customers = await stripe.customers.search({
       query: `email:"${data.email}"`,
@@ -55,7 +43,7 @@ const getCheckoutUrl = createServerFn({ method: "POST" })
       const customer = await stripe.customers.create({
         email: data.email,
         metadata: {
-          externalId: payload.sub!,
+          externalId: context.idToken.sub!,
         },
       });
 
