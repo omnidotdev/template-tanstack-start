@@ -2,12 +2,13 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import {
   HeadContent,
+  Outlet,
   Scripts,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -18,18 +19,21 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import { getThemeServerFn } from "@/server/theme";
 
 import type { QueryClient } from "@tanstack/react-query";
-import type { Session, User } from "better-auth";
 
 const fetchSession = createServerFn().handler(async () => {
-  const request = getRequest();
+  const headers = getRequestHeaders();
 
-  return await auth.api.getSession({ headers: request.headers });
+  return await auth.api.getSession({ headers });
 });
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
-  auth: { session: Session; user: User } | null;
 }>()({
+  beforeLoad: async () => {
+    const session = await fetchSession();
+
+    return { auth: session };
+  },
   head: () => ({
     meta: [
       {
@@ -48,14 +52,17 @@ export const Route = createRootRouteWithContext<{
       },
     ],
   }),
-  beforeLoad: async () => {
-    const session = await fetchSession();
-
-    return { auth: session };
-  },
   loader: () => getThemeServerFn(),
-  shellComponent: RootDocument,
+  component: RootComponent,
 });
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
+  );
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const theme = Route.useLoaderData();
