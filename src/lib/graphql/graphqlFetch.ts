@@ -1,26 +1,31 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createIsomorphicFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { parse } from "graphql";
 import { GraphQLClient, gql } from "graphql-request";
 
 import { auth } from "@/lib/auth/auth";
 import { API_GRAPHQL_URL } from "@/lib/config/env.config";
+import { authClient } from "../auth/authClient";
 
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import type { Variables } from "graphql-request";
 
-// TODO: debug. Seems to throw error on occasion, invalidating the session and forcing sign out
-// Possibly make this isomorphic and use `authClient` when necessary?
-const getAccessToken = createServerFn().handler(async () => {
-  const headers = getRequestHeaders();
+const getAccessToken = createIsomorphicFn()
+  .server(async () => {
+    const headers = getRequestHeaders();
 
-  const { accessToken } = await auth.api.getAccessToken({
-    body: { providerId: "omni" },
-    headers,
+    const { accessToken } = await auth.api.getAccessToken({
+      body: { providerId: "omni" },
+      headers,
+    });
+
+    return accessToken;
+  })
+  .client(async () => {
+    const { data } = await authClient.getAccessToken({ providerId: "omni" });
+
+    return data?.accessToken;
   });
-
-  return accessToken;
-});
 
 type FetchOptions = {
   /** Request cache setting. */
