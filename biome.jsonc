@@ -80,7 +80,7 @@
         "noArrayIndexKey": "warn",
         "noConsole": {
           "level": "error",
-          "options": { "allow": ["error", "warn"] }
+          "options": { "allow": ["error", "warn", "info"] }
         }
       }
     }
