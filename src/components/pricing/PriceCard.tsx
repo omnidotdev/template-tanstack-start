@@ -24,17 +24,33 @@ import type { CardProps } from "@/components/ui/card";
 
 const checkoutSchema = z.object({
   priceId: z.string().startsWith("price_"),
-  email: z.email().optional(),
+  email: z.email(),
 });
 
 const getCheckoutUrl = createServerFn({ method: "POST" })
   .inputValidator((data) => checkoutSchema.parse(data))
   .handler(async ({ data }) => {
+    let customerId: Stripe.Customer["id"];
+
+    const customers = await stripe.customers.search({
+      query: `email:"${data.email}"`,
+    });
+
+    if (!customers.data.length) {
+      const customer = await stripe.customers.create({
+        email: data.email,
+        // TODO: metadata for idp ID lookup
+      });
+
+      customerId = customer.id;
+    } else {
+      customerId = customers.data[0].id;
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: data.priceId, quantity: 1 }],
-      // TODO: use `customer` field instead. This currently creates a new customer even if the email is the same as an existing customer's email
-      customer_email: data.email,
+      customer: customerId,
       success_url: `${BASE_URL}/pricing`,
     });
 
