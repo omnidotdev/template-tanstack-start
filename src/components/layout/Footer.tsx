@@ -1,10 +1,7 @@
 import ExternalLink from "@/components/core/ExternalLink";
 import { app } from "@/lib/config/app.config";
-import { useTheme } from "@/providers/ThemeProvider";
 
 export const Footer = () => {
-  const { theme } = useTheme();
-
   return (
     <footer className="flex w-full items-center justify-center gap-1 p-4 text-muted-foreground">
       <p className="px-3">
@@ -22,25 +19,27 @@ export const Footer = () => {
       <div className="flex items-center gap-1">
         <ExternalLink variant="ghost" href={app.socials.discord}>
           <img
-            src={
-              theme === "light"
-                ? "/socials/discord-logo-black.png"
-                : "/socials/discord-logo-white.png"
-            }
-            alt="Discord"
-            className="h-auto w-5"
+            src="/socials/discord-logo-black.png"
+            alt="discord"
+            className="block h-auto w-5 dark:hidden"
+          />
+          <img
+            src="/socials/discord-logo-white.png"
+            alt="discord"
+            className="hidden h-auto w-5 dark:block"
           />
         </ExternalLink>
 
         <ExternalLink variant="ghost" href={app.socials.x}>
           <img
-            src={
-              theme === "light"
-                ? "/socials/x-logo-black.png"
-                : "/socials/x-logo-white.png"
-            }
+            src="/socials/x-logo-black.png"
             alt="X"
-            className="h-auto w-4"
+            className="block h-auto w-4 dark:hidden"
+          />
+          <img
+            src="/socials/x-logo-white.png"
+            alt="X"
+            className="hidden h-auto w-4 dark:block"
           />
         </ExternalLink>
       </div>

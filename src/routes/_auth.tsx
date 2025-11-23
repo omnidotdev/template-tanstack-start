@@ -4,9 +4,9 @@ export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context: { auth } }) => {
     if (!auth) throw redirect({ to: "/" });
   },
-  component: RouteComponent,
+  component: AuthLayout,
 });
 
-function RouteComponent() {
+function AuthLayout() {
   return <Outlet />;
 }
