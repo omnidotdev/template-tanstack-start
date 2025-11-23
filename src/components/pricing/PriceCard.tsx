@@ -77,7 +77,6 @@ export const PriceCard = ({
 
   const { mutateAsync: checkout } = useMutation({
     mutationFn: async ({ priceId, email }: z.input<typeof checkoutSchema>) =>
-      // TODO: handle `free` product. Current set up fails schema validation (as it should), need to handle that flow properly.
       await getCheckoutUrl({ data: { priceId, email } }),
     onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
   });
