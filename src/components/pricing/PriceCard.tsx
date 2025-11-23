@@ -2,7 +2,10 @@ import { Format } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
+import { createRemoteJWKSet, jwtVerify } from "jose";
 import { CheckIcon } from "lucide-react";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -13,8 +16,9 @@ import {
   CardRoot,
   CardTitle,
 } from "@/components/ui/card";
+import { auth } from "@/lib/auth/auth";
 import { authClient } from "@/lib/auth/authClient";
-import { BASE_URL } from "@/lib/config/env.config";
+import { AUTH_ISSUER_URL, BASE_URL } from "@/lib/config/env.config";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { cn } from "@/lib/utils";
 import { stripe } from "@/payments/client";
@@ -32,6 +36,17 @@ const getCheckoutUrl = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     let customerId: Stripe.Customer["id"];
 
+    const headers = getRequestHeaders();
+
+    const { idToken } = await auth.api.getAccessToken({
+      body: { providerId: "omni" },
+      headers,
+    });
+
+    const jwks = createRemoteJWKSet(new URL(`${AUTH_ISSUER_URL!}/jwks`));
+
+    const { payload } = await jwtVerify(idToken!, jwks);
+
     const customers = await stripe.customers.search({
       query: `email:"${data.email}"`,
     });
@@ -39,7 +54,9 @@ const getCheckoutUrl = createServerFn({ method: "POST" })
     if (!customers.data.length) {
       const customer = await stripe.customers.create({
         email: data.email,
-        // TODO: metadata for idp ID lookup
+        metadata: {
+          externalId: payload.sub!,
+        },
       });
 
       customerId = customer.id;
@@ -95,6 +112,7 @@ export const PriceCard = ({
     mutationFn: async ({ priceId, email }: z.input<typeof checkoutSchema>) =>
       await getCheckoutUrl({ data: { priceId, email } }),
     onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
+    onError: (error) => toast.error(error.message),
   });
 
   return (

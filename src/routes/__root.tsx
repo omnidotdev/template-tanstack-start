@@ -9,6 +9,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
+import { Toaster } from "sonner";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -81,6 +82,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
             <Footer />
           </div>
+
+          <Toaster position="top-center" richColors />
         </ThemeProvider>
 
         <TanStackDevtools
