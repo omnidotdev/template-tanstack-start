@@ -1,4 +1,5 @@
 // core
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const API_GRAPHQL_URL = import.meta.env.VITE_API_GRAPHQL_URL;
 
 // auth

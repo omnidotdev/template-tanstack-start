@@ -1,7 +1,9 @@
 import { Format } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
+import { useNavigate, useRouteContext } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { CheckIcon } from "lucide-react";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,13 +14,35 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth/authClient";
+import { BASE_URL } from "@/lib/config/env.config";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { cn } from "@/lib/utils";
+import { stripe } from "@/payments/client";
 
 import type Stripe from "stripe";
 import type { CardProps } from "@/components/ui/card";
 
+const checkoutSchema = z.object({
+  priceId: z.string().startsWith("price_"),
+  email: z.email().optional(),
+});
+
+const getCheckoutUrl = createServerFn({ method: "POST" })
+  .inputValidator((data) => checkoutSchema.parse(data))
+  .handler(async ({ data }) => {
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      line_items: [{ price: data.priceId, quantity: 1 }],
+      // TODO: use `customer` field instead. This currently creates a new customer even if the email is the same as an existing customer's email
+      customer_email: data.email,
+      success_url: `${BASE_URL}/pricing`,
+    });
+
+    return session.url as string;
+  });
+
 export interface Price {
+  id: Stripe.Price["id"];
   unit_amount: Stripe.Price["unit_amount"];
   product: {
     name: Stripe.Product["name"];
@@ -34,6 +58,7 @@ interface Props extends CardProps {
 
 export const PriceCard = ({ price, className, ...rest }: Props) => {
   const { auth } = useRouteContext({ from: "/pricing" });
+  const navigate = useNavigate();
 
   const { mutateAsync: signIn, isPending: isSignInPending } = useMutation({
     mutationFn: async () =>
@@ -42,6 +67,13 @@ export const PriceCard = ({ price, className, ...rest }: Props) => {
         callbackURL: "/pricing",
         disableRedirect: false,
       }),
+  });
+
+  const { mutateAsync: checkout } = useMutation({
+    mutationFn: async ({ priceId, email }: z.input<typeof checkoutSchema>) =>
+      // TODO: handle `free` product. Current set up fails schema validation (as it should), need to handle that flow properly.
+      await getCheckoutUrl({ data: { priceId, email } }),
+    onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
   });
 
   return (
@@ -78,7 +110,13 @@ export const PriceCard = ({ price, className, ...rest }: Props) => {
         </div>
 
         {auth ? (
-          <Button>Get Started</Button>
+          <Button
+            onClick={() =>
+              checkout({ priceId: price.id, email: auth.user.email })
+            }
+          >
+            Get Started
+          </Button>
         ) : (
           <Button disabled={isSignInPending} onClick={() => signIn()}>
             Get Started

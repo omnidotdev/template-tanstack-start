@@ -10,6 +10,7 @@ import { stripe } from "@/payments/client";
 import type { Price } from "@/components/pricing/PriceCard";
 
 const FREE_PRICE: Price = {
+  id: "free-price",
   unit_amount: 0,
   product: {
     name: "Free",
