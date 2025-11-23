@@ -54,9 +54,15 @@ export interface Price {
 
 interface Props extends CardProps {
   price: Price;
+  disableAction?: boolean;
 }
 
-export const PriceCard = ({ price, className, ...rest }: Props) => {
+export const PriceCard = ({
+  price,
+  className,
+  disableAction,
+  ...rest
+}: Props) => {
   const { auth } = useRouteContext({ from: "/pricing" });
   const navigate = useNavigate();
 
@@ -111,6 +117,7 @@ export const PriceCard = ({ price, className, ...rest }: Props) => {
 
         {auth ? (
           <Button
+            disabled={disableAction}
             onClick={() =>
               checkout({ priceId: price.id, email: auth.user.email })
             }

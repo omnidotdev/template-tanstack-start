@@ -75,7 +75,8 @@ function PricingPage() {
           value={tabs.value!}
           className="flex flex-col items-center gap-4 lg:flex-row"
         >
-          <PriceCard price={FREE_PRICE} />
+          {/** Handling the free tier could be quite different across apps. For now, we disable the action for authenticated users. TODO: Implement downstream. */}
+          <PriceCard price={FREE_PRICE} disableAction />
 
           {filteredPrices.map((price) => (
             <PriceCard key={price.id} price={price} />
