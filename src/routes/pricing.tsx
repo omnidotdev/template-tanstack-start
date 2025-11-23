@@ -1,90 +1,56 @@
-import { Format, TabsRootProvider, useTabs } from "@ark-ui/react";
+import { TabsRootProvider, useTabs } from "@ark-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckIcon } from "lucide-react";
+import { createServerFn } from "@tanstack/react-start";
 
 import { FrequentlyAskedQuestions } from "@/components/pricing/FrequentlyAskedQuestions";
-import { Button } from "@/components/ui/button";
-import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardRoot,
-  CardTitle,
-} from "@/components/ui/card";
+import { PriceCard } from "@/components/pricing/PriceCard";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
+import { stripe } from "@/payments/client";
 
-const FREE_PRODUCT = {
-  recurring_interval: "forever",
-  title: "free",
-  description: "Start for free.",
+import type { Price } from "@/components/pricing/PriceCard";
+
+const FREE_PRICE: Price = {
   unit_amount: 0,
-  marketing_features: [
-    { name: "Feature 1" },
-    { name: "Feature 2" },
-    { name: "Feature 3" },
-  ],
-} as const;
+  product: {
+    name: "Free",
+    description: "Start for free.",
+    marketing_features: [
+      { name: "Feature 1" },
+      { name: "Feature 2" },
+      { name: "Feature 3" },
+    ],
+  },
+};
 
-const MOCK_PRODUCTS = [
-  FREE_PRODUCT,
-  {
-    recurring_interval: "month",
-    title: "basic",
-    description: "Perfect for small teams just getting started.",
-    unit_amount: 500,
-    marketing_features: [
-      { name: "Feature 1" },
-      { name: "Feature 2" },
-      { name: "Feature 3" },
-    ],
-  },
-  {
-    recurring_interval: "month",
-    title: "pro",
-    description: "Everything you need for a growing business.",
-    unit_amount: 1200,
-    marketing_features: [
-      { name: "Feature 1" },
-      { name: "Feature 2" },
-      { name: "Feature 3" },
-    ],
-  },
-  {
-    recurring_interval: "year",
-    title: "basic",
-    description: "Perfect for small teams just getting started.",
-    unit_amount: 4500,
-    marketing_features: [
-      { name: "Feature 1" },
-      { name: "Feature 2" },
-      { name: "Feature 3" },
-    ],
-  },
-  {
-    recurring_interval: "year",
-    title: "pro",
-    description: "Everything you need for a growing business.",
-    unit_amount: 10800,
-    marketing_features: [
-      { name: "Feature 1" },
-      { name: "Feature 2" },
-      { name: "Feature 3" },
-    ],
-  },
-];
+const fetchPrices = createServerFn().handler(async () => {
+  const prices = await stripe.prices.list();
+
+  const pricesWithProduct = await Promise.all(
+    prices.data.map(async (price) => ({
+      ...price,
+      product: await stripe.products.retrieve(price.product as string),
+    })),
+  );
+
+  return pricesWithProduct.sort((a, b) => a.unit_amount! - b.unit_amount!);
+});
 
 export const Route = createFileRoute("/pricing")({
+  loader: async () => {
+    const prices = await fetchPrices();
+
+    return { prices };
+  },
   component: PricingPage,
 });
 
 function PricingPage() {
+  const { prices } = Route.useLoaderData();
+
   const tabs = useTabs({ defaultValue: "month" });
 
-  const filteredProducts = MOCK_PRODUCTS.filter(
-    (prod) =>
-      prod.recurring_interval === "forever" ||
-      prod.recurring_interval === tabs.value,
+  const filteredPrices = prices.filter(
+    (price) => price.recurring?.interval === tabs.value,
   );
 
   return (
@@ -108,47 +74,10 @@ function PricingPage() {
           value={tabs.value!}
           className="flex flex-col items-center gap-4 lg:flex-row"
         >
-          {filteredProducts.map((prod) => (
-            <CardRoot
-              key={prod.title}
-              className="size-full max-w-lg overflow-hidden lg:min-w-80"
-            >
-              <CardHeader className="bg-muted pb-3 lg:min-h-[202px]">
-                <div className="flex flex-1 flex-col">
-                  <CardTitle className="text-lg">
-                    {capitalizeFirstLetter(prod.title)}
-                  </CardTitle>
+          <PriceCard price={FREE_PRICE} />
 
-                  <CardDescription className="mt-2 mb-4 flex-1">
-                    {prod.description}
-                  </CardDescription>
-
-                  <p className="font-semibold text-lg">
-                    <Format.Number
-                      value={prod.unit_amount / 100}
-                      style="currency"
-                      currency="USD"
-                      notation="compact"
-                      compactDisplay="short"
-                    />
-                    <span className="pl-1 font-normal text-muted-foreground text-sm">
-                      /{prod.recurring_interval}
-                    </span>
-                  </p>
-                </div>
-
-                <Button>Get Started</Button>
-              </CardHeader>
-
-              <CardContent className="p-4">
-                {prod.marketing_features.map((feature) => (
-                  <div key={feature.name} className="flex items-center gap-2">
-                    <CheckIcon className="size-4 text-primary" />
-                    <p>{feature.name}</p>
-                  </div>
-                ))}
-              </CardContent>
-            </CardRoot>
+          {filteredPrices.map((price) => (
+            <PriceCard key={price.id} price={price} />
           ))}
         </TabsContent>
       </TabsRootProvider>
