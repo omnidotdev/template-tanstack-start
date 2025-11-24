@@ -8,10 +8,11 @@ function ProfilePage() {
   const { auth } = Route.useRouteContext();
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-2">
-      <div className="flex items-center gap-2 p-2 text-xl">
-        {auth?.user.name} Profile Page
-      </div>
+    <div className="flex h-full flex-col gap-2 text-pretty px-4 py-8 text-center sm:text-start">
+      <h1 className="font-bold text-xl">Welcome, {auth?.user.name}!</h1>
+      <h2 className="text-muted-foreground text-sm">
+        Review and manage details about your account below.
+      </h2>
     </div>
   );
 }
