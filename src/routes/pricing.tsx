@@ -7,6 +7,7 @@ import { PriceCard } from "@/components/pricing/PriceCard";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { stripe } from "@/payments/client";
 
+import type Stripe from "stripe";
 import type { Price } from "@/components/pricing/PriceCard";
 
 const FREE_PRICE: Price = {
@@ -23,17 +24,17 @@ const FREE_PRICE: Price = {
   },
 };
 
+// NB: we expand the product details in the server function below. This interface narrows the type for `product` on that return
+interface ExpandedProductPrice extends Stripe.Price {
+  product: Stripe.Product;
+}
+
 const fetchPrices = createServerFn().handler(async () => {
-  const prices = await stripe.prices.list();
+  const prices = await stripe.prices.list({ expand: ["data.product"] });
 
-  const pricesWithProduct = await Promise.all(
-    prices.data.map(async (price) => ({
-      ...price,
-      product: await stripe.products.retrieve(price.product as string),
-    })),
-  );
-
-  return pricesWithProduct.sort((a, b) => a.unit_amount! - b.unit_amount!);
+  return prices.data.sort(
+    (a, b) => a.unit_amount! - b.unit_amount!,
+  ) as ExpandedProductPrice[];
 });
 
 export const Route = createFileRoute("/pricing")({
