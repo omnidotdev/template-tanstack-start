@@ -20,7 +20,7 @@ const ch = createColumnHelper<Stripe.Subscription>();
 const columns = [
   ch.display({
     header: "Actions",
-    cell: (row) => (
+    cell: () => (
       <div className="flex w-full justify-center gap-1">
         <Button variant="ghost" size="icon">
           <EditIcon className="text-blue-500" />
@@ -100,7 +100,7 @@ function ProfilePage() {
           View details and manage your currently active subscriptions.
         </h2>
 
-        {customer ? (
+        {customer?.subscriptions?.data.length ? (
           <DataTable table={table} containerProps="mt-6" />
         ) : (
           <p className="mt-4">No active subscriptions.</p>
