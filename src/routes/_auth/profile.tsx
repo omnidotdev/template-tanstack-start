@@ -5,8 +5,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { EditIcon, Trash2Icon } from "lucide-react";
 
 import { DataTable } from "@/components/core/DataTable";
+import { Button } from "@/components/ui/button";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { stripe } from "@/payments/client";
 import { authMiddleware } from "@/server/authMiddleware";
@@ -16,6 +18,22 @@ import type Stripe from "stripe";
 const ch = createColumnHelper<Stripe.Subscription>();
 
 const columns = [
+  ch.display({
+    header: "Actions",
+    cell: (row) => (
+      <div className="flex w-full justify-center gap-1">
+        <Button variant="ghost" size="icon">
+          <EditIcon className="text-blue-500" />
+        </Button>
+        <Button variant="ghost" size="icon">
+          <Trash2Icon className="text-red-500" />
+        </Button>
+      </div>
+    ),
+    meta: {
+      tableCellClassName: "text-center max-w-10",
+    },
+  }),
   ch.accessor("id", {
     header: "Sub ID",
     cell: (info) => info.getValue(),
@@ -66,7 +84,7 @@ function ProfilePage() {
   });
 
   return (
-    <div className="flex h-full flex-col text-pretty px-4 py-8 text-center sm:text-start">
+    <div className="mx-auto flex h-full max-w-7xl flex-col text-pretty px-4 py-8 text-center sm:text-start">
       <div className="flex flex-col">
         <h1 className="font-bold text-xl sm:text-3xl">
           Welcome, {auth?.user.name}!
@@ -83,7 +101,7 @@ function ProfilePage() {
         </h2>
 
         {customer ? (
-          <DataTable table={table} containerProps="max-w-2xl mt-6" />
+          <DataTable table={table} containerProps="mt-6" />
         ) : (
           <p className="mt-4">No active subscriptions.</p>
         )}
