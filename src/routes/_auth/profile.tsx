@@ -1,10 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
+import { DataTable } from "@/components/core/DataTable";
+import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { stripe } from "@/payments/client";
 import { authMiddleware } from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
+
+const ch = createColumnHelper<Stripe.Subscription>();
+
+const columns = [
+  ch.accessor("id", {
+    header: "Sub ID",
+    cell: (info) => info.getValue(),
+  }),
+  ch.accessor("items.data", {
+    header: "Tier",
+    cell: (info) => {
+      const data = info.getValue();
+
+      return capitalizeFirstLetter(data[0].price.metadata.tier);
+    },
+  }),
+];
 
 const fetchCustomer = createServerFn()
   .middleware([authMiddleware])
@@ -35,6 +59,12 @@ function ProfilePage() {
   const { auth } = Route.useRouteContext();
   const { customer } = Route.useLoaderData();
 
+  const table = useReactTable({
+    columns,
+    data: customer?.subscriptions?.data ?? [],
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <div className="flex h-full flex-col text-pretty px-4 py-8 text-center sm:text-start">
       <div className="flex flex-col">
@@ -53,14 +83,7 @@ function ProfilePage() {
         </h2>
 
         {customer ? (
-          <div className="mt-4 flex flex-col">
-            {customer.subscriptions?.data.map((sub) => (
-              <div key={sub.id} className="flex gap-4">
-                <p>{sub.id}</p>
-                <p>{sub.items.data[0].price.metadata.tier}</p>
-              </div>
-            ))}
-          </div>
+          <DataTable table={table} containerProps="max-w-2xl mt-6" />
         ) : (
           <p className="mt-4">No active subscriptions.</p>
         )}
