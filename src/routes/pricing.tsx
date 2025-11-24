@@ -30,7 +30,11 @@ interface ExpandedProductPrice extends Stripe.Price {
 }
 
 const fetchPrices = createServerFn().handler(async () => {
-  const prices = await stripe.prices.list({ expand: ["data.product"] });
+  const prices = await stripe.prices.search({
+    // NB: must update in downstream usage.
+    query: "metadata['product']:'template'",
+    expand: ["data.product"],
+  });
 
   return prices.data.sort(
     (a, b) => a.unit_amount! - b.unit_amount!,
