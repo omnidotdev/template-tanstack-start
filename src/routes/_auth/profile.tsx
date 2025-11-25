@@ -15,7 +15,13 @@ import { authMiddleware } from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
 
-const ch = createColumnHelper<Stripe.Subscription>();
+interface Subscription {
+  id: Stripe.Subscription["id"];
+  customerId: Stripe.Customer["id"];
+  price: Stripe.Price;
+}
+
+const ch = createColumnHelper<Subscription>();
 
 const columns = [
   ch.display({
@@ -23,14 +29,12 @@ const columns = [
     cell: ({ row }) => (
       <div className="flex w-full justify-center gap-1">
         <ManageSubscription
-          // NB: if at any point `customer` is expanded in the `fetchCustomer` (for subscriptions) server function below this type cast will break
-          customerId={row.original.customer as string}
+          customerId={row.original.customerId}
           subscriptionId={row.original.id}
         />
 
         <CancelSubscription
-          // NB: if at any point `customer` is expanded in the `fetchCustomer` (for subscriptions) server function below this type cast will break
-          customerId={row.original.customer as string}
+          customerId={row.original.customerId}
           subscriptionId={row.original.id}
         />
       </div>
@@ -43,19 +47,18 @@ const columns = [
     header: "Sub ID",
     cell: (info) => info.getValue(),
   }),
-  ch.accessor("items.data", {
+  ch.accessor("price", {
     header: "Tier",
     cell: (info) => {
-      const data = info.getValue();
+      const price = info.getValue();
 
-      return capitalizeFirstLetter(data[0].price.metadata.tier);
+      return capitalizeFirstLetter(price.metadata.tier);
     },
   }),
 ];
 
 const fetchSubscriptions = createServerFn()
   .middleware([authMiddleware])
-  // @ts-expect-error TODO: fix. See: https://discord.com/channels/719702312431386674/1442566447598534767
   .handler(async ({ context }) => {
     const customers = await stripe.customers.search({
       query: `metadata['externalId']:'${context.idToken.sub}'`,
@@ -68,16 +71,19 @@ const fetchSubscriptions = createServerFn()
       status: "active",
     });
 
-    return subscriptions.data;
+    return subscriptions.data.map((sub) => ({
+      id: sub.id,
+      // NB: type cast is required here so that the server function knows this is serializable. We do not expand customer, this this will always return the customer ID, thus this type casting is safe
+      customerId: sub.customer as string,
+      price: sub.items.data[0].price,
+    }));
   });
 
 export const Route = createFileRoute("/_auth/profile")({
-  // @ts-expect-error TODO: fix. See: https://discord.com/channels/719702312431386674/1442566447598534767
   loader: async () => {
     const subscriptions = await fetchSubscriptions();
 
-    // TODO: remove type casting when typescript issues above are resolved
-    return { subscriptions: subscriptions as Stripe.Subscription[] };
+    return { subscriptions };
   },
   component: ProfilePage,
 });
