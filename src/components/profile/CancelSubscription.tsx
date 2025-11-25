@@ -12,7 +12,6 @@ import { authMiddleware } from "@/server/authMiddleware";
 const cancelSubscriptionSchema = z.object({
   customerId: z.string().startsWith("cus_"),
   subscriptionId: z.string().startsWith("sub_"),
-  returnUrl: z.string(),
 });
 
 const getCancelSubscriptionUrl = createServerFn()
@@ -50,7 +49,7 @@ const getCancelSubscriptionUrl = createServerFn()
           subscription: data.subscriptionId,
         },
       },
-      return_url: data.returnUrl,
+      return_url: `${BASE_URL}/profile`,
     });
 
     return session.url;
@@ -67,7 +66,7 @@ export const CancelSubscription = ({ customerId, subscriptionId }: Props) => {
   const { mutateAsync: cancelSubscription } = useMutation({
     mutationFn: async () =>
       await getCancelSubscriptionUrl({
-        data: { customerId, subscriptionId, returnUrl: `${BASE_URL}/profile` },
+        data: { customerId, subscriptionId },
       }),
     onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
   });

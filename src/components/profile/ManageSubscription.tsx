@@ -13,7 +13,6 @@ import { authMiddleware } from "@/server/authMiddleware";
 const manageSubscriptionSchema = z.object({
   customerId: z.string().startsWith("cus_"),
   subscriptionId: z.string().startsWith("sub_"),
-  returnUrl: z.string(),
 });
 
 const getManageSubscriptionUrl = createServerFn()
@@ -71,7 +70,7 @@ const getManageSubscriptionUrl = createServerFn()
           subscription: data.subscriptionId,
         },
       },
-      return_url: data.returnUrl,
+      return_url: `${BASE_URL}/profile`,
     });
 
     return session.url;
@@ -88,7 +87,7 @@ export const ManageSubscription = ({ customerId, subscriptionId }: Props) => {
   const { mutateAsync: manageSubscription } = useMutation({
     mutationFn: async () =>
       await getManageSubscriptionUrl({
-        data: { customerId, subscriptionId, returnUrl: `${BASE_URL}/profile` },
+        data: { customerId, subscriptionId },
       }),
     onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
   });
