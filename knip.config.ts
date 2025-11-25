@@ -10,7 +10,7 @@ const knipConfig: KnipConfig = {
     "src/router.tsx",
     "src/lib/graphql/graphqlFetch.ts",
   ],
-  project: ["src/**/*.{ts,tsx}"],
+  project: ["src/**/*.{ts,tsx,css}"],
   // NB: Modified from the default GraphQL Codegen configuration, see: https://knip.dev/reference/plugins/graphql-codegen
   "graphql-codegen": {
     config: ["package.json", "src/lib/graphql/codegen.config.ts"],
@@ -19,10 +19,6 @@ const knipConfig: KnipConfig = {
   ignoreExportsUsedInFile: true,
   ignore: ["**/*.gen.*", "**/generated/**"],
   ignoreDependencies: [
-    // used for globals.css
-    "tailwindcss",
-    // used for globals.css
-    "tw-animate-css",
     // used for graphql codegen scripts
     "dotenv",
   ],
