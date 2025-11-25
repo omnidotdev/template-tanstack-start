@@ -18,21 +18,28 @@ const cancelSubscriptionSchema = z.object({
 const getCancelSubscriptionUrl = createServerFn()
   .inputValidator((data) => cancelSubscriptionSchema.parse(data))
   .middleware([authMiddleware])
-  // TODO: add middleware to handle validating that it is indeed the signed in user's subscription
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     // TODO: move this config to stripe and just access the ID (through env var or something) rather than creating it each time
-    const config = await stripe.billingPortal.configurations.create({
-      features: {
-        subscription_cancel: {
-          enabled: true,
-          mode: "at_period_end",
-          cancellation_reason: {
+    const [config, customer] = await Promise.all([
+      stripe.billingPortal.configurations.create({
+        features: {
+          subscription_cancel: {
             enabled: true,
-            options: ["too_expensive", "other"],
+            mode: "at_period_end",
+            cancellation_reason: {
+              enabled: true,
+              options: ["too_expensive", "other"],
+            },
           },
         },
-      },
-    });
+      }),
+      stripe.customers.retrieve(data.customerId),
+    ]);
+
+    if (customer.deleted) throw new Error("Invalid customer");
+
+    if (customer.metadata.externalId !== context.idToken.sub!)
+      throw new Error("Unauthorized");
 
     const session = await stripe.billingPortal.sessions.create({
       customer: data.customerId,

@@ -19,9 +19,16 @@ const manageSubscriptionSchema = z.object({
 const getManageSubscriptionUrl = createServerFn()
   .inputValidator((data) => manageSubscriptionSchema.parse(data))
   .middleware([authMiddleware])
-  // TODO: add middleware to handle validating that it is indeed the signed in user's subscription
-  .handler(async ({ data }) => {
-    const prices = await fetchPrices();
+  .handler(async ({ data, context }) => {
+    const [prices, customer] = await Promise.all([
+      fetchPrices(),
+      stripe.customers.retrieve(data.customerId),
+    ]);
+
+    if (customer.deleted) throw new Error("Invalid customer");
+
+    if (customer.metadata.externalId !== context.idToken.sub!)
+      throw new Error("Unauthorized");
 
     const map = new Map<string, string[]>();
 
