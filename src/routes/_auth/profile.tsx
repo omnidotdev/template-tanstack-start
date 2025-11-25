@@ -53,38 +53,42 @@ const columns = [
   }),
 ];
 
-const fetchCustomer = createServerFn()
+const fetchSubscriptions = createServerFn()
   .middleware([authMiddleware])
   // @ts-expect-error TODO: fix. See: https://discord.com/channels/719702312431386674/1442566447598534767
   .handler(async ({ context }) => {
     const customers = await stripe.customers.search({
       query: `metadata['externalId']:'${context.idToken.sub}'`,
-      expand: ["data.subscriptions"],
     });
 
-    if (!customers.data.length) return null;
+    if (!customers.data.length) return [];
 
-    return customers.data[0];
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customers.data[0].id,
+      status: "active",
+    });
+
+    return subscriptions.data;
   });
 
 export const Route = createFileRoute("/_auth/profile")({
   // @ts-expect-error TODO: fix. See: https://discord.com/channels/719702312431386674/1442566447598534767
   loader: async () => {
-    const customer = await fetchCustomer();
+    const subscriptions = await fetchSubscriptions();
 
     // TODO: remove type casting when typescript issues above are resolved
-    return { customer: customer as Stripe.Customer | null };
+    return { subscriptions: subscriptions as Stripe.Subscription[] };
   },
   component: ProfilePage,
 });
 
 function ProfilePage() {
   const { auth } = Route.useRouteContext();
-  const { customer } = Route.useLoaderData();
+  const { subscriptions } = Route.useLoaderData();
 
   const table = useReactTable({
     columns,
-    data: customer?.subscriptions?.data ?? [],
+    data: subscriptions,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -105,7 +109,7 @@ function ProfilePage() {
           View details and manage your currently active subscriptions.
         </h2>
 
-        {customer?.subscriptions?.data.length ? (
+        {subscriptions.length ? (
           <DataTable table={table} containerProps="mt-6" />
         ) : (
           <p className="mt-4">No active subscriptions.</p>
