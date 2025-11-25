@@ -5,9 +5,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { EditIcon, Trash2Icon } from "lucide-react";
+import { EditIcon } from "lucide-react";
 
 import { DataTable } from "@/components/core/DataTable";
+import { CancelSubscription } from "@/components/profile/CancelSubscription";
 import { Button } from "@/components/ui/button";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { stripe } from "@/payments/client";
@@ -20,14 +21,17 @@ const ch = createColumnHelper<Stripe.Subscription>();
 const columns = [
   ch.display({
     header: "Actions",
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex w-full justify-center gap-1">
         <Button variant="ghost" size="icon">
           <EditIcon className="text-blue-500" />
         </Button>
-        <Button variant="ghost" size="icon">
-          <Trash2Icon className="text-red-500" />
-        </Button>
+
+        <CancelSubscription
+          // NB: if at any point `customer` is expanded in the `fetchCustomer` (for subscriptions) server function below this type cast will break
+          customerId={row.original.customer as string}
+          subscriptionId={row.original.id}
+        />
       </div>
     ),
     meta: {
