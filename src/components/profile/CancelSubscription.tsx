@@ -21,7 +21,7 @@ const getCancelSubscriptionUrl = createServerFn()
       query: `metadata['externalId']:'${context.idToken.sub}'`,
     });
 
-    if (customers.data.length) throw new Error("Invalid customer");
+    if (!customers.data.length) throw new Error("Invalid customer");
 
     const session = await stripe.billingPortal.sessions.create({
       customer: customers.data[0].id,
