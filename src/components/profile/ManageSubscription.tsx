@@ -5,9 +5,8 @@ import { EditIcon } from "lucide-react";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/lib/config/env.config";
+import { BASE_URL, MANAGE_SUB_CONFIG_ID } from "@/lib/config/env.config";
 import { stripe } from "@/payments/client";
-import { fetchPrices } from "@/routes/pricing";
 import { authMiddleware } from "@/server/authMiddleware";
 
 const manageSubscriptionSchema = z.object({
@@ -19,51 +18,16 @@ const getManageSubscriptionUrl = createServerFn()
   .inputValidator((data) => manageSubscriptionSchema.parse(data))
   .middleware([authMiddleware])
   .handler(async ({ data, context }) => {
-    const [prices, customer] = await Promise.all([
-      fetchPrices(),
-      stripe.customers.retrieve(data.customerId),
-    ]);
+    const customer = await stripe.customers.retrieve(data.customerId);
 
     if (customer.deleted) throw new Error("Invalid customer");
 
     if (customer.metadata.externalId !== context.idToken.sub!)
       throw new Error("Unauthorized");
 
-    const map = new Map<string, string[]>();
-
-    for (const price of prices) {
-      const productId = price.product.id;
-      const priceId = price.id;
-
-      if (!map.has(productId)) {
-        map.set(productId, []);
-      }
-
-      map.get(productId)!.push(priceId);
-    }
-
-    const products = Array.from(map, ([product, prices]) => ({
-      product,
-      prices,
-    }));
-
-    // TODO: move this config to stripe and just access the ID (through env var or something) rather than creating it each time
-    const configuration = await stripe.billingPortal.configurations.create({
-      features: {
-        payment_method_update: {
-          enabled: true,
-        },
-        subscription_update: {
-          enabled: true,
-          default_allowed_updates: ["price"],
-          products,
-        },
-      },
-    });
-
     const session = await stripe.billingPortal.sessions.create({
       customer: data.customerId,
-      configuration: configuration.id,
+      configuration: MANAGE_SUB_CONFIG_ID,
       flow_data: {
         type: "subscription_update",
         subscription_update: {

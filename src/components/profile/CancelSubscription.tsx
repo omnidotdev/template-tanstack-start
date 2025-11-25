@@ -5,7 +5,7 @@ import { Trash2Icon } from "lucide-react";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { BASE_URL } from "@/lib/config/env.config";
+import { BASE_URL, CANCEL_SUB_CONFIG_ID } from "@/lib/config/env.config";
 import { stripe } from "@/payments/client";
 import { authMiddleware } from "@/server/authMiddleware";
 
@@ -18,22 +18,7 @@ const getCancelSubscriptionUrl = createServerFn()
   .inputValidator((data) => cancelSubscriptionSchema.parse(data))
   .middleware([authMiddleware])
   .handler(async ({ data, context }) => {
-    // TODO: move this config to stripe and just access the ID (through env var or something) rather than creating it each time
-    const [config, customer] = await Promise.all([
-      stripe.billingPortal.configurations.create({
-        features: {
-          subscription_cancel: {
-            enabled: true,
-            mode: "at_period_end",
-            cancellation_reason: {
-              enabled: true,
-              options: ["too_expensive", "other"],
-            },
-          },
-        },
-      }),
-      stripe.customers.retrieve(data.customerId),
-    ]);
+    const customer = await stripe.customers.retrieve(data.customerId);
 
     if (customer.deleted) throw new Error("Invalid customer");
 
@@ -42,7 +27,7 @@ const getCancelSubscriptionUrl = createServerFn()
 
     const session = await stripe.billingPortal.sessions.create({
       customer: data.customerId,
-      configuration: config.id,
+      configuration: CANCEL_SUB_CONFIG_ID,
       flow_data: {
         type: "subscription_cancel",
         subscription_cancel: {

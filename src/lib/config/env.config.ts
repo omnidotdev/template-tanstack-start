@@ -8,3 +8,7 @@ export const AUTH_ISSUER_URL = `${AUTH_BASE_URL}/api/auth`;
 // auth
 export const AUTH_CLIENT_ID = process.env.AUTH_CLIENT_ID;
 export const AUTH_CLIENT_SECRET = process.env.AUTH_CLIENT_SECRET;
+
+// payment processing
+export const CANCEL_SUB_CONFIG_ID = process.env.CANCEL_SUB_CONFIG_ID;
+export const MANAGE_SUB_CONFIG_ID = process.env.MANAGE_SUB_CONFIG_ID;
