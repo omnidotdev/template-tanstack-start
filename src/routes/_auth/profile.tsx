@@ -21,10 +21,10 @@ interface Subscription {
   price: Stripe.Price;
 }
 
-const ch = createColumnHelper<Subscription>();
+const columnHelper = createColumnHelper<Subscription>();
 
 const columns = [
-  ch.display({
+  columnHelper.display({
     header: "Actions",
     cell: ({ row }) => (
       <div className="flex w-full justify-center gap-1">
@@ -43,11 +43,11 @@ const columns = [
       tableCellClassName: "text-center max-w-10",
     },
   }),
-  ch.accessor("id", {
+  columnHelper.accessor("id", {
     header: "Sub ID",
     cell: (info) => info.getValue(),
   }),
-  ch.accessor("price", {
+  columnHelper.accessor("price", {
     header: "Tier",
     cell: (info) => {
       const price = info.getValue();
