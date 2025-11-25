@@ -73,8 +73,8 @@ const fetchSubscriptions = createServerFn()
 
     return subscriptions.data.map((sub) => ({
       id: sub.id,
-      // NB: type cast is required here so that the server function knows this is serializable.
-      // We do not expand customer, so this will always return the customer ID, thus this type casting is safe
+      // NB: type assertion is required here so that the server function knows this is serializable.
+      // We do not expand customer, so this will always return the customer ID, thus this type assertion is safe
       customerId: sub.customer as string,
       price: sub.items.data[0].price,
     }));
