@@ -9,8 +9,8 @@ import {
 import { DataTable } from "@/components/core/DataTable";
 import { CancelSubscription } from "@/components/profile/CancelSubscription";
 import { ManageSubscription } from "@/components/profile/ManageSubscription";
+import { payments } from "@/lib/payments";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
-import { stripe } from "@/payments/client";
 import { authMiddleware } from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
@@ -54,13 +54,13 @@ const columns = [
 const fetchSubscriptions = createServerFn()
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    const customers = await stripe.customers.search({
+    const customers = await payments.customers.search({
       query: `metadata['externalId']:'${context.idToken.sub}'`,
     });
 
     if (!customers.data.length) return [];
 
-    const subscriptions = await stripe.subscriptions.list({
+    const subscriptions = await payments.subscriptions.list({
       customer: customers.data[0].id,
       status: "active",
     });

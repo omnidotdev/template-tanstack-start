@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth/authClient";
 import { BASE_URL } from "@/lib/config/env.config";
+import { payments } from "@/lib/payments";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { cn } from "@/lib/utils";
-import { stripe } from "@/payments/client";
 import { authMiddleware } from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
@@ -35,12 +35,12 @@ const getCheckoutUrl = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     let customerId: Stripe.Customer["id"];
 
-    const customers = await stripe.customers.search({
+    const customers = await payments.customers.search({
       query: `email:"${data.email}"`,
     });
 
     if (!customers.data.length) {
-      const customer = await stripe.customers.create({
+      const customer = await payments.customers.create({
         email: data.email,
         metadata: {
           externalId: context.idToken.sub!,
@@ -52,7 +52,7 @@ const getCheckoutUrl = createServerFn({ method: "POST" })
       customerId = customers.data[0].id;
     }
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await payments.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: data.priceId, quantity: 1 }],
       customer: customerId,

@@ -5,7 +5,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { FrequentlyAskedQuestions } from "@/components/pricing/FrequentlyAskedQuestions";
 import { PriceCard } from "@/components/pricing/PriceCard";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { stripe } from "@/payments/client";
+import { payments } from "@/lib/payments";
 
 import type Stripe from "stripe";
 import type { Price } from "@/components/pricing/PriceCard";
@@ -30,7 +30,7 @@ interface ExpandedProductPrice extends Stripe.Price {
 }
 
 const fetchPrices = createServerFn().handler(async () => {
-  const prices = await stripe.prices.search({
+  const prices = await payments.prices.search({
     // NB: must update in downstream usage.
     query: "metadata['product']:'template'",
     expand: ["data.product"],
