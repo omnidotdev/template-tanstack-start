@@ -28,15 +28,9 @@ const columns = [
     header: "Actions",
     cell: ({ row }) => (
       <div className="flex w-full justify-center gap-1">
-        <ManageSubscription
-          customerId={row.original.customerId}
-          subscriptionId={row.original.id}
-        />
+        <ManageSubscription subscriptionId={row.original.id} />
 
-        <CancelSubscription
-          customerId={row.original.customerId}
-          subscriptionId={row.original.id}
-        />
+        <CancelSubscription subscriptionId={row.original.id} />
       </div>
     ),
     meta: {

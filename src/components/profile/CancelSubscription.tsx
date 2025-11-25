@@ -10,7 +10,6 @@ import { stripe } from "@/payments/client";
 import { authMiddleware } from "@/server/authMiddleware";
 
 const cancelSubscriptionSchema = z.object({
-  customerId: z.string().startsWith("cus_"),
   subscriptionId: z.string().startsWith("sub_"),
 });
 
@@ -18,15 +17,14 @@ const getCancelSubscriptionUrl = createServerFn()
   .inputValidator((data) => cancelSubscriptionSchema.parse(data))
   .middleware([authMiddleware])
   .handler(async ({ data, context }) => {
-    const customer = await stripe.customers.retrieve(data.customerId);
+    const customers = await stripe.customers.search({
+      query: `metadata['externalId']:'${context.idToken.sub}'`,
+    });
 
-    if (customer.deleted) throw new Error("Invalid customer");
-
-    if (customer.metadata.externalId !== context.idToken.sub!)
-      throw new Error("Unauthorized");
+    if (customers.data.length) throw new Error("Invalid customer");
 
     const session = await stripe.billingPortal.sessions.create({
-      customer: data.customerId,
+      customer: customers.data[0].id,
       configuration: CANCEL_SUB_CONFIG_ID,
       flow_data: {
         type: "subscription_cancel",
@@ -41,17 +39,16 @@ const getCancelSubscriptionUrl = createServerFn()
   });
 
 interface Props {
-  customerId: string;
   subscriptionId: string;
 }
 
-export const CancelSubscription = ({ customerId, subscriptionId }: Props) => {
+export const CancelSubscription = ({ subscriptionId }: Props) => {
   const navigate = useNavigate();
 
   const { mutateAsync: cancelSubscription } = useMutation({
     mutationFn: async () =>
       await getCancelSubscriptionUrl({
-        data: { customerId, subscriptionId },
+        data: { subscriptionId },
       }),
     onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
   });
