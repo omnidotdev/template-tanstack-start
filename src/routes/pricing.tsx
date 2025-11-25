@@ -29,7 +29,7 @@ interface ExpandedProductPrice extends Stripe.Price {
   product: Stripe.Product;
 }
 
-const fetchPrices = createServerFn().handler(async () => {
+export const fetchPrices = createServerFn().handler(async () => {
   const prices = await stripe.prices.search({
     // NB: must update in downstream usage.
     query: "metadata['product']:'template'",
