@@ -18,8 +18,9 @@ const cancelSubscriptionSchema = z.object({
 const getCancelSubscriptionUrl = createServerFn()
   .inputValidator((data) => cancelSubscriptionSchema.parse(data))
   .middleware([authMiddleware])
-  // TODO: add middleware to handle validating user subscription
+  // TODO: add middleware to handle validating that it is indeed the signed in user's subscription
   .handler(async ({ data }) => {
+    // TODO: move this config to stripe and just access the ID (through env var or something) rather than creating it each time
     const config = await stripe.billingPortal.configurations.create({
       features: {
         subscription_cancel: {
