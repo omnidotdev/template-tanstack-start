@@ -5,7 +5,7 @@ import { Trash2Icon } from "lucide-react";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { BASE_URL, CANCEL_SUB_CONFIG_ID } from "@/lib/config/env.config";
+import { BASE_URL, STRIPE_PORTAL_CONFIG_ID } from "@/lib/config/env.config";
 import { payments } from "@/lib/payments";
 import { authMiddleware } from "@/server/authMiddleware";
 
@@ -25,7 +25,7 @@ const getCancelSubscriptionUrl = createServerFn()
 
     const session = await payments.billingPortal.sessions.create({
       customer: customers.data[0].id,
-      configuration: CANCEL_SUB_CONFIG_ID,
+      configuration: STRIPE_PORTAL_CONFIG_ID,
       flow_data: {
         type: "subscription_cancel",
         subscription_cancel: {

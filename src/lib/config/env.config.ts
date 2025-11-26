@@ -10,5 +10,5 @@ export const AUTH_CLIENT_ID = process.env.AUTH_CLIENT_ID;
 export const AUTH_CLIENT_SECRET = process.env.AUTH_CLIENT_SECRET;
 
 // payment processing
-export const CANCEL_SUB_CONFIG_ID = process.env.CANCEL_SUB_CONFIG_ID;
-export const MANAGE_SUB_CONFIG_ID = process.env.MANAGE_SUB_CONFIG_ID;
+export const STRIPE_PORTAL_CONFIG_ID = import.meta.env
+  .VITE_STRIPE_PORTAL_CONFIG_ID;
