@@ -34,7 +34,6 @@
     "includes": [
       "**",
       "!!**/*.gen.*",
-      "!!**/.cache",
       "!!**/bun.lock",
       "!!**/generated",
       "!!**/public"
