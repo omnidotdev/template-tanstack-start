@@ -21,48 +21,126 @@ export type Scalars = {
   UUID: { input: string; output: string; }
 };
 
-/** All input for the create `User` mutation. */
-export type CreateUserInput = {
+/** All input for the create `Post` mutation. */
+export type CreatePostInput = {
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The `Post` to be created by this mutation. */
+  post: PostInput;
 };
 
-/** The output of our create `User` mutation. */
-export type CreateUserPayload = {
-  __typename?: 'CreateUserPayload';
+/** The output of our create `Post` mutation. */
+export type CreatePostPayload = {
+  __typename?: 'CreatePostPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The `Post` that was created by this mutation. */
+  post?: Maybe<Post>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostEdge>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
-  /** The `User` that was created by this mutation. */
-  user?: Maybe<User>;
-  /** An edge for our `User`. May be used by Relay 1. */
-  userEdge?: Maybe<UserEdge>;
 };
 
 
-/** The output of our create `User` mutation. */
-export type CreateUserPayloadUserEdgeArgs = {
-  orderBy?: Array<UserOrderBy>;
+/** The output of our create `Post` mutation. */
+export type CreatePostPayloadPostEdgeArgs = {
+  orderBy?: Array<PostOrderBy>;
+};
+
+/** All input for the `deletePostById` mutation. */
+export type DeletePostByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The globally unique `ID` which will identify a single `Post` to be deleted. */
+  id: Scalars['ID']['input'];
+};
+
+/** All input for the `deletePost` mutation. */
+export type DeletePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  rowId: Scalars['UUID']['input'];
+};
+
+/** The output of our delete `Post` mutation. */
+export type DeletePostPayload = {
+  __typename?: 'DeletePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  deletedPostId?: Maybe<Scalars['ID']['output']>;
+  /** The `Post` that was deleted by this mutation. */
+  post?: Maybe<Post>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our delete `Post` mutation. */
+export type DeletePostPayloadPostEdgeArgs = {
+  orderBy?: Array<PostOrderBy>;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Creates a single `User`. */
-  createUser?: Maybe<CreateUserPayload>;
+  /** Creates a single `Post`. */
+  createPost?: Maybe<CreatePostPayload>;
+  /** Deletes a single `Post` using a unique key. */
+  deletePost?: Maybe<DeletePostPayload>;
+  /** Deletes a single `Post` using its globally unique id. */
+  deletePostById?: Maybe<DeletePostPayload>;
+  /** Updates a single `Post` using a unique key and a patch. */
+  updatePost?: Maybe<UpdatePostPayload>;
+  /** Updates a single `Post` using its globally unique id and a patch. */
+  updatePostById?: Maybe<UpdatePostPayload>;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationCreateUserArgs = {
-  input: CreateUserInput;
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostArgs = {
+  input: DeletePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeletePostByIdArgs = {
+  input: DeletePostByIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostArgs = {
+  input: UpdatePostInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdatePostByIdArgs = {
+  input: UpdatePostByIdInput;
 };
 
 /** An object with a globally unique `ID`. */
@@ -144,6 +222,13 @@ export type PostFilter = {
   rowId?: InputMaybe<UuidFilter>;
 };
 
+/** An input for mutations affecting `Post` */
+export type PostInput = {
+  authorId: Scalars['UUID']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Methods to use when ordering `Post`. */
 export enum PostOrderBy {
   AuthorIdAsc = 'AUTHOR_ID_ASC',
@@ -154,6 +239,13 @@ export enum PostOrderBy {
   RowIdAsc = 'ROW_ID_ASC',
   RowIdDesc = 'ROW_ID_DESC'
 }
+
+/** Represents an update to a `Post`. Fields that are set will be updated. */
+export type PostPatch = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['Datetime']['input']>;
+};
 
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
@@ -269,6 +361,53 @@ export type UuidFilter = {
   notEqualTo?: InputMaybe<Scalars['UUID']['input']>;
   /** Not included in the specified list. */
   notIn?: InputMaybe<Array<Scalars['UUID']['input']>>;
+};
+
+/** All input for the `updatePostById` mutation. */
+export type UpdatePostByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The globally unique `ID` which will identify a single `Post` to be updated. */
+  id: Scalars['ID']['input'];
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+};
+
+/** All input for the `updatePost` mutation. */
+export type UpdatePostInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** An object where the defined keys will be set on the `Post` being updated. */
+  patch: PostPatch;
+  rowId: Scalars['UUID']['input'];
+};
+
+/** The output of our update `Post` mutation. */
+export type UpdatePostPayload = {
+  __typename?: 'UpdatePostPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The `Post` that was updated by this mutation. */
+  post?: Maybe<Post>;
+  /** An edge for our `Post`. May be used by Relay 1. */
+  postEdge?: Maybe<PostEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our update `Post` mutation. */
+export type UpdatePostPayloadPostEdgeArgs = {
+  orderBy?: Array<PostOrderBy>;
 };
 
 export type User = Node & {
