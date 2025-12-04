@@ -12,10 +12,13 @@ const getAccessToken = createServerFn()
   .middleware([authMiddleware])
   .handler(async ({ context }) => context.accessToken);
 
-type FetchOptions = {
-  /** Request cache setting. */
+interface FetchOptions {
+  /**
+   * Request cache setting.
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
+   */
   cache?: RequestCache;
-};
+}
 
 /**
  * GraphQL fetch wrapper. This is a wrapper around `graphql-request` that adds support for request options.
@@ -32,7 +35,7 @@ export const graphqlFetch =
 
     const { cache, ...restOptions } = options || {};
 
-    const client = new GraphQLClient(API_GRAPHQL_URL!, {
+    const client = new GraphQLClient(API_GRAPHQL_URL, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,

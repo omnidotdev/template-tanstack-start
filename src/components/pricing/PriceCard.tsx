@@ -39,11 +39,11 @@ const getCheckoutUrl = createServerFn({ method: "POST" })
       query: `email:"${data.email}"`,
     });
 
-    if (!customers.data.length) {
+    if (!customers.data.length && context.idToken.sub) {
       const customer = await payments.customers.create({
         email: data.email,
         metadata: {
-          externalId: context.idToken.sub!,
+          externalId: context.idToken.sub,
         },
       });
 
@@ -117,18 +117,21 @@ const PriceCard = ({ price, className, disableAction, ...rest }: Props) => {
             {price.product.description}
           </CardDescription>
 
-          <p className="font-semibold text-lg">
-            <Format.Number
-              value={price.unit_amount! / 100}
-              style="currency"
-              currency="USD"
-              notation="compact"
-              compactDisplay="short"
-            />
-            <span className="pl-1 font-normal text-muted-foreground text-sm">
-              /{price.recurring ? price.recurring.interval : "forever"}
-            </span>
-          </p>
+          {price.unit_amount != null && (
+            <p className="font-semibold text-lg">
+              <Format.Number
+                value={price.unit_amount / 100}
+                style="currency"
+                currency="USD"
+                notation="compact"
+                compactDisplay="short"
+              />
+
+              <span className="pl-1 font-normal text-muted-foreground text-sm">
+                /{price.recurring ? price.recurring.interval : "forever"}
+              </span>
+            </p>
+          )}
         </div>
 
         {auth ? (
