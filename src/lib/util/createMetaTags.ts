@@ -1,22 +1,23 @@
-import app from "../config/app.config";
+import app from "@/lib/config/app.config";
 
-/**
- * SEO.
- */
-// ? rename?
-const seo = ({
-  title,
-  description,
-  image,
-  keywords,
-  url,
-}: {
+interface Params {
   title?: string;
   description?: string;
   image?: string;
   keywords?: string;
   url?: string;
-} = {}) => {
+}
+
+/**
+ * SEO.
+ */
+const createMetaTags = ({
+  title,
+  description,
+  image,
+  keywords,
+  url,
+}: Params = {}) => {
   const displayedTitle = title ? `${title} | ${app.name}` : app.name;
 
   const tags = [
@@ -43,4 +44,4 @@ const seo = ({
   return tags;
 };
 
-export default seo;
+export default createMetaTags;

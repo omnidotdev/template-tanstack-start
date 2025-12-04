@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import seo from "@/lib/util/seo";
+import createMetaTags from "@/lib/util/createMetaTags";
 import usersOptions from "@/options/users.options";
 
 const DashboardPage = () => {
@@ -23,7 +23,7 @@ const DashboardRoute = createFileRoute("/_auth/dashboard")({
     await queryClient.ensureQueryData(usersOptions());
   },
   head: () => ({
-    meta: seo({ title: "Dashboard" }),
+    meta: createMetaTags({ title: "Dashboard" }),
   }),
   component: DashboardPage,
 });

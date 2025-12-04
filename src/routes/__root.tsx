@@ -14,7 +14,7 @@ import { Toaster } from "sonner";
 import { Footer, Header } from "@/components/layout";
 import auth from "@/lib/auth/auth";
 import appCss from "@/lib/styles/globals.css?url";
-import seo from "@/lib/util/seo";
+import createMetaTags from "@/lib/util/createMetaTags";
 import ThemeProvider from "@/providers/ThemeProvider";
 import { getThemeServerFn } from "@/server/functions/theme";
 
@@ -27,13 +27,11 @@ const fetchSession = createServerFn().handler(async () => {
   return await auth.api.getSession({ headers });
 });
 
-const RootComponent = () => {
-  return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
-  );
-};
+const RootComponent = () => (
+  <RootDocument>
+    <Outlet />
+  </RootDocument>
+);
 
 /**
  * Root route.
@@ -55,7 +53,7 @@ export const Route = createRootRouteWithContext<{
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },
-      ...seo(),
+      ...createMetaTags(),
     ],
     links: [
       {

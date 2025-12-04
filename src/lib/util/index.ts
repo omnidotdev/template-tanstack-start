@@ -1,2 +1,2 @@
 export { default as capitalizeFirstLetter } from "./capitalizeFirstLetter";
-export { default as seo } from "./seo";
+export { default as createMetaTags } from "./createMetaTags";
