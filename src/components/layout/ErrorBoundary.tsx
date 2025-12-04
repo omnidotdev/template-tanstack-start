@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 import type { ErrorComponentProps } from "@tanstack/react-router";
 
-export const ErrorBoundary = ({ error }: ErrorComponentProps) => {
+const ErrorBoundary = ({ error }: ErrorComponentProps) => {
   const router = useRouter();
   const isRoot = useMatch({
     strict: false,
@@ -28,13 +28,14 @@ export const ErrorBoundary = ({ error }: ErrorComponentProps) => {
         >
           Try Again
         </Button>
+
         {isRoot ? (
           <Link to="/">Home</Link>
         ) : (
           <Link
             to="/"
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={(evt) => {
+              evt.preventDefault();
               window.history.back();
             }}
           >
@@ -45,3 +46,5 @@ export const ErrorBoundary = ({ error }: ErrorComponentProps) => {
     </div>
   );
 };
+
+export default ErrorBoundary;

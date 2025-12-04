@@ -1,8 +1,8 @@
 /**
  * Application configuration.
  */
-export const app = {
-  name: "Start Template",
+const app = {
+  name: "Omni TanStack Start Template",
   description:
     "Tanstack Start starter template. Designed and maintained by Omni.",
   // ! TODO: replace with application url when this template is used.
@@ -17,3 +17,5 @@ export const app = {
     supportEmailAddress: "support@omni.dev",
   },
 };
+
+export default app;

@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth/authClient";
 import { BASE_URL } from "@/lib/config/env.config";
-import { payments } from "@/lib/payments";
+import payments from "@/lib/payments";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 import { authMiddleware } from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
@@ -78,12 +78,7 @@ interface Props extends CardProps {
   disableAction?: boolean;
 }
 
-export const PriceCard = ({
-  price,
-  className,
-  disableAction,
-  ...rest
-}: Props) => {
+const PriceCard = ({ price, className, disableAction, ...rest }: Props) => {
   const { auth } = useRouteContext({ from: "/pricing" });
   const navigate = useNavigate();
 
@@ -163,3 +158,5 @@ export const PriceCard = ({
     </CardRoot>
   );
 };
+
+export default PriceCard;

@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({
+const HomeRoute = createFileRoute("/")({
   beforeLoad: ({ context: { auth } }) => {
     if (auth) throw redirect({ to: "/dashboard" });
   },
@@ -16,3 +16,5 @@ function HomePage() {
     </div>
   );
 }
+
+export default HomeRoute;

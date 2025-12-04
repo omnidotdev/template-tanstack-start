@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 
 import type { ReactNode } from "react";
 
-export const NotFound = ({ children }: { children?: ReactNode }) => (
+/**
+ * 404 not found.
+ */
+const NotFound = ({ children }: { children?: ReactNode }) => (
   <div className="flex min-h-screen w-full flex-col items-center justify-center gap-4 p-2">
     <div className="text-6xl">404</div>
     <div className="text-muted-foreground">
@@ -17,3 +20,5 @@ export const NotFound = ({ children }: { children?: ReactNode }) => (
     </p>
   </div>
 );
+
+export default NotFound;

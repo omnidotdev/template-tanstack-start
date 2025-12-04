@@ -2,9 +2,9 @@ import { MutationCache, QueryClient, matchQuery } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
-import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
-import { NotFound } from "@/components/layout/NotFound";
-import { routeTree } from "./routeTree.gen";
+import ErrorBoundary from "@/components/layout/ErrorBoundary";
+import NotFound from "@/components/layout/NotFound";
+import { routeTree } from "@/routeTree.gen";
 
 import type { QueryKey } from "@tanstack/react-query";
 

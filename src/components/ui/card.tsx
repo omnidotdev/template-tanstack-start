@@ -1,6 +1,6 @@
 import { ark } from "@ark-ui/react";
 
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 
 import type { ComponentProps, ReactNode } from "react";
 

@@ -9,7 +9,7 @@ import {
 import { DataTable } from "@/components/core/DataTable";
 import { CancelSubscription } from "@/components/profile/CancelSubscription";
 import { ManageSubscription } from "@/components/profile/ManageSubscription";
-import { payments } from "@/lib/payments";
+import payments from "@/lib/payments";
 import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
 import { authMiddleware } from "@/server/authMiddleware";
 
@@ -74,7 +74,7 @@ const fetchSubscriptions = createServerFn()
     }));
   });
 
-export const Route = createFileRoute("/_auth/profile")({
+const ProfileRoute = createFileRoute("/_auth/profile")({
   loader: async () => {
     const subscriptions = await fetchSubscriptions();
 
@@ -84,8 +84,8 @@ export const Route = createFileRoute("/_auth/profile")({
 });
 
 function ProfilePage() {
-  const { auth } = Route.useRouteContext();
-  const { subscriptions } = Route.useLoaderData();
+  const { auth } = ProfileRoute.useRouteContext();
+  const { subscriptions } = ProfileRoute.useLoaderData();
 
   const table = useReactTable({
     columns,
@@ -119,3 +119,5 @@ function ProfilePage() {
     </div>
   );
 }
+
+export default ProfileRoute;

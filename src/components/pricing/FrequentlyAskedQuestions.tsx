@@ -5,7 +5,7 @@ import {
   AccordionRoot,
 } from "@/components/ui/accordion";
 import { app } from "@/lib/config/app.config";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 
 const FAQ = [
   {
@@ -33,7 +33,7 @@ interface Props {
   className?: string;
 }
 
-export const FrequentlyAskedQuestions = ({ className }: Props) => {
+const FrequentlyAskedQuestions = ({ className }: Props) => {
   return (
     <div className={cn("flex flex-col items-center gap-4", className)}>
       <h1 className="font-bold text-lg">Frequently Asked Questions</h1>
@@ -58,3 +58,5 @@ export const FrequentlyAskedQuestions = ({ className }: Props) => {
     </div>
   );
 };
+
+export default FrequentlyAskedQuestions;

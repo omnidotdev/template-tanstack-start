@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_auth")({
+const AuthRoute = createFileRoute("/_auth")({
   beforeLoad: async ({ context: { auth } }) => {
     if (!auth) throw redirect({ to: "/" });
   },
@@ -10,3 +10,5 @@ export const Route = createFileRoute("/_auth")({
 function AuthLayout() {
   return <Outlet />;
 }
+
+export default AuthRoute;

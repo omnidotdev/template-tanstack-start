@@ -1,6 +1,10 @@
-import { app } from "../config/app.config";
+import app from "../config/app.config";
 
-export const seo = ({
+/**
+ * SEO.
+ */
+// ? rename?
+const seo = ({
   title,
   description,
   image,
@@ -38,3 +42,5 @@ export const seo = ({
 
   return tags;
 };
+
+export default seo;

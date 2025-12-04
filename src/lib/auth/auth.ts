@@ -8,7 +8,10 @@ import {
   AUTH_ISSUER_URL,
 } from "@/lib/config/env.config";
 
-export const auth = betterAuth({
+/**
+ * Auth server client.
+ */
+const auth = betterAuth({
   plugins: [
     genericOAuth({
       config: [
@@ -28,3 +31,5 @@ export const auth = betterAuth({
     tanstackStartCookies(),
   ],
 });
+
+export default auth;

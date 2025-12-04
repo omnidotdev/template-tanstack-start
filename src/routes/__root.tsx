@@ -11,13 +11,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { Toaster } from "sonner";
 
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { auth } from "@/lib/auth/auth";
+import { Footer, Header } from "@/components/layout";
+import auth from "@/lib/auth/auth";
 import appCss from "@/lib/styles/globals.css?url";
-import { seo } from "@/lib/util/seo";
-import { ThemeProvider } from "@/providers/ThemeProvider";
-import { getThemeServerFn } from "@/server/theme";
+import seo from "@/lib/util/seo";
+import ThemeProvider from "@/providers/ThemeProvider";
+import { getThemeServerFn } from "@/server/functions/theme";
 
 import type { QueryClient } from "@tanstack/react-query";
 
@@ -107,3 +106,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
+
+export default RootDocument;

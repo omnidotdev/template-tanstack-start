@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 
 import type { RowData, Table as TableInterface } from "@tanstack/react-table";
 import type { TableProps } from "@/components/ui/table";
@@ -23,7 +23,7 @@ interface Props<T> extends TableProps {
   table: TableInterface<T>;
 }
 
-export const DataTable = <T,>({ table, ...rest }: Props<T>) => (
+const DataTable = <T,>({ table, ...rest }: Props<T>) => (
   <Table {...rest}>
     <TableHeader>
       {table.getHeaderGroups().map((headerGroup) => (
@@ -73,3 +73,5 @@ export const DataTable = <T,>({ table, ...rest }: Props<T>) => (
     </TableBody>
   </Table>
 );
+
+export default DataTable;

@@ -6,8 +6,8 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { BASE_URL, STRIPE_PORTAL_CONFIG_ID } from "@/lib/config/env.config";
-import { payments } from "@/lib/payments";
-import { authMiddleware } from "@/server/authMiddleware";
+import payments from "@/lib/payments";
+import authMiddleware from "@/server/authMiddleware";
 
 const manageSubscriptionSchema = z.object({
   subscriptionId: z.string().startsWith("sub_"),
@@ -42,7 +42,7 @@ interface Props {
   subscriptionId: string;
 }
 
-export const ManageSubscription = ({ subscriptionId }: Props) => {
+const ManageSubscription = ({ subscriptionId }: Props) => {
   const navigate = useNavigate();
 
   const { mutateAsync: manageSubscription } = useMutation({
@@ -59,3 +59,5 @@ export const ManageSubscription = ({ subscriptionId }: Props) => {
     </Button>
   );
 };
+
+export default ManageSubscription;

@@ -1,7 +1,7 @@
 import { Accordion as ArkAccordion } from "@ark-ui/react";
 import { ChevronDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 
 import type {
   AccordionItemContentProps,

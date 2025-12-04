@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { seo } from "@/lib/util/seo";
-import { usersOptions } from "@/options/users.options";
+import seo from "@/lib/util/seo";
+import usersOptions from "@/options/users.options";
 
-export const Route = createFileRoute("/_auth/dashboard")({
+const DashboardRoute = createFileRoute("/_auth/dashboard")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(usersOptions());
   },
@@ -27,3 +27,5 @@ function DashboardPage() {
     </div>
   );
 }
+
+export default DashboardRoute;

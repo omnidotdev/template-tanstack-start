@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-router";
 
 import InternalLink from "@/components/core/InternalLink";
-import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 import {
   AvatarFallback,
   AvatarImage,
@@ -24,10 +24,13 @@ import {
   MenuSeparator,
   MenuTrigger,
 } from "@/components/ui/menu";
-import { authClient } from "@/lib/auth/authClient";
-import { app } from "@/lib/config/app.config";
+import authClient from "@/lib/auth/authClient";
+import app from "@/lib/config/app.config";
 
-export const Header = () => {
+/**
+ * Layout header.
+ */
+const Header = () => {
   const { auth } = useRouteContext({ strict: false });
   const router = useRouter();
   const location = useLocation();
@@ -113,3 +116,5 @@ export const Header = () => {
     </header>
   );
 };
+
+export default Header;

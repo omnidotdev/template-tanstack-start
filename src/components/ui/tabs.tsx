@@ -1,6 +1,6 @@
 import { Tabs as ArkTabs } from "@ark-ui/react/tabs";
 
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 
 import type { ComponentProps } from "react";
 

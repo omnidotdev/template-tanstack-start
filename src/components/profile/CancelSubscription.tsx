@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { BASE_URL, STRIPE_PORTAL_CONFIG_ID } from "@/lib/config/env.config";
-import { payments } from "@/lib/payments";
+import payments from "@/lib/payments";
 import { authMiddleware } from "@/server/authMiddleware";
 
 const cancelSubscriptionSchema = z.object({
@@ -42,7 +42,7 @@ interface Props {
   subscriptionId: string;
 }
 
-export const CancelSubscription = ({ subscriptionId }: Props) => {
+const CancelSubscription = ({ subscriptionId }: Props) => {
   const navigate = useNavigate();
 
   const { mutateAsync: cancelSubscription } = useMutation({
@@ -59,3 +59,5 @@ export const CancelSubscription = ({ subscriptionId }: Props) => {
     </Button>
   );
 };
+
+export default CancelSubscription;

@@ -5,7 +5,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { FrequentlyAskedQuestions } from "@/components/pricing/FrequentlyAskedQuestions";
 import { PriceCard } from "@/components/pricing/PriceCard";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { payments } from "@/lib/payments";
+import payments from "@/lib/payments";
 
 import type Stripe from "stripe";
 import type { Price } from "@/components/pricing/PriceCard";
@@ -24,7 +24,9 @@ const FREE_PRICE: Price = {
   },
 };
 
-// NB: we expand the product details in the server function below. This interface narrows the type for `product` on that return
+/**
+ * Expand a Stripe Price object (https://docs.stripe.com/api/prices/object) with a Stripe Product object (https://docs.stripe.com/api/products/object).
+ */
 interface ExpandedProductPrice extends Stripe.Price {
   product: Stripe.Product;
 }
@@ -41,7 +43,7 @@ const fetchPrices = createServerFn().handler(async () => {
   ) as ExpandedProductPrice[];
 });
 
-export const Route = createFileRoute("/pricing")({
+const PricingRoute = createFileRoute("/pricing")({
   loader: async () => {
     const prices = await fetchPrices();
 
@@ -51,7 +53,7 @@ export const Route = createFileRoute("/pricing")({
 });
 
 function PricingPage() {
-  const { prices } = Route.useLoaderData();
+  const { prices } = PricingRoute.useLoaderData();
 
   const tabs = useTabs({ defaultValue: "month" });
 
@@ -93,3 +95,5 @@ function PricingPage() {
     </div>
   );
 }
+
+export default PricingRoute;
