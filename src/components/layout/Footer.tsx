@@ -1,4 +1,4 @@
-import ExternalLink from "@/components/core/ExternalLink";
+import { ExternalLink } from "@/components/core";
 import app from "@/lib/config/app.config";
 
 /**

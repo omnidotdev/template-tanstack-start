@@ -19,6 +19,7 @@ import ThemeProvider from "@/providers/ThemeProvider";
 import { getThemeServerFn } from "@/server/functions/theme";
 
 import type { QueryClient } from "@tanstack/react-query";
+import type { PropsWithChildren } from "react";
 
 const fetchSession = createServerFn().handler(async () => {
   const headers = getRequestHeaders();
@@ -26,6 +27,17 @@ const fetchSession = createServerFn().handler(async () => {
   return await auth.api.getSession({ headers });
 });
 
+const RootComponent = () => {
+  return (
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
+  );
+};
+
+/**
+ * Root route.
+ */
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
@@ -56,15 +68,7 @@ export const Route = createRootRouteWithContext<{
   component: RootComponent,
 });
 
-function RootComponent() {
-  return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
-  );
-}
-
-function RootDocument({ children }: { children: React.ReactNode }) {
+const RootDocument = ({ children }: PropsWithChildren) => {
   const theme = Route.useLoaderData();
 
   return (
@@ -105,6 +109,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </body>
     </html>
   );
-}
+};
 
 export default RootDocument;

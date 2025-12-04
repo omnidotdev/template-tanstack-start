@@ -9,27 +9,69 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as AuthProfileRouteImport } from './routes/_auth/profile'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthProfileRoute = AuthProfileRouteImport.update({
+  id: '/_auth/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/pricing': typeof PricingRoute
+  '/profile': typeof AuthProfileRoute
+}
+export interface FileRoutesByTo {
+  '/pricing': typeof PricingRoute
+  '/profile': typeof AuthProfileRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/pricing': typeof PricingRoute
+  '/_auth/profile': typeof AuthProfileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths: '/pricing' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to: '/pricing' | '/profile'
+  id: '__root__' | '/pricing' | '/_auth/profile'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  PricingRoute: typeof PricingRoute
+  AuthProfileRoute: typeof AuthProfileRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/profile': {
+      id: '/_auth/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  PricingRoute: PricingRoute,
+  AuthProfileRoute: AuthProfileRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()

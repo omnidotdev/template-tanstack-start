@@ -12,7 +12,7 @@ const authMiddleware = createMiddleware().server(async ({ next, request }) => {
 
   if (!idToken) throw new Error("ID Token not found");
 
-  const jwks = createRemoteJWKSet(new URL(`${AUTH_ISSUER_URL!}/jwks`));
+  const jwks = createRemoteJWKSet(new URL(`${AUTH_ISSUER_URL}/jwks`));
 
   const { payload } = await jwtVerify(idToken, jwks);
 

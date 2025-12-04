@@ -6,12 +6,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { DataTable } from "@/components/core/DataTable";
-import { CancelSubscription } from "@/components/profile/CancelSubscription";
-import { ManageSubscription } from "@/components/profile/ManageSubscription";
+import { DataTable } from "@/components/core";
+import { CancelSubscription, ManageSubscription } from "@/components/profile";
 import payments from "@/lib/payments";
-import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
-import { authMiddleware } from "@/server/authMiddleware";
+import { capitalizeFirstLetter } from "@/lib/util";
+import authMiddleware from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
 
@@ -74,18 +73,9 @@ const fetchSubscriptions = createServerFn()
     }));
   });
 
-const ProfileRoute = createFileRoute("/_auth/profile")({
-  loader: async () => {
-    const subscriptions = await fetchSubscriptions();
-
-    return { subscriptions };
-  },
-  component: ProfilePage,
-});
-
-function ProfilePage() {
-  const { auth } = ProfileRoute.useRouteContext();
-  const { subscriptions } = ProfileRoute.useLoaderData();
+const ProfilePage = () => {
+  const { auth } = Route.useRouteContext();
+  const { subscriptions } = Route.useLoaderData();
 
   const table = useReactTable({
     columns,
@@ -118,6 +108,13 @@ function ProfilePage() {
       </div>
     </div>
   );
-}
+};
 
-export default ProfileRoute;
+export const Route = createFileRoute("/_auth/profile")({
+  loader: async () => {
+    const subscriptions = await fetchSubscriptions();
+
+    return { subscriptions };
+  },
+  component: ProfilePage,
+});

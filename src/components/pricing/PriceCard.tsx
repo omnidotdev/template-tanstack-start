@@ -14,12 +14,12 @@ import {
   CardRoot,
   CardTitle,
 } from "@/components/ui/card";
-import { authClient } from "@/lib/auth/authClient";
+import authClient from "@/lib/auth/authClient";
 import { BASE_URL } from "@/lib/config/env.config";
 import payments from "@/lib/payments";
-import { capitalizeFirstLetter } from "@/lib/util/capitalizeFirstLetter";
+import { capitalizeFirstLetter } from "@/lib/util";
 import cn from "@/lib/utils";
-import { authMiddleware } from "@/server/authMiddleware";
+import authMiddleware from "@/server/authMiddleware";
 
 import type Stripe from "stripe";
 import type { CardProps } from "@/components/ui/card";

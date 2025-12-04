@@ -2,8 +2,7 @@ import { MutationCache, QueryClient, matchQuery } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
-import ErrorBoundary from "@/components/layout/ErrorBoundary";
-import NotFound from "@/components/layout/NotFound";
+import { ErrorBoundary, NotFound } from "@/components/layout";
 import { routeTree } from "@/routeTree.gen";
 
 import type { QueryKey } from "@tanstack/react-query";
@@ -16,7 +15,7 @@ declare module "@tanstack/react-query" {
   }
 }
 
-export function getRouter() {
+export const getRouter = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -66,4 +65,4 @@ export function getRouter() {
   });
 
   return router;
-}
+};

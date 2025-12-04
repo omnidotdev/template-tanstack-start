@@ -4,17 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import seo from "@/lib/util/seo";
 import usersOptions from "@/options/users.options";
 
-const DashboardRoute = createFileRoute("/_auth/dashboard")({
-  loader: async ({ context: { queryClient } }) => {
-    await queryClient.ensureQueryData(usersOptions());
-  },
-  head: () => ({
-    meta: seo({ title: "Dashboard" }),
-  }),
-  component: DashboardPage,
-});
-
-function DashboardPage() {
+const DashboardPage = () => {
   const { data } = useSuspenseQuery(usersOptions());
 
   return (
@@ -26,6 +16,16 @@ function DashboardPage() {
       <p className="my-4">There are {data.users?.totalCount} total users.</p>
     </div>
   );
-}
+};
+
+const DashboardRoute = createFileRoute("/_auth/dashboard")({
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(usersOptions());
+  },
+  head: () => ({
+    meta: seo({ title: "Dashboard" }),
+  }),
+  component: DashboardPage,
+});
 
 export default DashboardRoute;

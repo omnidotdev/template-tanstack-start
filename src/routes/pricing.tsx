@@ -2,13 +2,12 @@ import { TabsRootProvider, useTabs } from "@ark-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
-import { FrequentlyAskedQuestions } from "@/components/pricing/FrequentlyAskedQuestions";
-import { PriceCard } from "@/components/pricing/PriceCard";
+import { FrequentlyAskedQuestions, PriceCard } from "@/components/pricing";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import payments from "@/lib/payments";
 
 import type Stripe from "stripe";
-import type { Price } from "@/components/pricing/PriceCard";
+import type { Price } from "@/components/pricing";
 
 const FREE_PRICE: Price = {
   id: "free-price",
@@ -39,21 +38,13 @@ const fetchPrices = createServerFn().handler(async () => {
   });
 
   return prices.data.sort(
-    (a, b) => a.unit_amount! - b.unit_amount!,
+    // set null prices last by treating null as Infinity
+    (a, b) => (a.unit_amount ?? Infinity) - (b.unit_amount ?? Infinity),
   ) as ExpandedProductPrice[];
 });
 
-const PricingRoute = createFileRoute("/pricing")({
-  loader: async () => {
-    const prices = await fetchPrices();
-
-    return { prices };
-  },
-  component: PricingPage,
-});
-
-function PricingPage() {
-  const { prices } = PricingRoute.useLoaderData();
+const PricingPage = () => {
+  const { prices } = Route.useLoaderData();
 
   const tabs = useTabs({ defaultValue: "month" });
 
@@ -78,22 +69,31 @@ function PricingPage() {
           <TabsTrigger value="year">Yearly</TabsTrigger>
         </TabsList>
 
-        <TabsContent
-          value={tabs.value!}
-          className="flex flex-col items-center gap-4 lg:flex-row"
-        >
-          {/** Handling the free tier could be quite different across apps. For now, we disable the action for authenticated users. TODO: Implement downstream. */}
-          <PriceCard price={FREE_PRICE} disableAction />
+        {tabs.value != null && (
+          <TabsContent
+            value={tabs.value}
+            className="flex flex-col items-center gap-4 lg:flex-row"
+          >
+            {/** Handling the free tier could be quite different across apps. For now, we disable the action for authenticated users. TODO: Implement downstream. */}
+            <PriceCard price={FREE_PRICE} disableAction />
 
-          {filteredPrices.map((price) => (
-            <PriceCard key={price.id} price={price} />
-          ))}
-        </TabsContent>
+            {filteredPrices.map((price) => (
+              <PriceCard key={price.id} price={price} />
+            ))}
+          </TabsContent>
+        )}
       </TabsRootProvider>
 
       <FrequentlyAskedQuestions className="mt-12 w-full" />
     </div>
   );
-}
+};
 
-export default PricingRoute;
+export const Route = createFileRoute("/pricing")({
+  loader: async () => {
+    const prices = await fetchPrices();
+
+    return { prices };
+  },
+  component: PricingPage,
+});

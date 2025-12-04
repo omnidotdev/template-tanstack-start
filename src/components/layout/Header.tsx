@@ -6,8 +6,8 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 
-import InternalLink from "@/components/core/InternalLink";
-import ThemeToggle from "@/components/layout/ThemeToggle";
+import { InternalLink } from "@/components/core";
+import { ThemeToggle } from "@/components/layout";
 import {
   AvatarFallback,
   AvatarImage,

@@ -3,7 +3,7 @@ import { parse } from "graphql";
 import { GraphQLClient, gql } from "graphql-request";
 
 import { API_GRAPHQL_URL } from "@/lib/config/env.config";
-import { authMiddleware } from "@/server/authMiddleware";
+import authMiddleware from "@/server/authMiddleware";
 
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import type { Variables } from "graphql-request";

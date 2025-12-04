@@ -4,7 +4,7 @@ import {
   AccordionItemTrigger,
   AccordionRoot,
 } from "@/components/ui/accordion";
-import { app } from "@/lib/config/app.config";
+import app from "@/lib/config/app.config";
 import cn from "@/lib/utils";
 
 const FAQ = [
