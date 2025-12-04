@@ -4,9 +4,11 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently --kill-others --names \"GRAPHQL-CODEGEN,CLIENT\" -c \"bgBlue.bold,bgMagenta.bold\" \"bun run graphql:generate:watch\" \"vite dev\"",
-    "build": "vite build",
+    "build": "vite build && bun sw:build",
     "serve": "vite preview",
     "start": "node .output/server/index.mjs",
+    "sw:build": "bun scripts/buildSw.ts",
+    "icons:generate": "bun scripts/generateIcons.ts",
     "graphql:generate": "NODE_PATH=src/ dotenv -e .env.development -- graphql-codegen --config src/lib/graphql/codegen.config.ts",
     "graphql:generate:watch": "bun graphql:generate -w",
     "format": "biome format --write",
@@ -40,6 +42,7 @@
     "dotenv-cli": "^11.0.0",
     "husky": "^9.1.7",
     "knip": "^5.71.0",
+    "serwist": "^9.2.1",
     "typescript": "^5.9.3",
     "vite": "^7.2.6",
     "vite-plugin-mkcert": "^1.17.9"
