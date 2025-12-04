@@ -9,7 +9,7 @@ interface Params {
 }
 
 /**
- * SEO.
+ * Create meta tags.
  */
 const createMetaTags = ({
   title,
