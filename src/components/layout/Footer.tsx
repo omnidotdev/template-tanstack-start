@@ -1,3 +1,8 @@
+import {
+  SiDiscord as DiscordIcon,
+  SiX as XIcon,
+} from "@icons-pack/react-simple-icons";
+
 import { ExternalLink } from "@/components/core";
 import app from "@/lib/config/app.config";
 
@@ -20,29 +25,11 @@ const Footer = () => (
 
     <div className="flex items-center gap-1">
       <ExternalLink variant="ghost" href={app.socials.discord}>
-        <img
-          src="/socials/discord-logo-black.png"
-          alt="discord"
-          className="block h-auto w-5 dark:hidden"
-        />
-        <img
-          src="/socials/discord-logo-white.png"
-          alt="discord"
-          className="hidden h-auto w-5 dark:block"
-        />
+        <DiscordIcon className="size-5" />
       </ExternalLink>
 
       <ExternalLink variant="ghost" href={app.socials.x}>
-        <img
-          src="/socials/x-logo-black.png"
-          alt="X"
-          className="block h-auto w-4 dark:hidden"
-        />
-        <img
-          src="/socials/x-logo-white.png"
-          alt="X"
-          className="hidden h-auto w-4 dark:block"
-        />
+        <XIcon className="size-5" />
       </ExternalLink>
     </div>
   </footer>
