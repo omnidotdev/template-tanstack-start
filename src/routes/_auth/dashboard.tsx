@@ -18,7 +18,7 @@ const DashboardPage = () => {
   );
 };
 
-const DashboardRoute = createFileRoute("/_auth/dashboard")({
+export const Route = createFileRoute("/_auth/dashboard")({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(usersOptions());
   },
@@ -27,5 +27,3 @@ const DashboardRoute = createFileRoute("/_auth/dashboard")({
   }),
   component: DashboardPage,
 });
-
-export default DashboardRoute;

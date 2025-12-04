@@ -29,7 +29,7 @@ const loggingMiddleware = createMiddleware().server(
   },
 );
 
-const ApiAuthRoute = createFileRoute("/api/auth/$")({
+export const Route = createFileRoute("/api/auth/$")({
   server: {
     middleware: [loggingMiddleware],
     handlers: {
@@ -42,5 +42,3 @@ const ApiAuthRoute = createFileRoute("/api/auth/$")({
     },
   },
 });
-
-export default ApiAuthRoute;

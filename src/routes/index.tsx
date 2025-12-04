@@ -11,11 +11,9 @@ const HomePage = () => (
   </div>
 );
 
-const HomeRoute = createFileRoute("/")({
+export const Route = createFileRoute("/")({
   beforeLoad: ({ context: { auth } }) => {
     if (auth) throw redirect({ to: "/dashboard" });
   },
   component: HomePage,
 });
-
-export default HomeRoute;
