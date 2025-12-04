@@ -73,6 +73,9 @@ const fetchSubscriptions = createServerFn()
     }));
   });
 
+/**
+ * Profile page.
+ */
 const ProfilePage = () => {
   const { auth } = Route.useRouteContext();
   const { subscriptions } = Route.useLoaderData();

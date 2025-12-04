@@ -24,6 +24,9 @@ interface Props<T> extends TableProps {
   table: TableInterface<T>;
 }
 
+/**
+ * Data table.
+ */
 const DataTable = <T,>({ table, ...rest }: Props<T>) => (
   <Table {...rest}>
     <TableHeader>

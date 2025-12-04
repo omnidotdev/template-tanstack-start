@@ -42,6 +42,9 @@ interface Props {
   subscriptionId: string;
 }
 
+/**
+ * Manage subscription.
+ */
 const ManageSubscription = ({ subscriptionId }: Props) => {
   const navigate = useNavigate();
 

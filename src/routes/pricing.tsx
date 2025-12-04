@@ -43,6 +43,9 @@ const fetchPrices = createServerFn().handler(async () => {
   ) as ExpandedProductPrice[];
 });
 
+/**
+ * Pricing page.
+ */
 const PricingPage = () => {
   const { prices } = Route.useLoaderData();
 

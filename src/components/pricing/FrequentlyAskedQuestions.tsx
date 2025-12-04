@@ -33,6 +33,9 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Frequently asked questions.
+ */
 const FrequentlyAskedQuestions = ({ className }: Props) => {
   return (
     <div className={cn("flex flex-col items-center gap-4", className)}>

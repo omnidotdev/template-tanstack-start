@@ -19,6 +19,9 @@ const BasicLink = ({
 
 const CreatedLink = createLink(BasicLink);
 
+/**
+ * Internal link.
+ */
 const InternalLink: LinkComponent<typeof BasicLink> = (props) => (
   <CreatedLink preload="intent" {...props} />
 );

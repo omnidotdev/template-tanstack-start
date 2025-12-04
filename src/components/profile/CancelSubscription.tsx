@@ -42,6 +42,9 @@ interface Props {
   subscriptionId: string;
 }
 
+/**
+ * Cancel subscription.
+ */
 const CancelSubscription = ({ subscriptionId }: Props) => {
   const navigate = useNavigate();
 

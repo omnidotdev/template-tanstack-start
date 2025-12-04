@@ -66,6 +66,9 @@ export const Route = createRootRouteWithContext<{
   component: RootComponent,
 });
 
+/**
+ * Root document.
+ */
 const RootDocument = ({ children }: PropsWithChildren) => {
   const theme = Route.useLoaderData();
 

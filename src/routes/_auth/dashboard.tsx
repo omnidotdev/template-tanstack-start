@@ -4,6 +4,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import createMetaTags from "@/lib/util/createMetaTags";
 import usersOptions from "@/options/users.options";
 
+/**
+ * Dashboard page.
+ */
 const DashboardPage = () => {
   const { data } = useSuspenseQuery(usersOptions());
 

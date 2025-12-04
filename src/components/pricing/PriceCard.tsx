@@ -78,6 +78,9 @@ interface Props extends CardProps {
   disableAction?: boolean;
 }
 
+/**
+ * Price card.
+ */
 const PriceCard = ({ price, className, disableAction, ...rest }: Props) => {
   const { auth } = useRouteContext({ from: "/pricing" });
   const navigate = useNavigate();

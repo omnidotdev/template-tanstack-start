@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 
 import type { ErrorComponentProps } from "@tanstack/react-router";
 
+/**
+ * Error boundary.
+ */
 const ErrorBoundary = ({ error }: ErrorComponentProps) => {
   const router = useRouter();
   const isRoot = useMatch({
