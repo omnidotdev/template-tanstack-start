@@ -1,10 +1,10 @@
 // see https://biomejs.dev/reference/configuration
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": true,
   },
   "assist": {
     "actions": {
@@ -18,17 +18,17 @@
               ":BLANK_LINE:",
               {
                 "type": false,
-                "source": [":PACKAGE:", ":PACKAGE_WITH_PROTOCOL:"]
+                "source": [":PACKAGE:", ":PACKAGE_WITH_PROTOCOL:"],
               },
               ":BLANK_LINE:",
               { "type": false, "source": ["**"] },
               ":BLANK_LINE:",
-              { "type": true }
-            ]
-          }
-        }
-      }
-    }
+              { "type": true },
+            ],
+          },
+        },
+      },
+    },
   },
   "files": {
     "includes": [
@@ -36,26 +36,26 @@
       "!!**/*.gen.*",
       "!!**/bun.lock",
       "!!**/generated",
-      "!!**/public"
-    ]
+      "!!**/public",
+    ],
   },
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 80
+    "lineWidth": 80,
   },
   "css": {
     "parser": {
-      "tailwindDirectives": true
-    }
+      "tailwindDirectives": true,
+    },
   },
   "linter": {
     "rules": {
       "correctness": {
         "noUnusedImports": {
           "fix": "safe",
-          "level": "error"
-        }
+          "level": "error",
+        },
       },
       "nursery": {
         "useSortedClasses": {
@@ -63,23 +63,23 @@
           "level": "error",
           "options": {
             "attributes": ["class", "className"],
-            "functions": ["cn", "clsx", "classnames", "cva", "tv"]
-          }
-        }
+            "functions": ["cn", "clsx", "classnames", "cva", "tv"],
+          },
+        },
       },
       "style": {
         "useImportType": {
           "level": "error",
-          "options": { "style": "separatedType" }
-        }
+          "options": { "style": "separatedType" },
+        },
       },
       "suspicious": {
         "noArrayIndexKey": "warn",
         "noConsole": {
           "level": "error",
-          "options": { "allow": ["error", "warn", "info"] }
-        }
-      }
-    }
-  }
+          "options": { "allow": ["error", "warn", "info"] },
+        },
+      },
+    },
+  },
 }
