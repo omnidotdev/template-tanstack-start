@@ -90,7 +90,7 @@ bun dev
 bun pwa:audit
 ```
 
-This crawls your entire site and runs Google Lighthouse audits on each page, providing a dashboard with:
+This crawls the entire site and runs Google Lighthouse audits on each page, providing a dashboard with:
 
 - Performance scores
 - Accessibility checks
