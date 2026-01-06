@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -8,9 +7,8 @@ import {
 
 import { DataTable } from "@/components/core";
 import { CancelSubscription, ManageSubscription } from "@/components/profile";
-import payments from "@/lib/payments";
 import { capitalizeFirstLetter } from "@/lib/util";
-import authMiddleware from "@/server/authMiddleware";
+import { getSubscriptions } from "@/server/functions/subscriptions";
 
 import type Stripe from "stripe";
 
@@ -49,29 +47,6 @@ const columns = [
     },
   }),
 ];
-
-const fetchSubscriptions = createServerFn()
-  .middleware([authMiddleware])
-  .handler(async ({ context }) => {
-    const customers = await payments.customers.search({
-      query: `metadata['externalId']:'${context.idToken.sub}'`,
-    });
-
-    if (!customers.data.length) return [];
-
-    const customerId = customers.data[0].id;
-
-    const subscriptions = await payments.subscriptions.list({
-      customer: customerId,
-      status: "active",
-    });
-
-    return subscriptions.data.map((sub) => ({
-      id: sub.id,
-      customerId,
-      price: sub.items.data[0].price,
-    }));
-  });
 
 /**
  * Profile page.
@@ -115,7 +90,7 @@ const ProfilePage = () => {
 
 export const Route = createFileRoute("/_auth/profile")({
   loader: async () => {
-    const subscriptions = await fetchSubscriptions();
+    const subscriptions = await getSubscriptions();
 
     return { subscriptions };
   },

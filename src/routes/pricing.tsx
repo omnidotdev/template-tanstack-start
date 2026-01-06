@@ -1,12 +1,10 @@
 import { TabsRootProvider, useTabs } from "@ark-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 
 import { FrequentlyAskedQuestions, PriceCard } from "@/components/pricing";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import payments from "@/lib/payments";
+import { getPrices } from "@/server/functions/prices";
 
-import type Stripe from "stripe";
 import type { Price } from "@/components/pricing";
 
 const FREE_PRICE: Price = {
@@ -22,26 +20,6 @@ const FREE_PRICE: Price = {
     ],
   },
 };
-
-/**
- * Expand a Stripe Price object (https://docs.stripe.com/api/prices/object) with a Stripe Product object (https://docs.stripe.com/api/products/object).
- */
-interface ExpandedProductPrice extends Stripe.Price {
-  product: Stripe.Product;
-}
-
-const fetchPrices = createServerFn().handler(async () => {
-  const prices = await payments.prices.search({
-    // NB: must update in downstream usage.
-    query: "metadata['product']:'template'",
-    expand: ["data.product"],
-  });
-
-  return prices.data.sort(
-    // set null prices last by treating null as Infinity
-    (a, b) => (a.unit_amount ?? Infinity) - (b.unit_amount ?? Infinity),
-  ) as ExpandedProductPrice[];
-});
 
 /**
  * Pricing page.
@@ -94,7 +72,7 @@ const PricingPage = () => {
 
 export const Route = createFileRoute("/pricing")({
   loader: async () => {
-    const prices = await fetchPrices();
+    const prices = await getPrices();
 
     return { prices };
   },

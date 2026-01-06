@@ -1,10 +1,8 @@
 import { Format } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 import { CheckIcon } from "lucide-react";
 import { toast } from "sonner";
-import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,52 +13,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import authClient from "@/lib/auth/authClient";
-import { BASE_URL } from "@/lib/config/env.config";
-import payments from "@/lib/payments";
 import { capitalizeFirstLetter } from "@/lib/util";
 import cn from "@/lib/utils";
-import authMiddleware from "@/server/authMiddleware";
+import { getCheckoutUrl } from "@/server/functions/subscriptions";
 
 import type Stripe from "stripe";
 import type { CardProps } from "@/components/ui/card";
-
-const checkoutSchema = z.object({
-  priceId: z.string().startsWith("price_"),
-  email: z.email(),
-});
-
-const getCheckoutUrl = createServerFn({ method: "POST" })
-  .inputValidator((data) => checkoutSchema.parse(data))
-  .middleware([authMiddleware])
-  .handler(async ({ data, context }) => {
-    let customerId: Stripe.Customer["id"];
-
-    const customers = await payments.customers.search({
-      query: `email:"${data.email}"`,
-    });
-
-    if (!customers.data.length && context.idToken.sub) {
-      const customer = await payments.customers.create({
-        email: data.email,
-        metadata: {
-          externalId: context.idToken.sub,
-        },
-      });
-
-      customerId = customer.id;
-    } else {
-      customerId = customers.data[0].id;
-    }
-
-    const session = await payments.checkout.sessions.create({
-      mode: "subscription",
-      line_items: [{ price: data.priceId, quantity: 1 }],
-      customer: customerId,
-      success_url: `${BASE_URL}/pricing`,
-    });
-
-    return session.url as string;
-  });
 
 export interface Price {
   id: Stripe.Price["id"];
@@ -95,8 +53,8 @@ const PriceCard = ({ price, className, disableAction, ...rest }: Props) => {
   });
 
   const { mutateAsync: checkout } = useMutation({
-    mutationFn: async ({ priceId, email }: z.input<typeof checkoutSchema>) =>
-      await getCheckoutUrl({ data: { priceId, email } }),
+    mutationFn: async (priceId: string) =>
+      await getCheckoutUrl({ data: { priceId } }),
     onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
     onError: (error) => toast.error(error.message),
   });
@@ -138,12 +96,7 @@ const PriceCard = ({ price, className, disableAction, ...rest }: Props) => {
         </div>
 
         {auth ? (
-          <Button
-            disabled={disableAction}
-            onClick={() =>
-              checkout({ priceId: price.id, email: auth.user.email })
-            }
-          >
+          <Button disabled={disableAction} onClick={() => checkout(price.id)}>
             Get Started
           </Button>
         ) : (
