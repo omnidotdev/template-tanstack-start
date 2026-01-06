@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useQuery, useSuspenseQuery, useInfiniteQuery, useSuspenseInfiniteQuery, UseQueryOptions, UseSuspenseQueryOptions, UseInfiniteQueryOptions, InfiniteData, UseSuspenseInfiniteQueryOptions } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { graphqlFetch } from '@/lib/graphql/graphqlFetch';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -759,24 +759,6 @@ export const useUsersQuery = <
 
 useUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['Users'] : ['Users', variables];
 
-export const useSuspenseUsersQuery = <
-      TData = UsersQuery,
-      TError = unknown
-    >(
-      variables?: UsersQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<UsersQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<UsersQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['UsersSuspense'] : ['UsersSuspense', variables],
-    queryFn: graphqlFetch<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['UsersSuspense'] : ['UsersSuspense', variables];
-
 export const useInfiniteUsersQuery = <
       TData = InfiniteData<UsersQuery>,
       TError = unknown
@@ -797,27 +779,6 @@ export const useInfiniteUsersQuery = <
     )};
 
 useInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['Users.infinite'] : ['Users.infinite', variables];
-
-export const useSuspenseInfiniteUsersQuery = <
-      TData = InfiniteData<UsersQuery>,
-      TError = unknown
-    >(
-      variables: UsersQueryVariables,
-      options: Omit<UseSuspenseInfiniteQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseInfiniteQueryOptions<UsersQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseInfiniteQuery<UsersQuery, TError, TData>(
-      (() => {
-    const { queryKey: optionsQueryKey, ...restOptions } = options;
-    return {
-      queryKey: optionsQueryKey ?? variables === undefined ? ['Users.infiniteSuspense'] : ['Users.infiniteSuspense', variables],
-      queryFn: (metaData) => graphqlFetch<UsersQuery, UsersQueryVariables>(UsersDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      ...restOptions
-    }
-  })()
-    )};
-
-useSuspenseInfiniteUsersQuery.getKey = (variables?: UsersQueryVariables) => variables === undefined ? ['Users.infiniteSuspense'] : ['Users.infiniteSuspense', variables];
 
 
 useUsersQuery.fetcher = (variables?: UsersQueryVariables, options?: RequestInit['headers']) => graphqlFetch<UsersQuery, UsersQueryVariables>(UsersDocument, variables, options);
