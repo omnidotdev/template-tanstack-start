@@ -58,8 +58,10 @@ First, `cp .env.local.template .env.local` and fill in the values.
 
 ### Building and Running
 
+Run `tilt up`, or:
+
 ```sh
-bun install
+bun i
 ```
 
 ```sh
@@ -71,6 +73,26 @@ Generate PWA icons (optional):
 ```sh
 bun icons:generate
 ```
+
+### PWA Audit
+
+Run a comprehensive PWA audit with [Unlighthouse](https://unlighthouse.dev):
+
+```sh
+# first, start the dev server
+bun dev
+
+# in another terminal, run the audit
+bun pwa:audit
+```
+
+This crawls your entire site and runs Google Lighthouse audits on each page, providing a dashboard with:
+
+- Performance scores
+- Accessibility checks
+- Best practices
+- SEO analysis
+- PWA compliance
 
 ## License
 
