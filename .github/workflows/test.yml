@@ -37,6 +37,9 @@ jobs:
       - name: Install Playwright Chromium
         run: bunx playwright install --with-deps chromium
 
+      - name: Build app
+        run: bun build
+
       - name: Run E2E tests
         run: bun test:e2e
         env:
