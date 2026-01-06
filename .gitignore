@@ -21,6 +21,9 @@ certificates
 !.env.test
 !.env.local.template
 
-# Serwist
+# Serwist (https://serwist.pages.dev)
 public/sw*
 public/swe-worker*
+
+# Unlighthouse (https://unlighthouse.dev)
+.unlighthouse
