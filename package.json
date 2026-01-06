@@ -15,7 +15,7 @@
     "check": "biome check --diagnostic-level=error src",
     "knip": "knip-bun --tags=-knipignore",
     "pwa:audit": "unlighthouse-ci --site https://localhost:3000",
-    "test": "bun test src/__tests__/unit src/__tests__/components",
+    "test": "bun test",
     "test:watch": "bun test --watch",
     "test:coverage": "bun test --coverage",
     "test:e2e": "NODE_ENV=test playwright test",

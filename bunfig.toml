@@ -4,5 +4,5 @@ timeout = 30000
 preload = ["./src/test/preload.ts"]
 coverageSkipTestFiles = true
 
-# exclude E2E tests from `bun test` (they use Playwright)
-testIgnorePatterns = ["**/e2e/**"]
+# exclude E2E tests and generated files from `bun test`
+testIgnorePatterns = ["**/e2e/**", "**/generated/**"]
