@@ -98,6 +98,37 @@ This crawls the entire site and runs Google Lighthouse audits on each page, prov
 - SEO analysis
 - PWA compliance
 
+## Testing
+
+The project includes a comprehensive test suite with unit tests and E2E tests.
+
+### Unit Tests
+
+```sh
+bun test
+
+# or in watch mode
+bun test:watch
+
+# or test with coverage reporting
+bun test:coverage
+```
+
+### E2E Tests
+
+```sh
+# first, ensure Playwright browsers are installed
+bunx playwright install
+
+# run E2E tests
+bun test:e2e
+
+# or run with UI
+bun test:e2e:ui
+```
+
+Tests use [MSW (Mock Service Worker)](https://mswjs.io) to mock API calls. GraphQL mocks are auto-generated in `src/generated/graphql.mock.ts` via GraphQL Code Generator.
+
 ## License
 
 The code in this repository is licensed under MIT, &copy; Omni LLC. See [LICENSE.md](LICENSE.md) for more information.

@@ -1,0 +1,55 @@
+name: Test 🧪
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  unit:
+    name: Unit Tests 🃏
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run tests
+        run: bun test
+
+  # TODO fix and enable
+  # e2e:
+  #   name: E2E Tests 🎭
+  #   timeout-minutes: 10
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - uses: oven-sh/setup-bun@v2
+
+  #     - name: Install dependencies
+  #       run: bun install
+
+  #     - name: Install Playwright Chromium
+  #       run: bunx playwright install --with-deps chromium
+
+  #     - name: Build app
+  #       run: bun run build
+
+  #     - name: Run E2E tests
+  #       run: bun test:e2e
+  #       env:
+  #         CI: true
+
+  #     - name: Upload test artifacts
+  #       uses: actions/upload-artifact@v4
+  #       if: failure()
+  #       with:
+  #         name: test-artifacts
+  #         path: src/generated/test-artifacts/
+  #         retention-days: 7

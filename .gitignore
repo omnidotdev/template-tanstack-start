@@ -27,3 +27,9 @@ public/swe-worker*
 
 # Unlighthouse (https://unlighthouse.dev)
 .unlighthouse
+
+# Playwright (https://playwright.dev)
+playwright-report
+playwright/.cache
+src/generated/test-artifacts
+src/generated/test-report

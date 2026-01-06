@@ -12,16 +12,27 @@ const knipConfig: KnipConfig = {
     "src/sw.ts",
   ],
   project: ["src/**/*.{ts,tsx,css}"],
-  // NB: Modified from the default GraphQL Codegen configuration, see: https://knip.dev/reference/plugins/graphql-codegen
+  // based on https://knip.dev/reference/plugins/graphql-codegen
   "graphql-codegen": {
     config: ["package.json", "src/lib/graphql/codegen.config.ts"],
   },
   // used for proper management of Thornberry components, see https://knip.dev/reference/configuration#ignoreexportsusedinfile
   ignoreExportsUsedInFile: true,
-  ignore: ["**/*.gen.*", "**/generated/**"],
+  ignore: [
+    "**/*.gen.*",
+    "**/generated/**",
+    "src/test/**",
+    "src/__tests__/**",
+    "**/*.test.{ts,tsx}",
+  ],
   ignoreDependencies: [
-    // used for graphql codegen scripts
     "dotenv",
+    "@faker-js/faker",
+    "@happy-dom/global-registrator",
+    "@testing-library/jest-dom",
+    "@testing-library/dom",
+    "@testing-library/react",
+    "happy-dom",
   ],
   tags: ["-knipignore"],
 };
