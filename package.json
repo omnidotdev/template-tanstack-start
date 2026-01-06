@@ -14,7 +14,7 @@
     "lint": "biome lint",
     "check": "biome check --diagnostic-level=error src",
     "knip": "knip-bun --tags=-knipignore",
-    "audit:pwa": "unlighthouse-ci --site http://localhost:3000",
+    "pwa:audit": "unlighthouse-ci --site https://localhost:3000",
     "prepare": "husky"
   },
   "devDependencies": {
