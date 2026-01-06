@@ -14,6 +14,7 @@
     "lint": "biome lint",
     "check": "biome check --diagnostic-level=error src",
     "knip": "knip-bun --tags=-knipignore",
+    "audit:pwa": "unlighthouse-ci --site http://localhost:3000",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@unlighthouse/cli": "^0.17.4",
     "@vitejs/plugin-react": "^5.1.2",
     "concurrently": "^9.2.1",
     "dotenv": "^17.2.3",
