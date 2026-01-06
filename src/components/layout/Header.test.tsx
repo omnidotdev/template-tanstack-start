@@ -31,7 +31,7 @@ mock.module("@/providers/ThemeProvider", () => ({
 }));
 
 // Import after mocking
-const { default: Header } = await import("@/components/layout/Header");
+const { default: Header } = await import("./Header");
 
 const createTestRouter = (
   ui: React.ReactElement,

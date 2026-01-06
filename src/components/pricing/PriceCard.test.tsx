@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 
-import type { Price } from "@/components/pricing/PriceCard";
+import type { Price } from "./PriceCard";
 
 // Mock auth client
 mock.module("@/lib/auth/authClient", () => ({
@@ -26,7 +26,7 @@ mock.module("@/server/functions/subscriptions", () => ({
 }));
 
 // Import after mocking
-const { default: PriceCard } = await import("@/components/pricing/PriceCard");
+const { default: PriceCard } = await import("./PriceCard");
 
 const mockPrice: Price = {
   id: "price_123",

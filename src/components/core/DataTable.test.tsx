@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-table";
 import { render, screen } from "@testing-library/react";
 
-import DataTable from "@/components/core/DataTable";
+import DataTable from "./DataTable";
 
 interface TestData {
   id: number;

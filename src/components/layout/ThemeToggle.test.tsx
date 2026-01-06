@@ -14,9 +14,7 @@ mock.module("@/providers/ThemeProvider", () => ({
 }));
 
 // Import after mocking
-const { default: ThemeToggle } = await import(
-  "@/components/layout/ThemeToggle"
-);
+const { default: ThemeToggle } = await import("./ThemeToggle");
 
 describe("ThemeToggle", () => {
   test("renders toggle button", () => {

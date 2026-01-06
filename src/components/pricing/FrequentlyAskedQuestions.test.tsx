@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import { render, screen } from "@testing-library/react";
 
-import FrequentlyAskedQuestions from "@/components/pricing/FrequentlyAskedQuestions";
+import FrequentlyAskedQuestions from "./FrequentlyAskedQuestions";
 
 describe("FrequentlyAskedQuestions", () => {
   test("renders the FAQ heading", () => {

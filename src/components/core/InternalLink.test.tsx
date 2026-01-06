@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { render, screen, waitFor } from "@testing-library/react";
 
-import InternalLink from "@/components/core/InternalLink";
+import InternalLink from "./InternalLink";
 
 // Helper to wrap InternalLink with router context
 const renderWithRouter = async (ui: React.ReactElement, initialPath = "/") => {

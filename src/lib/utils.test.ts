@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import cn from "@/lib/utils";
+import cn from "./utils";
 
 describe("cn utility", () => {
   test("merges class names", () => {
