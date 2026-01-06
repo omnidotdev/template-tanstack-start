@@ -12,10 +12,12 @@ const createPricingPageObject = ({ page, context }: PageObjectContext) =>
     name: "Pricing",
     baseUrl: "/pricing",
     // Page-specific helpers
-    getPriceCards: () => page.locator('[class*="CardRoot"]'),
+    getHeading: () => page.getByRole("heading", { name: /pricing/i }),
+    getPriceCards: () => page.locator("article"),
     getMonthlyTab: () => page.getByRole("tab", { name: /monthly/i }),
     getYearlyTab: () => page.getByRole("tab", { name: /yearly/i }),
-    getFAQSection: () => page.getByText("Frequently Asked Questions"),
+    getFAQSection: () =>
+      page.getByRole("heading", { name: "Frequently Asked Questions" }),
     getGetStartedButtons: () =>
       page.getByRole("button", { name: "Get Started" }),
   });

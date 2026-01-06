@@ -5,7 +5,7 @@ import { defineConfig } from "@playwright/test";
  * @see https://playwright.dev/docs/test-configuration
  */
 const playwrightConfig = defineConfig({
-  testDir: "src/test/e2e",
+  testDir: "e2e",
   // Maximum single-test timeout (3 minutes)
   timeout: 180_000,
   expect: {
@@ -29,10 +29,12 @@ const playwrightConfig = defineConfig({
   // Run dev server before starting the tests
   webServer: {
     command: "bun dev",
-    port: 3000,
+    url: "https://localhost:3000",
     timeout: 120_000,
     // Do not use an existing server in CI
     reuseExistingServer: !process.env.CI,
+    // Ignore HTTPS errors for self-signed certificates
+    ignoreHTTPSErrors: true,
   },
   use: {
     headless: true,

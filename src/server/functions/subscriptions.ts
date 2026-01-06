@@ -30,7 +30,7 @@ export const getSubscriptions = createServerFn()
 
     return subscriptions.data.map((sub) => ({
       id: sub.id,
-      customerId: context.customer!.id,
+      customerId: context.customer?.id,
       price: sub.items.data[0].price,
     }));
   });

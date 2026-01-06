@@ -18,12 +18,20 @@ const knipConfig: KnipConfig = {
   },
   // used for proper management of Thornberry components, see https://knip.dev/reference/configuration#ignoreexportsusedinfile
   ignoreExportsUsedInFile: true,
-  ignore: ["**/*.gen.*", "**/generated/**", "src/test/**", "src/__tests__/**"],
+  ignore: [
+    "**/*.gen.*",
+    "**/generated/**",
+    "src/test/**",
+    "src/__tests__/**",
+    "**/*.test.{ts,tsx}",
+  ],
   ignoreDependencies: [
     "dotenv",
     "@faker-js/faker",
     "@happy-dom/global-registrator",
     "@testing-library/jest-dom",
+    "@testing-library/dom",
+    "@testing-library/react",
     "happy-dom",
   ],
   tags: ["-knipignore"],
