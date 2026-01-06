@@ -82,7 +82,7 @@ interface Props extends CardProps {
  * Price card.
  */
 const PriceCard = ({ price, className, disableAction, ...rest }: Props) => {
-  const { auth } = useRouteContext({ from: "/pricing" });
+  const { auth } = useRouteContext({ strict: false });
   const navigate = useNavigate();
 
   const { mutateAsync: signIn, isPending: isSignInPending } = useMutation({
@@ -110,7 +110,7 @@ const PriceCard = ({ price, className, disableAction, ...rest }: Props) => {
       )}
       {...rest}
     >
-      <CardHeader className="bg-muted pb-3 lg:min-h-[202px]">
+      <CardHeader className="bg-muted pb-3 lg:min-h-50.5">
         <div className="flex flex-1 flex-col">
           <CardTitle className="text-lg">
             {capitalizeFirstLetter(price.product.name)}

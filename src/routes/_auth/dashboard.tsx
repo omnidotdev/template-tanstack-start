@@ -4,10 +4,20 @@ import { createFileRoute } from "@tanstack/react-router";
 import createMetaTags from "@/lib/util/createMetaTags";
 import usersOptions from "@/options/users.options";
 
+export const Route = createFileRoute("/_auth/dashboard")({
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(usersOptions());
+  },
+  head: () => ({
+    meta: createMetaTags({ title: "Dashboard" }),
+  }),
+  component: DashboardPage,
+});
+
 /**
  * Dashboard page.
  */
-const DashboardPage = () => {
+function DashboardPage() {
   const { data } = useSuspenseQuery(usersOptions());
 
   return (
@@ -19,14 +29,4 @@ const DashboardPage = () => {
       <p className="my-4">There are {data.users?.totalCount} total users.</p>
     </div>
   );
-};
-
-export const Route = createFileRoute("/_auth/dashboard")({
-  loader: async ({ context: { queryClient } }) => {
-    await queryClient.ensureQueryData(usersOptions());
-  },
-  head: () => ({
-    meta: createMetaTags({ title: "Dashboard" }),
-  }),
-  component: DashboardPage,
-});
+}

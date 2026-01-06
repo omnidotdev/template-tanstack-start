@@ -56,7 +56,7 @@ export const getRouter = () => {
     defaultPreloadStaleTime: 0,
     defaultPreload: "intent",
     defaultErrorComponent: ErrorBoundary,
-    defaultNotFoundComponent: () => <NotFound />,
+    defaultNotFoundComponent: NotFound,
   });
 
   setupRouterSsrQueryIntegration({

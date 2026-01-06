@@ -1,4 +1,5 @@
 {
+  "$comment": "Values should match src/lib/config/app.config.ts",
   "name": "Omni TanStack Start Template",
   "short_name": "Omni Start",
   "description": "Omni TanStack Start template",
