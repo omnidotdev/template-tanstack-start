@@ -68,13 +68,17 @@ bun i
 bun dev
 ```
 
-Generate PWA icons (optional):
+### PWA (Optional Tasks)
+
+#### Generate Icons
+
+Generate PWA icons:
 
 ```sh
 bun icons:generate
 ```
 
-### PWA Audit
+#### Audit
 
 Run a comprehensive PWA audit with [Unlighthouse](https://unlighthouse.dev):
 
