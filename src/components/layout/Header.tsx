@@ -60,6 +60,7 @@ const Header = () => {
             <InternalLink to="/" variant="unstyled" className="-ml-4">
               <h1 className="font-bold text-xl">{app.name}</h1>
             </InternalLink>
+
             <InternalLink to="/pricing" variant="ghost">
               Pricing
             </InternalLink>

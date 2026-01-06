@@ -21,6 +21,13 @@ This is a template repository for a frontend web application powered by [TanStac
   - Dark/light theme support with persistent preferences
   - Responsive design with mobile-first approach
   - Toast notifications with [Sonner](https://sonner.emilkowal.ski)
+- 📱 **Progressive Web App (PWA)**:
+  - [Serwist](https://serwist.pages.dev) service worker for offline functionality
+  - App installation with native-like experience
+  - Automatic updates with user notifications
+  - Offline status indicators and caching strategies
+  - Web app manifest for app store distribution
+  - Background sync and push notification ready
 - 📊 **Data Management**:
   - [TanStack Query](https://tanstack.com/query) for server state management
   - [TanStack Table](https://tanstack.com/table) for data visualization
@@ -43,6 +50,7 @@ This is a template repository for a frontend web application powered by [TanStac
   - TLS/HTTPS support with certificate generation
   - Optimized build process with Vite
   - Route-based code splitting
+  - PWA support with offline functionality and app installation
 
 ## Local Development
 
@@ -50,13 +58,45 @@ First, `cp .env.local.template .env.local` and fill in the values.
 
 ### Building and Running
 
+Run `tilt up`, or:
+
 ```sh
-bun install
+bun i
 ```
 
 ```sh
 bun dev
 ```
+
+### PWA (Optional Tasks)
+
+#### Generate Icons
+
+Generate PWA icons:
+
+```sh
+bun icons:generate
+```
+
+#### Audit
+
+Run a comprehensive PWA audit with [Unlighthouse](https://unlighthouse.dev):
+
+```sh
+# first, start the dev server
+bun dev
+
+# in another terminal, run the audit
+bun pwa:audit
+```
+
+This crawls the entire site and runs Google Lighthouse audits on each page, providing a dashboard with:
+
+- Performance scores
+- Accessibility checks
+- Best practices
+- SEO analysis
+- PWA compliance
 
 ## License
 

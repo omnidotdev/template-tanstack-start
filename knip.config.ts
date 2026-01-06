@@ -9,6 +9,7 @@ const knipConfig: KnipConfig = {
     "src/routes/**/*.{ts,tsx}",
     "src/router.tsx",
     "src/lib/graphql/graphqlFetch.ts",
+    "src/sw.ts",
   ],
   project: ["src/**/*.{ts,tsx,css}"],
   // NB: Modified from the default GraphQL Codegen configuration, see: https://knip.dev/reference/plugins/graphql-codegen

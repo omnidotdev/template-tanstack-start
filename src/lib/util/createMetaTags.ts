@@ -1,5 +1,7 @@
 import app from "@/lib/config/app.config";
+import { BASE_URL } from "@/lib/config/env.config";
 
+// TODO JSDoc
 interface Params {
   title?: string;
   description?: string;
@@ -8,37 +10,59 @@ interface Params {
   url?: string;
 }
 
+// TODO improve type safety
+
 /**
  * Create meta tags.
  */
 const createMetaTags = ({
-  title,
-  description,
+  title: _title,
+  description: _description,
+  url: _url,
   image,
   keywords,
-  url,
 }: Params = {}) => {
-  const displayedTitle = title ? `${title} | ${app.name}` : app.name;
+  const title = _title ? `${_title} | ${app.name}` : app.name,
+    description = _description ?? app.description,
+    url = _url ?? BASE_URL;
 
   const tags = [
-    { title: displayedTitle },
-    { name: "description", content: description ?? app.description },
-    { name: "keywords", content: keywords },
+    { title },
     {
-      name: "twitter:title",
-      content: displayedTitle,
+      name: "description",
+      content: description,
     },
-    { name: "twitter:description", content: description ?? app.description },
+    { name: "keywords", content: keywords },
+    { name: "twitter:title", content: title },
+    {
+      name: "twitter:description",
+      content: description,
+    },
     { name: "twitter:creator", content: "@omnidotdev" },
-    { name: "twitter:site", content: "@omnidotdev" },
-    { name: "twitter:url", content: url ?? app.url },
-    { name: "og:type", content: "website" },
-    { name: "og:title", content: displayedTitle },
-    { name: "og:description", content: description ?? app.description },
-    { name: "og:url", content: url ?? app.url },
-    { name: "twitter:image", content: image ?? "/favicon.ico" },
-    { name: "twitter:card", content: "summary_large_image" },
-    { name: "og:image", content: image ?? "/favicon.ico" },
+    { name: "twitter:url", content: url },
+    { property: "og:type", content: "website" },
+    { property: "og:title", content: title },
+    {
+      property: "og:description",
+      content: description,
+    },
+    { property: "og:url", content: url },
+    ...(image
+      ? [
+          { name: "twitter:image", content: image },
+          { name: "twitter:card", content: "summary_large_image" },
+          { property: "og:image", content: image },
+          { property: "og:image:width", content: "1200" },
+          { property: "og:image:height", content: "630" },
+        ]
+      : [
+          // TODO dynamic OG/static improve
+          { name: "twitter:image", content: `${BASE_URL}/og.png` },
+          { name: "twitter:card", content: "summary_large_image" },
+          { property: "og:image", content: `${BASE_URL}/og.png` },
+          { property: "og:image:width", content: "1200" },
+          { property: "og:image:height", content: "630" },
+        ]),
   ];
 
   return tags;

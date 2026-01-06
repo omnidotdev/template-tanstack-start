@@ -1,1 +1,2 @@
-bun knip && bun check --staged --no-errors-on-unmatched
+bun knip
+bun check --staged --no-errors-on-unmatched

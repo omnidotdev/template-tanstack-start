@@ -3,7 +3,7 @@ load("ext://dotenv", "dotenv")
 
 dotenv(fn=".env.local")
 
-project_name = "start-template"
+project_name = "tanstack-start-template"
 
 local_resource(
     "install-deps-%s" % project_name,

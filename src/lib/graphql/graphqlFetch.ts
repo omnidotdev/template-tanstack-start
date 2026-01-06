@@ -3,14 +3,14 @@ import { parse } from "graphql";
 import { GraphQLClient, gql } from "graphql-request";
 
 import { API_GRAPHQL_URL } from "@/lib/config/env.config";
-import authMiddleware from "@/server/authMiddleware";
+import { authMiddleware } from "@/server/middleware";
 
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import type { Variables } from "graphql-request";
 
 const getAccessToken = createServerFn()
   .middleware([authMiddleware])
-  .handler(async ({ context }) => context.accessToken);
+  .handler(async ({ context }) => context.session.accessToken);
 
 interface FetchOptions {
   /**
