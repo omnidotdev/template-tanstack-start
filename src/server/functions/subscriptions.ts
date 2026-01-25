@@ -21,16 +21,18 @@ const subscriptionSchema = z.object({
 export const getSubscriptions = createServerFn()
   .middleware([customerMiddleware])
   .handler(async ({ context }) => {
-    if (!context.customer) return [];
+    const { customer } = context;
+
+    if (!customer) return [];
 
     const subscriptions = await payments.subscriptions.list({
-      customer: context.customer.id,
+      customer: customer.id,
       status: "active",
     });
 
     return subscriptions.data.map((sub) => ({
       id: sub.id,
-      customerId: context.customer?.id,
+      customerId: customer.id,
       price: sub.items.data[0].price,
     }));
   });

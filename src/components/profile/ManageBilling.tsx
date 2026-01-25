@@ -1,36 +1,18 @@
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { SettingsIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getManageBillingUrl } from "@/server/functions/subscriptions";
 
 interface Props {
   workspaceId?: string;
 }
 
 /**
- * Manage billing button.
- * Opens Stripe billing portal for the workspace.
+ * Manage billing button placeholder.
+ *
+ * In production, this would open the Stripe billing portal.
+ * Requires Aether integration for workspace-level billing.
  */
 const ManageBilling = ({ workspaceId }: Props) => {
-  const navigate = useNavigate();
-
-  const { mutateAsync: manageBilling, isPending } = useMutation({
-    mutationFn: async () => {
-      if (!workspaceId) {
-        throw new Error("Workspace ID is required");
-      }
-      return await getManageBillingUrl({
-        data: {
-          workspaceId,
-          returnUrl: window.location.href,
-        },
-      });
-    },
-    onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
-  });
-
   if (!workspaceId) {
     return null;
   }
@@ -39,8 +21,10 @@ const ManageBilling = ({ workspaceId }: Props) => {
     <Button
       variant="outline"
       size="sm"
-      onClick={() => manageBilling()}
-      disabled={isPending}
+      onClick={() => {
+        // TODO: Implement with Aether + Stripe integration
+        void workspaceId;
+      }}
     >
       <SettingsIcon className="mr-2 h-4 w-4" />
       Manage Billing

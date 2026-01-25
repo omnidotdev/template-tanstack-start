@@ -73,7 +73,7 @@ const AvatarImage = ({
 );
 
 interface AvatarProps extends ComponentProps<typeof AvatarRoot> {
-  src: string | Blob | undefined;
+  src: string | undefined;
   alt: string | undefined;
   fallback: ReactNode;
 }

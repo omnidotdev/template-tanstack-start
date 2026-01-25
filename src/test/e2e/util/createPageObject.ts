@@ -26,21 +26,22 @@ interface PageObject<D extends object> extends Params<D> {
  *
  * @see https://playwright.dev/docs/pom
  */
-const createPageObject = <D extends object>({
+const createPageObject = <D extends object, E extends object = object>({
   name,
   page,
   context,
   baseUrl,
   ...rest
-}: Params<D>): PageObject<D> => ({
-  name,
-  page,
-  context,
-  baseUrl,
-  goto: async () => {
-    await page.goto(baseUrl);
-  },
-  ...rest,
-});
+}: Params<D> & E): PageObject<D> & E =>
+  ({
+    name,
+    page,
+    context,
+    baseUrl,
+    goto: async () => {
+      await page.goto(baseUrl);
+    },
+    ...rest,
+  }) as PageObject<D> & E;
 
 export default createPageObject;
