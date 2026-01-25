@@ -1,0 +1,24 @@
+services:
+  app:
+    build: .
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      # Self-hosted mode
+      VITE_SELF_HOSTED: "true"
+      # API connection
+      VITE_BASE_URL: ${VITE_BASE_URL:-http://localhost:3000}
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://api:4000}
+      # Auth
+      AUTH_SECRET: ${AUTH_SECRET:?AUTH_SECRET is required}
+      VITE_AUTH_BASE_URL: ${VITE_AUTH_BASE_URL:-}
+      AUTH_CLIENT_ID: ${AUTH_CLIENT_ID:-}
+      AUTH_CLIENT_SECRET: ${AUTH_CLIENT_SECRET:-}
+      # Provider overrides (optional)
+      VITE_ENTITLEMENT_PROVIDER: ${VITE_ENTITLEMENT_PROVIDER:-}
+      VITE_AUTHZ_PROVIDER: ${VITE_AUTHZ_PROVIDER:-}
+      # External provider URLs (if using non-local providers)
+      VITE_BILLING_BASE_URL: ${VITE_BILLING_BASE_URL:-}
+      VITE_AUTHZ_API_URL: ${VITE_AUTHZ_API_URL:-}
+      VITE_AUTHZ_ENABLED: ${VITE_AUTHZ_ENABLED:-}
+    ports:
+      - "${APP_PORT:-3000}:3000"

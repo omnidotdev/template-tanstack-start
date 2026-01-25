@@ -3,6 +3,9 @@ import type { KnipConfig } from "knip";
 /**
  * Knip configuration.
  * @see https://knip.dev/overview/configuration
+ *
+ * NOTE: Many lib files are intentionally unused in the template.
+ * They serve as reference patterns for Omni products to adopt.
  */
 const knipConfig: KnipConfig = {
   entry: [
@@ -24,6 +27,14 @@ const knipConfig: KnipConfig = {
     "src/test/**",
     "src/__tests__/**",
     "**/*.test.{ts,tsx}",
+    // Reference patterns - unused in template but available for adoption
+    "src/components/profile/ManageBilling.tsx",
+    "src/lib/config/env.config.ts",
+    "src/lib/context/organization.context.tsx",
+    "src/lib/context/workspace.context.tsx",
+    "src/lib/providers/**",
+    "src/server/functions/authorization.ts",
+    "src/server/functions/entitlements.ts",
   ],
   ignoreDependencies: [
     "dotenv",

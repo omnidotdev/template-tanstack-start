@@ -15,6 +15,7 @@ import { Toaster, toast } from "sonner";
 import { ErrorBoundary, Footer, Header } from "@/components/layout";
 import auth from "@/lib/auth/auth";
 import app from "@/lib/config/app.config";
+import { isDevEnv } from "@/lib/config/env.config";
 import appCss from "@/lib/styles/globals.css?url";
 import createMetaTags from "@/lib/util/createMetaTags";
 import ThemeProvider from "@/providers/ThemeProvider";
@@ -28,6 +29,19 @@ const fetchSession = createServerFn().handler(async () => {
 
   return await auth.api.getSession({ headers });
 });
+
+/**
+ * Coming soon teaser page for production.
+ */
+function ComingSoon() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-sky-900 to-sky-800">
+      <div className="text-center">
+        <div className="text-9xl">✨</div>
+      </div>
+    </div>
+  );
+}
 
 /**
  * Root route.
@@ -108,12 +122,26 @@ export const Route = createRootRouteWithContext<{
 });
 
 function RootComponent() {
+  // Note: Production teaser is intentionally disabled for this app
+  // To enable, uncomment the isDevEnv check below
+  // if (!isDevEnv) {
+  //   return (
+  //     <RootDocument>
+  //       <ComingSoon />
+  //     </RootDocument>
+  //   );
+  // }
+
   return (
     <RootDocument>
       <Outlet />
     </RootDocument>
   );
 }
+
+// Suppress unused warnings while teaser is disabled
+void isDevEnv;
+void ComingSoon;
 
 /**
  * Register the service worker for PWA functionality.
