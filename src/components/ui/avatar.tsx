@@ -93,6 +93,9 @@ const Avatar = ({
   </AvatarRoot>
 );
 
+/**
+ * @knipignore - Exported for downstream use.
+ */
 export {
   Avatar,
   AvatarRoot,

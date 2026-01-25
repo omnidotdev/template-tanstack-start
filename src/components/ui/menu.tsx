@@ -192,6 +192,9 @@ const MenuItemShortcut = ({
   </span>
 );
 
+/**
+ * @knipignore - Exported for downstream use.
+ */
 export {
   MenuArrow,
   MenuArrowTip,
