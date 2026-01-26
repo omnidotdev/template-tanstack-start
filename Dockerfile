@@ -14,16 +14,17 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN bun run build
 
-# Run
-FROM base AS runner
+# TODO: Switch back to Bun runtime once module resolution is fixed
+# Bun doesn't properly resolve externalized Nitro packages (srvx, react-dom/server)
+# Error: Cannot find package 'srvx' from '/app/.output/server/chunks/virtual/entry.mjs'
+# Error: Cannot find module 'react-dom/server'
+FROM node:22-alpine AS runner
+WORKDIR /app
 ENV NODE_ENV=production
-# Ensure Node.js can resolve modules from both locations
-ENV NODE_PATH=/app/node_modules:/app/.output/server/node_modules
 
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 
 EXPOSE 3000
-# Run bun directly to avoid node shim compatibility issues
-CMD ["bun", ".output/server/index.mjs"]
+CMD ["node", ".output/server/index.mjs"]
