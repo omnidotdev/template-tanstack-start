@@ -30,8 +30,11 @@ const { default: PriceCard } = await import("./PriceCard");
 
 const mockPrice: Price = {
   id: "price_123",
+  active: true,
+  currency: "usd",
   unit_amount: 2999,
   product: {
+    id: "prod_123",
     name: "Pro",
     description: "Perfect for growing teams",
     marketing_features: [
@@ -123,7 +126,7 @@ describe("PriceCard", () => {
   test("handles one-time payment (no recurring)", async () => {
     const oneTimePrice: Price = {
       ...mockPrice,
-      recurring: undefined,
+      recurring: null,
     };
 
     await renderWithProviders(oneTimePrice);

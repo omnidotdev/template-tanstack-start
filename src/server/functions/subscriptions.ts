@@ -2,9 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import app from "@/lib/config/app.config";
-import { BASE_URL, STRIPE_PORTAL_CONFIG_ID } from "@/lib/config/env.config";
-import payments from "@/lib/payments";
-import { customerMiddleware } from "@/server/middleware";
+import { BASE_URL } from "@/lib/config/env.config";
+import billing from "@/lib/providers/billing";
+import { authMiddleware } from "@/server/middleware";
 
 const checkoutSchema = z.object({
   priceId: z.string().startsWith("price_"),
@@ -12,106 +12,94 @@ const checkoutSchema = z.object({
 });
 
 const subscriptionSchema = z.object({
-  subscriptionId: z.string().startsWith("sub_"),
+  entityType: z.string().min(1),
+  entityId: z.string().min(1),
 });
 
 /**
- * Get user's active subscriptions.
+ * Validate access token or throw.
  */
-export const getSubscriptions = createServerFn()
-  .middleware([customerMiddleware])
-  .handler(async ({ context }) => {
-    const { customer } = context;
+const requireAccessToken = (accessToken: string | undefined): string => {
+  if (!accessToken) {
+    throw new Error("Access token required");
+  }
+  return accessToken;
+};
 
-    if (!customer) return [];
-
-    const subscriptions = await payments.subscriptions.list({
-      customer: customer.id,
-      status: "active",
-    });
-
-    return subscriptions.data.map((sub) => ({
-      id: sub.id,
-      customerId: customer.id,
-      price: sub.items.data[0].price,
-    }));
+/**
+ * Get subscription details for an entity.
+ */
+export const getSubscription = createServerFn()
+  .middleware([authMiddleware])
+  .inputValidator((data) => subscriptionSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    return billing.getSubscription(
+      data.entityType,
+      data.entityId,
+      requireAccessToken(context.session.accessToken),
+    );
   });
 
 /**
  * Create a checkout session for a new subscription.
- * Creates the Stripe customer if one doesn't exist.
  */
 export const getCheckoutUrl = createServerFn({ method: "POST" })
-  .middleware([customerMiddleware])
+  .middleware([authMiddleware])
   .inputValidator((data) => checkoutSchema.parse(data))
   .handler(async ({ data, context }) => {
-    let customer = context.customer;
-
-    if (!customer) {
-      customer = await payments.customers.create({
-        email: context.session.user.email!,
-        name: context.session.user.name ?? undefined,
-        metadata: {
-          externalId: context.session.user.identityProviderId!,
-        },
-      });
-    }
-
-    const checkout = await payments.checkout.sessions.create({
-      mode: "subscription",
-      customer: customer.id,
-      success_url: data.successUrl ?? `${BASE_URL}/pricing`,
-      line_items: [{ price: data.priceId, quantity: 1 }],
-      subscription_data: {
-        metadata: {
-          omniProduct: app.name.toLowerCase(),
-        },
+    return billing.createCheckoutSession({
+      priceId: data.priceId,
+      successUrl: data.successUrl ?? `${BASE_URL}/pricing`,
+      customerEmail: context.session.user.email!,
+      customerName: context.session.user.name ?? undefined,
+      metadata: {
+        externalId: context.session.user.identityProviderId!,
+        omniProduct: app.name.toLowerCase(),
       },
     });
-
-    return checkout.url!;
   });
 
 /**
- * Get billing portal URL for managing a subscription.
+ * Get billing portal URL for managing subscription.
  */
-export const getManageSubscriptionUrl = createServerFn({ method: "POST" })
+export const getBillingPortalUrl = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .inputValidator((data) => subscriptionSchema.parse(data))
-  .middleware([customerMiddleware])
   .handler(async ({ data, context }) => {
-    if (!context.customer) throw new Error("No customer found");
-
-    const session = await payments.billingPortal.sessions.create({
-      customer: context.customer.id,
-      configuration: STRIPE_PORTAL_CONFIG_ID,
-      flow_data: {
-        type: "subscription_update",
-        subscription_update: { subscription: data.subscriptionId },
-      },
-      return_url: `${BASE_URL}/profile`,
-    });
-
-    return session.url;
+    return billing.getBillingPortalUrl(
+      data.entityType,
+      data.entityId,
+      app.name.toLowerCase(),
+      `${BASE_URL}/profile`,
+      requireAccessToken(context.session.accessToken),
+    );
   });
 
 /**
- * Get billing portal URL for canceling a subscription.
+ * Cancel a subscription.
  */
-export const getCancelSubscriptionUrl = createServerFn({ method: "POST" })
+export const cancelSubscription = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .inputValidator((data) => subscriptionSchema.parse(data))
-  .middleware([customerMiddleware])
   .handler(async ({ data, context }) => {
-    if (!context.customer) throw new Error("No customer found");
+    return billing.cancelSubscription(
+      data.entityType,
+      data.entityId,
+      requireAccessToken(context.session.accessToken),
+    );
+  });
 
-    const session = await payments.billingPortal.sessions.create({
-      customer: context.customer.id,
-      configuration: STRIPE_PORTAL_CONFIG_ID,
-      flow_data: {
-        type: "subscription_cancel",
-        subscription_cancel: { subscription: data.subscriptionId },
-      },
-      return_url: `${BASE_URL}/profile`,
-    });
-
-    return session.url;
+/**
+ * Renew a subscription (remove scheduled cancellation).
+ * @knipignore
+ */
+export const renewSubscription = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator((data) => subscriptionSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    return billing.renewSubscription(
+      data.entityType,
+      data.entityId,
+      requireAccessToken(context.session.accessToken),
+    );
   });

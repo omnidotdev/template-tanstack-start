@@ -1,65 +1,73 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 
-import { DataTable } from "@/components/core";
 import { CancelSubscription, ManageSubscription } from "@/components/profile";
-import { capitalizeFirstLetter } from "@/lib/util";
-import { getSubscriptions } from "@/server/functions/subscriptions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { fetchSession } from "@/server/functions/auth";
+import { getSubscription } from "@/server/functions/subscriptions";
 
-import type Stripe from "stripe";
+import type { Subscription } from "@/lib/providers/billing";
 
-interface Subscription {
-  id: Stripe.Subscription["id"];
-  customerId: Stripe.Customer["id"];
-  price: Stripe.Price;
-}
+/**
+ * Format Unix timestamp to readable date.
+ */
+const formatDate = (timestamp: number) =>
+  new Date(timestamp * 1000).toLocaleDateString();
 
-const columnHelper = createColumnHelper<Subscription>();
+/**
+ * Subscription card component.
+ */
+const SubscriptionCard = ({
+  subscription,
+  entityType,
+  entityId,
+}: {
+  subscription: Subscription;
+  entityType: string;
+  entityId: string;
+}) => {
+  const isPendingCancellation = subscription.cancelAt !== null;
 
-const columns = [
-  columnHelper.display({
-    header: "Actions",
-    cell: ({ row }) => (
-      <div className="flex w-full justify-center gap-1">
-        <ManageSubscription subscriptionId={row.original.id} />
-
-        <CancelSubscription subscriptionId={row.original.id} />
-      </div>
-    ),
-    meta: {
-      tableCellClassName: "text-center max-w-10",
-    },
-  }),
-  columnHelper.accessor("id", {
-    header: "Sub ID",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("price", {
-    header: "Tier",
-    cell: (info) => {
-      const price = info.getValue();
-
-      return capitalizeFirstLetter(price.metadata.tier);
-    },
-  }),
-];
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-lg">
+          {subscription.product?.name ?? "Subscription"}
+        </CardTitle>
+        <div className="flex gap-1">
+          <ManageSubscription entityType={entityType} entityId={entityId} />
+          {!isPendingCancellation && (
+            <CancelSubscription entityType={entityType} entityId={entityId} />
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <dl className="grid grid-cols-2 gap-2 text-sm">
+          <dt className="text-muted-foreground">Status</dt>
+          <dd className="capitalize">
+            {isPendingCancellation
+              ? `Cancels ${formatDate(subscription.cancelAt!)}`
+              : subscription.status}
+          </dd>
+          <dt className="text-muted-foreground">Current Period Ends</dt>
+          <dd>{formatDate(subscription.currentPeriodEnd)}</dd>
+          {subscription.product?.description && (
+            <>
+              <dt className="text-muted-foreground">Description</dt>
+              <dd>{subscription.product.description}</dd>
+            </>
+          )}
+        </dl>
+      </CardContent>
+    </Card>
+  );
+};
 
 /**
  * Profile page.
  */
 const ProfilePage = () => {
   const { auth } = Route.useRouteContext();
-  const { subscriptions } = Route.useLoaderData();
-
-  const table = useReactTable({
-    columns,
-    data: subscriptions,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const { subscription, entityType, entityId } = Route.useLoaderData();
 
   return (
     <div className="mx-auto flex h-full max-w-7xl flex-col text-pretty px-4 py-8 text-center sm:text-start">
@@ -73,16 +81,22 @@ const ProfilePage = () => {
       </div>
 
       <div className="mt-8 flex flex-col text-start">
-        <h1 className="font-bold sm:text-xl">Subscriptions</h1>
+        <h1 className="font-bold sm:text-xl">Subscription</h1>
         <h2 className="text-muted-foreground text-xs sm:text-sm">
-          View details and manage your currently active subscriptions.
+          View details and manage your subscription.
         </h2>
 
-        {subscriptions.length ? (
-          <DataTable table={table} containerProps="mt-6" />
-        ) : (
-          <p className="mt-4">No active subscriptions.</p>
-        )}
+        <div className="mt-6">
+          {subscription ? (
+            <SubscriptionCard
+              subscription={subscription}
+              entityType={entityType}
+              entityId={entityId}
+            />
+          ) : (
+            <p className="text-muted-foreground">No active subscription.</p>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -90,9 +104,19 @@ const ProfilePage = () => {
 
 export const Route = createFileRoute("/_auth/profile")({
   loader: async () => {
-    const subscriptions = await getSubscriptions();
+    const { session } = await fetchSession();
+    if (!session?.user.identityProviderId) {
+      return { subscription: null, entityType: "user", entityId: "" };
+    }
 
-    return { subscriptions };
+    const entityType = "user";
+    const entityId = session.user.identityProviderId;
+
+    const subscription = await getSubscription({
+      data: { entityType, entityId },
+    });
+
+    return { subscription, entityType, entityId };
   },
   component: ProfilePage,
 });

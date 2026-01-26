@@ -9,8 +9,12 @@ import type { Price } from "@/components/pricing";
 
 const FREE_PRICE: Price = {
   id: "free-price",
+  active: true,
+  currency: "usd",
   unit_amount: 0,
+  recurring: null,
   product: {
+    id: "free-product",
     name: "Free",
     description: "Start for free.",
     marketing_features: [

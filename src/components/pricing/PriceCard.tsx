@@ -17,19 +17,10 @@ import { capitalizeFirstLetter } from "@/lib/util";
 import cn from "@/lib/utils";
 import { getCheckoutUrl } from "@/server/functions/subscriptions";
 
-import type Stripe from "stripe";
+import type { Price } from "@/lib/providers/billing";
 import type { CardProps } from "@/components/ui/card";
 
-export interface Price {
-  id: Stripe.Price["id"];
-  unit_amount: Stripe.Price["unit_amount"];
-  product: {
-    name: Stripe.Product["name"];
-    description: Stripe.Product["description"];
-    marketing_features: Stripe.Product["marketing_features"];
-  };
-  recurring?: Stripe.Price["recurring"];
-}
+export type { Price };
 
 interface Props extends CardProps {
   price: Price;

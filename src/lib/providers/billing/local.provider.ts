@@ -1,7 +1,9 @@
 import type {
+  BillingProvider,
+  CheckoutParams,
   Entitlement,
-  EntitlementProvider,
   EntitlementsResponse,
+  Price,
   Subscription,
 } from "./interface";
 
@@ -57,10 +59,10 @@ const SELF_HOSTED_SUBSCRIPTION: Subscription = {
 };
 
 /**
- * Local entitlement provider.
+ * Local billing provider.
  * Returns unlimited entitlements for self-hosted mode.
  */
-class LocalEntitlementProvider implements EntitlementProvider {
+class LocalBillingProvider implements BillingProvider {
   async getEntitlements(
     entityType: string,
     entityId: string,
@@ -85,6 +87,15 @@ class LocalEntitlementProvider implements EntitlementProvider {
       (e) => e.featureKey === featureKey,
     );
     return entitlement?.value ?? "unlimited";
+  }
+
+  async getPrices(_appName: string): Promise<Price[]> {
+    // No prices in self-hosted mode - all features included
+    return [];
+  }
+
+  async createCheckoutSession(_params: CheckoutParams): Promise<string> {
+    throw new Error("Billing is not available in self-hosted mode");
   }
 
   async getSubscription(
@@ -129,4 +140,4 @@ class LocalEntitlementProvider implements EntitlementProvider {
   }
 }
 
-export default LocalEntitlementProvider;
+export default LocalBillingProvider;

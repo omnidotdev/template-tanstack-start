@@ -3,22 +3,23 @@ import { useNavigate } from "@tanstack/react-router";
 import { EditIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getManageSubscriptionUrl } from "@/server/functions/subscriptions";
+import { getBillingPortalUrl } from "@/server/functions/subscriptions";
 
 interface Props {
-  subscriptionId: string;
+  entityType: string;
+  entityId: string;
 }
 
 /**
- * Manage subscription.
+ * Manage subscription via billing portal.
  */
-const ManageSubscription = ({ subscriptionId }: Props) => {
+const ManageSubscription = ({ entityType, entityId }: Props) => {
   const navigate = useNavigate();
 
   const { mutateAsync: manageSubscription } = useMutation({
     mutationFn: async () =>
-      await getManageSubscriptionUrl({
-        data: { subscriptionId },
+      await getBillingPortalUrl({
+        data: { entityType, entityId },
       }),
     onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
   });

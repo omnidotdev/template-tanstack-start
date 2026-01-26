@@ -40,9 +40,54 @@ export interface Subscription {
 }
 
 /**
- * Entitlement provider interface.
+ * Product information.
  */
-export interface EntitlementProvider {
+export interface Product {
+  id: string;
+  name: string;
+  description: string | null;
+  marketing_features: Array<{ name: string }>;
+}
+
+/**
+ * Recurring billing details.
+ */
+export interface Recurring {
+  interval: "day" | "week" | "month" | "year";
+  interval_count: number;
+  meter?: string | null;
+  trial_period_days?: number | null;
+  usage_type?: "licensed" | "metered";
+}
+
+/**
+ * Price with expanded product.
+ */
+export interface Price {
+  id: string;
+  active: boolean;
+  currency: string;
+  unit_amount: number | null;
+  recurring: Recurring | null;
+  product: Product;
+}
+
+/**
+ * Checkout session parameters.
+ */
+export interface CheckoutParams {
+  priceId: string;
+  successUrl: string;
+  customerEmail: string;
+  customerName?: string;
+  customerId?: string;
+  metadata?: Record<string, string>;
+}
+
+/**
+ * Billing provider interface.
+ */
+export interface BillingProvider {
   /**
    * Get all entitlements for an entity.
    */
@@ -63,6 +108,16 @@ export interface EntitlementProvider {
     featureKey: string,
     accessToken?: string,
   ): Promise<string | null>;
+
+  /**
+   * Get available prices for an app.
+   */
+  getPrices(appName: string): Promise<Price[]>;
+
+  /**
+   * Create a checkout session for a new subscription.
+   */
+  createCheckoutSession(params: CheckoutParams): Promise<string>;
 
   /**
    * Get subscription details for an entity.

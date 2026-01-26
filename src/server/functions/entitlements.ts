@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import { entitlements } from "@/lib/providers";
+import { billing } from "@/lib/providers";
 import { authMiddleware } from "@/server/middleware";
 
 import type { EntitlementsResponse } from "@/lib/providers";
@@ -26,7 +26,7 @@ export const getEntitlements = createServerFn()
   .inputValidator((data) => entitySchema.parse(data))
   .middleware([authMiddleware])
   .handler(async ({ data, context }): Promise<EntitlementsResponse | null> => {
-    return entitlements.getEntitlements(
+    return billing.getEntitlements(
       data.entityType,
       data.entityId,
       data.productId,
@@ -42,7 +42,7 @@ export const checkEntitlement = createServerFn()
   .inputValidator((data) => checkEntitlementSchema.parse(data))
   .middleware([authMiddleware])
   .handler(async ({ data, context }): Promise<string | null> => {
-    return entitlements.checkEntitlement(
+    return billing.checkEntitlement(
       data.entityType,
       data.entityId,
       data.productId,

@@ -1,26 +1,29 @@
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getCancelSubscriptionUrl } from "@/server/functions/subscriptions";
+import { cancelSubscription as cancelSubscriptionFn } from "@/server/functions/subscriptions";
 
 interface Props {
-  subscriptionId: string;
+  entityType: string;
+  entityId: string;
 }
 
 /**
  * Cancel subscription.
  */
-const CancelSubscription = ({ subscriptionId }: Props) => {
-  const navigate = useNavigate();
+const CancelSubscription = ({ entityType, entityId }: Props) => {
+  const queryClient = useQueryClient();
 
   const { mutateAsync: cancelSubscription } = useMutation({
     mutationFn: async () =>
-      await getCancelSubscriptionUrl({
-        data: { subscriptionId },
+      await cancelSubscriptionFn({
+        data: { entityType, entityId },
       }),
-    onSuccess: (url) => navigate({ href: url, reloadDocument: true }),
+    onSuccess: () => {
+      // Invalidate subscription query to refetch
+      queryClient.invalidateQueries({ queryKey: ["subscription"] });
+    },
   });
 
   return (

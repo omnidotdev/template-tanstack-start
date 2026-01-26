@@ -17,9 +17,10 @@ export const {
   VITE_AUTHZ_API_URL: AUTHZ_API_URL,
   VITE_AUTHZ_ENABLED: AUTHZ_ENABLED,
   // self-hosted mode
-  VITE_SELF_HOSTED: SELF_HOSTED,
+  VITE_SELF_HOSTED,
+  SELF_HOSTED,
   // provider overrides
-  VITE_ENTITLEMENT_PROVIDER: ENTITLEMENT_PROVIDER,
+  VITE_BILLING_PROVIDER: BILLING_PROVIDER,
   VITE_AUTHZ_PROVIDER: AUTHZ_PROVIDER,
 } = { ...import.meta.env, ...process.env };
 
@@ -27,7 +28,8 @@ export const API_GRAPHQL_URL = `${API_BASE_URL}/graphql`;
 
 // environment helpers
 export const isDevEnv = import.meta.env.DEV;
-export const isSelfHosted = SELF_HOSTED === "true";
+export const isSelfHosted =
+  SELF_HOSTED === "true" || VITE_SELF_HOSTED === "true";
 
 /**
  * Resolve a provider based on env var or self-hosted defaults.
@@ -41,8 +43,5 @@ const resolveProvider = (
   return isSelfHosted ? defaultSelfHosted : defaultSaas;
 };
 
-export const entitlementProvider = resolveProvider(
-  ENTITLEMENT_PROVIDER,
-  "aether",
-);
+export const billingProvider = resolveProvider(BILLING_PROVIDER, "aether");
 export const authzProvider = resolveProvider(AUTHZ_PROVIDER, "warden");

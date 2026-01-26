@@ -1,16 +1,19 @@
 import { BILLING_BASE_URL } from "@/lib/config/env.config";
+import payments from "@/lib/payments";
 
 import type {
-  EntitlementProvider,
+  BillingProvider,
+  CheckoutParams,
   EntitlementsResponse,
+  Price,
   Subscription,
 } from "./interface";
 
 /**
- * Aether entitlement provider.
+ * Aether billing provider.
  * Fetches entitlements and manages subscriptions via Aether billing service.
  */
-class AetherEntitlementProvider implements EntitlementProvider {
+class AetherBillingProvider implements BillingProvider {
   async getEntitlements(
     entityType: string,
     entityId: string,
@@ -69,6 +72,69 @@ class AetherEntitlementProvider implements EntitlementProvider {
     );
 
     return entitlement?.value ?? null;
+  }
+
+  async getPrices(appName: string): Promise<Price[]> {
+    const prices = await payments.prices.search({
+      query: `metadata['app']:'${appName}'`,
+      expand: ["data.product"],
+    });
+
+    return prices.data
+      .filter((p) => p.active)
+      .sort((a, b) => (a.unit_amount ?? 0) - (b.unit_amount ?? 0))
+      .map((p) => ({
+        id: p.id,
+        active: p.active,
+        currency: p.currency,
+        unit_amount: p.unit_amount,
+        recurring: p.recurring
+          ? {
+              interval: p.recurring.interval,
+              interval_count: p.recurring.interval_count,
+              meter: p.recurring.meter,
+              trial_period_days: p.recurring.trial_period_days,
+              usage_type: p.recurring.usage_type,
+            }
+          : null,
+        product: {
+          id: (p.product as { id: string }).id,
+          name: (p.product as { name: string }).name,
+          description: (p.product as { description: string | null }).description,
+          marketing_features: (
+            p.product as { marketing_features: Array<{ name: string }> }
+          ).marketing_features,
+        },
+      }));
+  }
+
+  async createCheckoutSession(params: CheckoutParams): Promise<string> {
+    let customerId = params.customerId;
+
+    if (!customerId) {
+      const customer = await payments.customers.create({
+        email: params.customerEmail,
+        name: params.customerName,
+        metadata: params.metadata,
+      });
+      customerId = customer.id;
+    }
+
+    const checkout = await payments.checkout.sessions.create({
+      mode: "subscription",
+      customer: customerId,
+      success_url: params.successUrl,
+      line_items: [{ price: params.priceId, quantity: 1 }],
+      subscription_data: {
+        metadata: params.metadata,
+      },
+    });
+
+    if (!checkout.url) {
+      throw new Error("Failed to create checkout session");
+    }
+
+    return checkout.url;
   }
 
   async getSubscription(
@@ -210,4 +276,4 @@ class AetherEntitlementProvider implements EntitlementProvider {
   }
 }
 
-export default AetherEntitlementProvider;
+export default AetherBillingProvider;

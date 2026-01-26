@@ -5,13 +5,13 @@
 
 // Authorization
 export { default as authz } from "./authz";
-// Entitlements
-export { default as entitlements } from "./entitlements";
+// Billing
+export { default as billing } from "./billing";
 
 export type { AuthzProvider } from "./authz";
 export type {
+  BillingProvider,
   Entitlement,
-  EntitlementProvider,
   EntitlementsResponse,
   Subscription,
-} from "./entitlements";
+} from "./billing";
