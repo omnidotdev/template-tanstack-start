@@ -17,7 +17,7 @@ RUN bun run build
 # Run
 FROM base AS runner
 ENV NODE_ENV=production
-# Ensure Node.js can resolve modules from both locations.
+# Ensure Node.js can resolve modules from both locations
 ENV NODE_PATH=/app/node_modules:/app/.output/server/node_modules
 
 COPY --from=builder /app/.output ./.output
@@ -25,5 +25,5 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 
 EXPOSE 3000
-# Run bun directly to avoid node shim compatibility issues.
+# Run bun directly to avoid node shim compatibility issues
 CMD ["bun", ".output/server/index.mjs"]

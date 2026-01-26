@@ -21,7 +21,11 @@ const config = defineConfig(({ command }) => ({
     devtools(),
     // use `mkcert` in development
     command === "serve" && mkcert(),
-    nitroV2Plugin({ preset: "node-server" }),
+    nitroV2Plugin({
+      preset: "node-server",
+      // Inline srvx to avoid module resolution issues with Bun runtime
+      externals: { inline: ["srvx"] },
+    }),
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
