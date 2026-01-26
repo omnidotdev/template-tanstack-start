@@ -109,6 +109,26 @@ This crawls the entire site and runs Google Lighthouse audits on each page, prov
 - SEO analysis
 - PWA compliance
 
+## Docker
+
+Build and run with Docker:
+
+```sh
+docker build -t app .
+docker run -p 3000:3000 app
+```
+
+The Dockerfile uses a multi-stage build:
+
+1. **deps** - Install dependencies with `bun install --frozen-lockfile`
+2. **builder** - Build the application with `bun run build`
+3. **runner** - Production image with only `.output` and `node_modules`
+
+Key configuration:
+
+- `NODE_PATH` is set to resolve modules from both `/app/node_modules` and `/app/.output/server/node_modules`
+- Runs Bun directly (`bun .output/server/index.mjs`) to avoid node shim compatibility issues
+
 ## Testing
 
 The project includes a comprehensive test suite with unit tests and E2E tests.
