@@ -1,15 +1,14 @@
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, spyOn, test } from "bun:test";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  RouterProvider,
-  createMemoryHistory,
-  createRootRoute,
-  createRouter,
-} from "@tanstack/react-router";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import * as TanStackRouter from "@tanstack/react-router";
+import { cleanup, render, screen } from "@testing-library/react";
 
 import type { Price } from "./PriceCard";
+
+// Spy on router hooks for this test file
+spyOn(TanStackRouter, "useRouteContext").mockReturnValue({ auth: null });
+spyOn(TanStackRouter, "useNavigate").mockReturnValue(mock());
 
 // Mock auth client
 mock.module("@/lib/auth/authClient", () => ({
@@ -52,84 +51,61 @@ const mockPrice: Price = {
   },
 };
 
-const renderWithProviders = async (
-  price: Price,
-  auth: {
-    user: { id: string; email: string; name: string; image: null };
-  } | null = null,
-  disableAction = false,
-) => {
+const renderPriceCard = (price: Price, disableAction = false) => {
   cleanup();
 
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
 
-  const rootRoute = createRootRoute({
-    component: () => <PriceCard price={price} disableAction={disableAction} />,
-  });
-
-  const router = createRouter({
-    routeTree: rootRoute,
-    history: createMemoryHistory({ initialEntries: ["/pricing"] }),
-    context: { auth },
-  });
-
-  const result = render(
+  return render(
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <PriceCard price={price} disableAction={disableAction} />
     </QueryClientProvider>,
   );
-
-  // Wait for component to render
-  await waitFor(() => {
-    expect(result.container.textContent).toContain("Pro");
-  });
-
-  return result;
 };
 
 describe("PriceCard", () => {
-  test("renders price card with product name", async () => {
-    await renderWithProviders(mockPrice);
+  test("renders price card with product name", () => {
+    renderPriceCard(mockPrice);
 
     expect(screen.getByText("Pro")).toBeDefined();
   });
 
-  test("renders product description", async () => {
-    await renderWithProviders(mockPrice);
+  test("renders product description", () => {
+    renderPriceCard(mockPrice);
 
     expect(screen.getByText("Perfect for growing teams")).toBeDefined();
   });
 
-  test("renders recurring interval", async () => {
-    await renderWithProviders(mockPrice);
+  test("renders recurring interval", () => {
+    renderPriceCard(mockPrice);
 
     expect(screen.getByText("/month")).toBeDefined();
   });
 
-  test("renders marketing features", async () => {
-    await renderWithProviders(mockPrice);
+  test("renders marketing features", () => {
+    renderPriceCard(mockPrice);
 
     expect(screen.getByText("Unlimited projects")).toBeDefined();
     expect(screen.getByText("Priority support")).toBeDefined();
     expect(screen.getByText("Advanced analytics")).toBeDefined();
   });
 
-  test("renders Get Started button", async () => {
-    await renderWithProviders(mockPrice);
+  test("renders Get Started button", () => {
+    renderPriceCard(mockPrice);
 
     const button = screen.getByRole("button", { name: "Get Started" });
     expect(button).toBeDefined();
   });
 
-  test("handles one-time payment (no recurring)", async () => {
+  test("handles one-time payment (no recurring)", () => {
     const oneTimePrice: Price = {
       ...mockPrice,
       recurring: null,
     };
 
-    await renderWithProviders(oneTimePrice);
+    renderPriceCard(oneTimePrice);
 
     expect(screen.getByText("/forever")).toBeDefined();
   });
