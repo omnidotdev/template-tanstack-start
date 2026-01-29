@@ -100,7 +100,8 @@ class AetherBillingProvider implements BillingProvider {
         product: {
           id: (p.product as { id: string }).id,
           name: (p.product as { name: string }).name,
-          description: (p.product as { description: string | null }).description,
+          description: (p.product as { description: string | null })
+            .description,
           marketing_features: (
             p.product as { marketing_features: Array<{ name: string }> }
           ).marketing_features,

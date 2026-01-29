@@ -17,8 +17,8 @@ import { capitalizeFirstLetter } from "@/lib/util";
 import cn from "@/lib/utils";
 import { getCheckoutUrl } from "@/server/functions/subscriptions";
 
-import type { Price } from "@/lib/providers/billing";
 import type { CardProps } from "@/components/ui/card";
+import type { Price } from "@/lib/providers/billing";
 
 export type { Price };
 

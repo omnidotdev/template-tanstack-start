@@ -14,7 +14,7 @@ services:
       AUTH_CLIENT_ID: ${AUTH_CLIENT_ID:-}
       AUTH_CLIENT_SECRET: ${AUTH_CLIENT_SECRET:-}
       # Provider overrides (optional)
-      VITE_ENTITLEMENT_PROVIDER: ${VITE_ENTITLEMENT_PROVIDER:-}
+      VITE_BILLING_PROVIDER: ${VITE_BILLING_PROVIDER:-}
       VITE_AUTHZ_PROVIDER: ${VITE_AUTHZ_PROVIDER:-}
       # External provider URLs (if using non-local providers)
       VITE_BILLING_BASE_URL: ${VITE_BILLING_BASE_URL:-}
