@@ -49,6 +49,7 @@ const mockPrice: Price = {
     usage_type: "licensed",
     meter: null,
   },
+  metadata: {},
 };
 
 const renderPriceCard = (price: Price, disableAction = false) => {

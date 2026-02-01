@@ -23,6 +23,7 @@ const FREE_PRICE: Price = {
       { name: "Feature 3" },
     ],
   },
+  metadata: {},
 };
 
 /**

@@ -1,6 +1,8 @@
 import type {
   BillingProvider,
   CheckoutParams,
+  CheckoutWithWorkspaceParams,
+  CheckoutWithWorkspaceResponse,
   Entitlement,
   EntitlementsResponse,
   Price,
@@ -95,6 +97,12 @@ class LocalBillingProvider implements BillingProvider {
   }
 
   async createCheckoutSession(_params: CheckoutParams): Promise<string> {
+    throw new Error("Billing is not available in self-hosted mode");
+  }
+
+  async createCheckoutWithWorkspace(
+    _params: CheckoutWithWorkspaceParams,
+  ): Promise<CheckoutWithWorkspaceResponse> {
     throw new Error("Billing is not available in self-hosted mode");
   }
 

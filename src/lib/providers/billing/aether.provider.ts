@@ -4,6 +4,8 @@ import payments from "@/lib/payments";
 import type {
   BillingProvider,
   CheckoutParams,
+  CheckoutWithWorkspaceParams,
+  CheckoutWithWorkspaceResponse,
   EntitlementsResponse,
   Price,
   Subscription,
@@ -106,6 +108,7 @@ class AetherBillingProvider implements BillingProvider {
             p.product as { marketing_features: Array<{ name: string }> }
           ).marketing_features,
         },
+        metadata: p.metadata,
       }));
   }
 
@@ -136,6 +139,39 @@ class AetherBillingProvider implements BillingProvider {
     }
 
     return checkout.url;
+  }
+
+  async createCheckoutWithWorkspace(
+    params: CheckoutWithWorkspaceParams,
+  ): Promise<CheckoutWithWorkspaceResponse> {
+    if (!BILLING_BASE_URL) {
+      throw new Error("BILLING_BASE_URL not configured");
+    }
+
+    const response = await fetch(`${BILLING_BASE_URL}/checkout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${params.accessToken}`,
+      },
+      body: JSON.stringify({
+        appId: params.appId,
+        priceId: params.priceId,
+        successUrl: params.successUrl,
+        cancelUrl: params.cancelUrl,
+        ...(params.workspaceId && { workspaceId: params.workspaceId }),
+        ...(params.createWorkspace && {
+          createWorkspace: params.createWorkspace,
+        }),
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.error || "Failed to create checkout session");
+    }
+
+    return response.json();
   }
 
   async getSubscription(
