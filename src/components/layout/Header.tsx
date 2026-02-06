@@ -1,10 +1,6 @@
 import { MenuRootProvider, useMenu } from "@ark-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import {
-  useLocation,
-  useRouteContext,
-  useRouter,
-} from "@tanstack/react-router";
+import { useLocation, useRouteContext } from "@tanstack/react-router";
 
 import { InternalLink } from "@/components/core";
 import { ThemeToggle } from "@/components/layout";
@@ -25,6 +21,7 @@ import {
   MenuTrigger,
 } from "@/components/ui/menu";
 import authClient from "@/lib/auth/authClient";
+import signOut from "@/lib/auth/signOut";
 import app from "@/lib/config/app.config";
 
 /**
@@ -32,7 +29,6 @@ import app from "@/lib/config/app.config";
  */
 const Header = () => {
   const { auth } = useRouteContext({ strict: false });
-  const router = useRouter();
   const location = useLocation();
 
   const accountMenu = useMenu();
@@ -46,11 +42,10 @@ const Header = () => {
       }),
   });
 
-  const { mutateAsync: signOut } = useMutation({
-    mutationFn: async () => await authClient.signOut(),
-    onMutate: () => accountMenu.api.setOpen(false),
-    onSuccess: () => router.invalidate(),
-  });
+  const handleSignOut = async () => {
+    accountMenu.api.setOpen(false);
+    await signOut();
+  };
 
   return (
     <header className="fixed top-0 z-50 w-full border border-b bg-background shadow-sm blur-ms">
@@ -98,7 +93,7 @@ const Header = () => {
 
                     <Button
                       variant="destructive"
-                      onClick={() => signOut()}
+                      onClick={handleSignOut}
                       tabIndex={-1}
                     >
                       Sign Out
