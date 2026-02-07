@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchSession } from "@/server/functions/auth";
 import { getSubscription } from "@/server/functions/subscriptions";
 
-import type { Subscription } from "@/lib/providers/billing";
+import type { Subscription } from "@omnidotdev/providers";
 
 /**
  * Format Unix timestamp to readable date.

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { billing } from "@/lib/providers";
 import { authMiddleware } from "@/server/middleware";
 
-import type { EntitlementsResponse } from "@/lib/providers";
+import type { EntitlementsResponse } from "@omnidotdev/providers";
 
 const entitySchema = z.object({
   entityType: z.string(),

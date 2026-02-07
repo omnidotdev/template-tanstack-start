@@ -43,10 +43,26 @@ export const batchCheckPermissions = createServerFn()
   .inputValidator((data) => batchCheckSchema.parse(data))
   .middleware([authMiddleware])
   .handler(async ({ data, context }): Promise<boolean[]> => {
-    return authz.batchCheckPermissions(
+    if (!authz.checkPermissionsBatch) {
+      // Fallback to individual checks
+      const results: boolean[] = [];
+      for (const check of data.checks) {
+        const allowed = await authz.checkPermission(
+          context.session.user.id,
+          check.resourceType,
+          check.resourceId,
+          check.permission,
+        );
+        results.push(allowed);
+      }
+      return results;
+    }
+
+    const results = await authz.checkPermissionsBatch(
       data.checks.map((check) => ({
         userId: context.session.user.id,
         ...check,
       })),
     );
+    return results.map((r) => r.allowed);
   });

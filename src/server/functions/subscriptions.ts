@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import app from "@/lib/config/app.config";
 import { BASE_URL } from "@/lib/config/env.config";
-import billing from "@/lib/providers/billing";
+import { billing } from "@/lib/providers";
 import { authMiddleware } from "@/server/middleware";
 
 const checkoutSchema = z.object({

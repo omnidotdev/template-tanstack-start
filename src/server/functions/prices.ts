@@ -1,7 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import app from "@/lib/config/app.config";
-import billing, { type Price } from "@/lib/providers/billing";
+import { billing } from "@/lib/providers";
+
+import type { Price } from "@omnidotdev/providers";
 
 /**
  * Fetch all prices for this app.
