@@ -24,10 +24,10 @@ const billingProviderName = resolveProvider(
 );
 
 export const authz = createAuthzProvider(authzProviderName, {
-  apiUrl: AUTHZ_API_URL ?? "",
+  apiUrl: AUTHZ_API_URL,
 });
 
 export const billing = createBillingProvider(billingProviderName, {
-  baseUrl: BILLING_BASE_URL ?? "",
+  baseUrl: BILLING_BASE_URL,
   appId: "platform",
 });
