@@ -16,14 +16,9 @@ export const {
   // authorization
   VITE_AUTHZ_API_URL: AUTHZ_API_URL,
   VITE_AUTHZ_ENABLED: AUTHZ_ENABLED,
-  // self-hosted mode
-  VITE_SELF_HOSTED,
-  SELF_HOSTED,
 } = { ...import.meta.env, ...process.env };
 
 export const API_GRAPHQL_URL = `${API_BASE_URL}/graphql`;
 
 // environment helpers
 export const isDevEnv = import.meta.env.DEV;
-export const isSelfHosted =
-  SELF_HOSTED === "true" || VITE_SELF_HOSTED === "true";
