@@ -16,6 +16,9 @@ export const {
   // authorization
   VITE_AUTHZ_API_URL: AUTHZ_API_URL,
   VITE_AUTHZ_ENABLED: AUTHZ_ENABLED,
+  // event streaming
+  VITE_VORTEX_API_URL: VORTEX_API_URL,
+  VITE_VORTEX_API_KEY: VORTEX_API_KEY,
 } = { ...import.meta.env, ...process.env };
 
 export const API_GRAPHQL_URL = `${API_BASE_URL}/graphql`;
