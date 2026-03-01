@@ -38,6 +38,10 @@ const auth = betterAuth({
     // store OAuth tokens (access token, refresh token) in a signed cookie for stateless mode to enable automatic token refresh without a database
     storeAccountCookie: true,
   },
+  advanced: {
+    // use custom cookie prefix to avoid collision with IDP cookies
+    cookiePrefix: "TODO",
+  },
   plugins: [
     genericOAuth({
       config: [
