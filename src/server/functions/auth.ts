@@ -10,6 +10,11 @@ import {
   BASE_URL,
 } from "@/lib/config/env.config";
 
+// Module-level JWKS set — reused across requests with built-in key caching
+const jwks = AUTH_BASE_URL
+  ? createRemoteJWKSet(new URL(`${AUTH_BASE_URL}/jwks`))
+  : null;
+
 /**
  * Fetch the current user session.
  * Returns session with user info if authenticated, null otherwise.
@@ -32,8 +37,7 @@ export const fetchSession = createServerFn().handler(async () => {
     accessToken = tokenResult?.accessToken;
 
     // Extract identity provider ID from the ID token
-    if (tokenResult?.idToken) {
-      const jwks = createRemoteJWKSet(new URL(`${AUTH_BASE_URL}/jwks`));
+    if (tokenResult?.idToken && jwks) {
       const { payload } = await jwtVerify(tokenResult.idToken, jwks);
       identityProviderId = payload.sub;
     }
@@ -69,14 +73,11 @@ export const signOutAndRedirect = createServerFn({ method: "POST" }).handler(
  * Build the IDP end_session URL for federated logout
  */
 export function getIdpLogoutUrl(): string | null {
-  if (!AUTH_BASE_URL || !AUTH_CLIENT_ID) return null;
+  if (!AUTH_BASE_URL || !AUTH_CLIENT_ID || !BASE_URL) return null;
 
   const endSessionUrl = new URL(`${AUTH_BASE_URL}/oauth2/endsession`);
   endSessionUrl.searchParams.set("client_id", AUTH_CLIENT_ID);
-  endSessionUrl.searchParams.set(
-    "post_logout_redirect_uri",
-    `${BASE_URL}/login`,
-  );
+  endSessionUrl.searchParams.set("post_logout_redirect_uri", BASE_URL);
 
   return endSessionUrl.toString();
 }
