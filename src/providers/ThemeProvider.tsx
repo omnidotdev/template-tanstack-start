@@ -1,5 +1,4 @@
-import { useRouter } from "@tanstack/react-router";
-import { createContext, use } from "react";
+import { createContext, use, useCallback, useState } from "react";
 
 import { setThemeServerFn } from "@/server/functions/theme";
 
@@ -18,12 +17,19 @@ const ThemeContext = createContext<ThemeContext | null>(null);
  */
 const ThemeProvider = ({
   children,
-  theme,
+  theme: initialTheme,
 }: PropsWithChildren<{ theme: Theme }>) => {
-  const router = useRouter();
+  const [theme, setThemeState] = useState<Theme>(initialTheme);
 
-  const setTheme = (val: Theme) =>
-    setThemeServerFn({ data: val }).then(() => router.invalidate());
+  const setTheme = useCallback((val: Theme) => {
+    // update DOM immediately for instant visual feedback
+    document.documentElement.className = val;
+
+    setThemeState(val);
+
+    // persist to server in background (non-blocking)
+    setThemeServerFn({ data: val });
+  }, []);
 
   return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;
 };
