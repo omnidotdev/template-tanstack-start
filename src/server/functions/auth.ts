@@ -1,3 +1,4 @@
+import { ensureFreshAccessToken } from "@omnidotdev/providers";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest, getRequestHeaders } from "@tanstack/react-start/server";
@@ -25,9 +26,17 @@ export const fetchSession = createServerFn().handler(async () => {
   let identityProviderId: string | undefined;
 
   try {
-    const tokenResult = await auth.api.getAccessToken({
-      body: { providerId: "omni" },
-      headers,
+    const tokenResult = await ensureFreshAccessToken({
+      getAccessToken: () =>
+        auth.api.getAccessToken({
+          body: { providerId: "omni" },
+          headers,
+        }),
+      refreshToken: () =>
+        auth.api.refreshToken({
+          body: { providerId: "omni" },
+          headers,
+        }),
     });
     accessToken = tokenResult?.accessToken;
 

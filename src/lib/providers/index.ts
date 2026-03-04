@@ -17,6 +17,7 @@ export const authz = createAuthzProvider({
 });
 
 export const billing = createBillingProvider({
+  provider: "aether",
   baseUrl: BILLING_BASE_URL,
   appId: "platform",
 });

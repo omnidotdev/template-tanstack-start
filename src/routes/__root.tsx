@@ -16,6 +16,8 @@ import { ErrorBoundary, Footer, Header } from "@/components/layout";
 import auth from "@/lib/auth/auth";
 import app from "@/lib/config/app.config";
 import { isDevEnv } from "@/lib/config/env.config";
+import "@/lib/styles/globals.css";
+
 import appCss from "@/lib/styles/globals.css?url";
 import createMetaTags from "@/lib/util/createMetaTags";
 import ThemeProvider from "@/providers/ThemeProvider";
