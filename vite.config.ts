@@ -1,3 +1,4 @@
+import { SECURITY_HEADERS } from "@omnidotdev/providers/server";
 import { serwist } from "@serwist/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
@@ -26,6 +27,7 @@ const config = defineConfig(({ command }) => ({
       preset: "node-server",
       // Inline srvx to avoid module resolution issues with Bun runtime
       externals: { inline: ["srvx"] },
+      routeRules: { "/**": { headers: SECURITY_HEADERS } },
     }),
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
