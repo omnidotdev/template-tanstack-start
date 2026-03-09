@@ -1,4 +1,4 @@
-import { ensureFreshAccessToken } from "@omnidotdev/providers";
+import { ensureFreshAccessToken, isInvalidGrant } from "@omnidotdev/providers";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest, getRequestHeaders } from "@tanstack/react-start/server";
@@ -49,6 +49,16 @@ export const fetchSession = createServerFn().handler(async () => {
     }
   } catch (err) {
     console.error("[fetchSession] Error getting access token:", err);
+
+    if (isInvalidGrant(err)) {
+      console.warn("[fetchSession] Invalid refresh token, clearing session");
+      try {
+        await auth.api.signOut({ headers });
+      } catch {
+        // Sign-out may fail if session is already corrupt
+      }
+      return { session: null };
+    }
   }
 
   return {
