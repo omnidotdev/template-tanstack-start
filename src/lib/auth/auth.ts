@@ -41,7 +41,7 @@ const auth = betterAuth({
   },
   advanced: {
     // use custom cookie prefix to avoid collision with IDP cookies
-    cookiePrefix: "TODO",
+    cookiePrefix: "TODO_REPLACE_ME",
   },
   plugins: [
     genericOAuth({
