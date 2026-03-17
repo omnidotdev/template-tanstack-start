@@ -37,6 +37,9 @@ const knipConfig: KnipConfig = {
     "src/server/functions/entitlements.ts",
     "src/server/functions/organizations.ts",
     "src/lib/config/gatekeeper.ts",
+    "src/lib/hooks/**",
+    "src/lib/options/**",
+    "src/lib/validation/**",
   ],
   ignoreDependencies: [
     "@changesets/changelog-github",

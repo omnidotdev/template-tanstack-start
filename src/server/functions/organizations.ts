@@ -111,6 +111,42 @@ export const inviteOrganizationMember = createServerFn({ method: "POST" })
     return gatekeeperOrg.inviteMember(data, accessToken);
   });
 
+const resendOrganizationInvitationSchema = z.object({
+  organizationId: z.string(),
+  email: z.string().email(),
+  role: z.enum(["admin", "member"]),
+});
+
+/**
+ * Resend an invitation (active or expired).
+ * Gatekeeper's `cancelPendingInvitationsOnReInvite` auto-cancels the old one
+ */
+export const resendOrganizationInvitation = createServerFn({ method: "POST" })
+  .inputValidator((data) => resendOrganizationInvitationSchema.parse(data))
+  .middleware([authMiddleware])
+  .handler(async ({ data, context }) => {
+    const accessToken = context.session.accessToken;
+
+    if (!accessToken) {
+      throw new Error("No access token available");
+    }
+
+    const membersResponse = await gatekeeperOrg.listMembers(
+      data.organizationId,
+      accessToken,
+    );
+
+    const isExistingMember = membersResponse.data.some(
+      (m) => m.user.email.toLowerCase() === data.email.toLowerCase(),
+    );
+
+    if (isExistingMember) {
+      throw new Error("This email is already a member of the organization");
+    }
+
+    return gatekeeperOrg.inviteMember(data, accessToken);
+  });
+
 /**
  * List invitations for an organization via Gatekeeper.
  * Runs server-side to avoid CORS issues with the IDP's Better Auth endpoint
