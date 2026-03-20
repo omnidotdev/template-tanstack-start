@@ -12,7 +12,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { useEffect } from "react";
 import { Toaster, toast } from "sonner";
 
-import { ErrorBoundary, Footer, Header } from "@/components/layout";
+import { DefaultCatchBoundary, Footer, Header } from "@/components/layout";
 import auth from "@/lib/auth/auth";
 import app from "@/lib/config/app.config";
 import { isDevEnv } from "@/lib/config/env.config";
@@ -119,7 +119,7 @@ export const Route = createRootRouteWithContext<{
     ],
   }),
   loader: () => getThemeServerFn(),
-  errorComponent: ErrorBoundary,
+  errorComponent: DefaultCatchBoundary,
   component: RootComponent,
 });
 

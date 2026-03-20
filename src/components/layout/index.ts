@@ -1,5 +1,5 @@
-export * from "./ErrorBoundary";
-export { default as ErrorBoundary } from "./ErrorBoundary";
+export * from "./DefaultCatchBoundary";
+export { default as DefaultCatchBoundary } from "./DefaultCatchBoundary";
 export * from "./Footer";
 export { default as Footer } from "./Footer";
 export * from "./Header";
