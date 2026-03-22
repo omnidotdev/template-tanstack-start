@@ -6,7 +6,6 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { useEffect } from "react";
@@ -235,11 +234,6 @@ function RootDocument({ children }: PropsWithChildren) {
 
         <TanStackDevtools
           plugins={[
-            {
-              name: "TanStack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-              defaultOpen: true,
-            },
             {
               name: "TanStack Query",
               render: <ReactQueryDevtoolsPanel />,
