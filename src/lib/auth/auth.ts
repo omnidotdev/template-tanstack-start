@@ -53,7 +53,7 @@ const auth = betterAuth({
           clientId: AUTH_CLIENT_ID ?? "",
           clientSecret: AUTH_CLIENT_SECRET ?? "",
           discoveryUrl: `${AUTH_BASE_URL}/.well-known/openid-configuration`,
-          scopes: ["openid", "profile", "email", "offline_access"],
+          scopes: ["openid", "profile", "email", "offline_access", "organization"],
           accessType: "offline",
           pkce: true,
         },
