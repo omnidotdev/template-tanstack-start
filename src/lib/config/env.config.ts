@@ -23,5 +23,17 @@ export const {
 
 export const API_GRAPHQL_URL = `${API_BASE_URL}/graphql`;
 
+// Startup warnings for optional integrations
+if (!BILLING_BASE_URL)
+  console.warn("BILLING_BASE_URL not set, billing disabled");
+if (!STRIPE_PORTAL_CONFIG_ID)
+  console.warn("STRIPE_PORTAL_CONFIG_ID not set, Stripe portal disabled");
+if (!AUTHZ_API_URL) console.warn("AUTHZ_API_URL not set, authorization disabled");
+if (!AUTHZ_ENABLED) console.warn("AUTHZ_ENABLED not set, authorization disabled");
+if (!VORTEX_API_URL)
+  console.warn("VORTEX_API_URL not set, event streaming disabled");
+if (!VORTEX_API_KEY)
+  console.warn("VORTEX_API_KEY not set, event streaming disabled");
+
 // environment helpers
 export const isDevEnv = import.meta.env.DEV;
