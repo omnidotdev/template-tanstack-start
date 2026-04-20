@@ -52,7 +52,7 @@ const mockPrice: Price = {
   metadata: {},
 };
 
-const renderPriceCard = (price: Price, disableAction = false) => {
+const renderPriceCard = (price: Price) => {
   cleanup();
 
   const queryClient = new QueryClient({
@@ -61,7 +61,7 @@ const renderPriceCard = (price: Price, disableAction = false) => {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <PriceCard price={price} disableAction={disableAction} />
+      <PriceCard price={price} />
     </QueryClientProvider>,
   );
 };

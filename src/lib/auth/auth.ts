@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth/minimal";
+import { betterAuth } from "better-auth";
 import { genericOAuth } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 
@@ -53,7 +53,13 @@ const auth = betterAuth({
           clientId: AUTH_CLIENT_ID ?? "",
           clientSecret: AUTH_CLIENT_SECRET ?? "",
           discoveryUrl: `${AUTH_BASE_URL}/.well-known/openid-configuration`,
-          scopes: ["openid", "profile", "email", "offline_access", "organization"],
+          scopes: [
+            "openid",
+            "profile",
+            "email",
+            "offline_access",
+            "organization",
+          ],
           accessType: "offline",
           pkce: true,
         },
