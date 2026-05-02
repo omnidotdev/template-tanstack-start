@@ -1,10 +1,14 @@
 import { TabsRootProvider, useTabs } from "@ark-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { FrequentlyAskedQuestions, PriceCard } from "@/components/pricing";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getUserOrganizations } from "@/server/functions/auth";
 import { getPrices } from "@/server/functions/prices";
+import { getSubscription } from "@/server/functions/subscriptions";
 
+import type { Subscription } from "@omnidotdev/providers";
 import type { Price } from "@/components/pricing";
 
 const FREE_PRICE: Price = {
@@ -23,14 +27,18 @@ const FREE_PRICE: Price = {
       { name: "Feature 3" },
     ],
   },
-  metadata: {},
+  metadata: { tier: "free" },
 };
 
+const searchSchema = z.object({
+  tier: z.string().optional(),
+});
+
 /**
- * Pricing page.
+ * Pricing page
  */
 const PricingPage = () => {
-  const { prices } = Route.useLoaderData();
+  const { prices, organizations, orgSubscriptions } = Route.useLoaderData();
 
   const tabs = useTabs({ defaultValue: "month" });
 
@@ -60,11 +68,19 @@ const PricingPage = () => {
             value={tabs.value}
             className="flex flex-col items-center gap-4 lg:flex-row"
           >
-            {/** Handling the free tier could be quite different across apps. For now, we disable the action for authenticated users. TODO: Implement downstream. */}
-            <PriceCard price={FREE_PRICE} disableAction />
+            <PriceCard
+              price={FREE_PRICE}
+              organizations={organizations}
+              orgSubscriptions={orgSubscriptions}
+            />
 
             {filteredPrices.map((price) => (
-              <PriceCard key={price.id} price={price} />
+              <PriceCard
+                key={price.id}
+                price={price}
+                organizations={organizations}
+                orgSubscriptions={orgSubscriptions}
+              />
             ))}
           </TabsContent>
         )}
@@ -76,10 +92,34 @@ const PricingPage = () => {
 };
 
 export const Route = createFileRoute("/pricing")({
+  validateSearch: searchSchema,
   loader: async () => {
     const prices = await getPrices();
+    const organizations = await getUserOrganizations();
 
-    return { prices };
+    // Fetch subscriptions for all user organizations to determine current tiers
+    const orgSubscriptions: Record<string, Subscription | null> = {};
+
+    if (organizations.length > 0) {
+      const results = await Promise.all(
+        organizations.map(async (org) => {
+          try {
+            const subscription = await getSubscription({
+              data: { organizationId: org.id },
+            });
+            return { orgId: org.id, subscription };
+          } catch {
+            return { orgId: org.id, subscription: null };
+          }
+        }),
+      );
+
+      for (const { orgId, subscription } of results) {
+        orgSubscriptions[orgId] = subscription;
+      }
+    }
+
+    return { prices, organizations, orgSubscriptions };
   },
   component: PricingPage,
 });

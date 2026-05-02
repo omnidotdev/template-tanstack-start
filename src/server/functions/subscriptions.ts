@@ -6,15 +6,26 @@ import { BASE_URL } from "@/lib/config/env.config";
 import { billing } from "@/lib/providers";
 import { authMiddleware } from "@/server/middleware";
 
-const checkoutSchema = z.object({
-  priceId: z.string().startsWith("price_"),
-  successUrl: z.string().url().optional(),
+const organizationSchema = z.object({
+  organizationId: z.string().min(1),
 });
 
-const subscriptionSchema = z.object({
-  entityType: z.string().min(1),
-  entityId: z.string().min(1),
-});
+const checkoutWithWorkspaceSchema = z
+  .object({
+    priceId: z.string().startsWith("price_"),
+    successUrl: z.string().url(),
+    cancelUrl: z.string().url(),
+    workspaceId: z.string().min(1).optional(),
+    createWorkspace: z
+      .object({
+        name: z.string().min(1).max(100),
+        slug: z.string().min(1).max(100).optional(),
+      })
+      .optional(),
+  })
+  .refine((data) => data.workspaceId || data.createWorkspace, {
+    message: "Either workspaceId or createWorkspace is required",
+  });
 
 /**
  * Validate access token or throw.
@@ -27,35 +38,35 @@ const requireAccessToken = (accessToken: string | undefined): string => {
 };
 
 /**
- * Get subscription details for an entity.
+ * Get subscription details for an organization.
  */
 export const getSubscription = createServerFn()
   .middleware([authMiddleware])
-  .inputValidator((data) => subscriptionSchema.parse(data))
+  .inputValidator((data) => organizationSchema.parse(data))
   .handler(async ({ data, context }) => {
     return billing.getSubscription(
-      data.entityType,
-      data.entityId,
+      "organization",
+      data.organizationId,
       requireAccessToken(context.session.accessToken),
     );
   });
 
 /**
- * Create a checkout session for a new subscription.
+ * Create a checkout session with workspace creation/selection.
+ * Routes through Aether for orchestration.
  */
-export const getCheckoutUrl = createServerFn({ method: "POST" })
+export const createCheckoutWithWorkspace = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .inputValidator((data) => checkoutSchema.parse(data))
+  .inputValidator((data) => checkoutWithWorkspaceSchema.parse(data))
   .handler(async ({ data, context }) => {
-    return billing.createCheckoutSession({
+    return billing.createCheckoutWithWorkspace({
+      appId: app.name.toLowerCase(),
       priceId: data.priceId,
-      successUrl: data.successUrl ?? `${BASE_URL}/pricing`,
-      customerEmail: context.session.user.email!,
-      customerName: context.session.user.name ?? undefined,
-      metadata: {
-        externalId: context.session.user.identityProviderId!,
-        omniProduct: app.name.toLowerCase(),
-      },
+      successUrl: data.successUrl,
+      cancelUrl: data.cancelUrl,
+      accessToken: requireAccessToken(context.session.accessToken),
+      workspaceId: data.workspaceId,
+      createWorkspace: data.createWorkspace,
     });
   });
 
@@ -64,13 +75,13 @@ export const getCheckoutUrl = createServerFn({ method: "POST" })
  */
 export const getBillingPortalUrl = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .inputValidator((data) => subscriptionSchema.parse(data))
+  .inputValidator((data) => organizationSchema.parse(data))
   .handler(async ({ data, context }) => {
     return billing.getBillingPortalUrl(
-      data.entityType,
-      data.entityId,
+      "organization",
+      data.organizationId,
       app.name.toLowerCase(),
-      `${BASE_URL}/profile`,
+      `${BASE_URL}/settings`,
       requireAccessToken(context.session.accessToken),
     );
   });
@@ -80,11 +91,11 @@ export const getBillingPortalUrl = createServerFn({ method: "POST" })
  */
 export const cancelSubscription = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .inputValidator((data) => subscriptionSchema.parse(data))
+  .inputValidator((data) => organizationSchema.parse(data))
   .handler(async ({ data, context }) => {
     return billing.cancelSubscription(
-      data.entityType,
-      data.entityId,
+      "organization",
+      data.organizationId,
       requireAccessToken(context.session.accessToken),
     );
   });
@@ -95,11 +106,11 @@ export const cancelSubscription = createServerFn({ method: "POST" })
  */
 export const renewSubscription = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .inputValidator((data) => subscriptionSchema.parse(data))
+  .inputValidator((data) => organizationSchema.parse(data))
   .handler(async ({ data, context }) => {
     return billing.renewSubscription(
-      data.entityType,
-      data.entityId,
+      "organization",
+      data.organizationId,
       requireAccessToken(context.session.accessToken),
     );
   });

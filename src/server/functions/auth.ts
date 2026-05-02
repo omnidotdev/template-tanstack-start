@@ -1,4 +1,8 @@
-import { ensureFreshAccessToken, isInvalidGrant } from "@omnidotdev/providers";
+import {
+  OMNI_CLAIMS_NAMESPACE,
+  ensureFreshAccessToken,
+  isInvalidGrant,
+} from "@omnidotdev/providers";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest, getRequestHeaders } from "@tanstack/react-start/server";
@@ -10,6 +14,8 @@ import {
   AUTH_CLIENT_ID,
   BASE_URL,
 } from "@/lib/config/env.config";
+
+import type { OrganizationClaim } from "@omnidotdev/providers/auth";
 
 /**
  * Fetch the current user session.
@@ -125,5 +131,43 @@ export const signOutLocal = createServerFn({ method: "POST" }).handler(
     await auth.api.signOut({ headers });
 
     return { idpLogoutUrl: getIdpLogoutUrl(idToken) };
+  },
+);
+
+/**
+ * Get user organizations from IDP token claims.
+ * Returns an empty array if unauthenticated or no claims are present.
+ */
+export const getUserOrganizations = createServerFn().handler(
+  async (): Promise<OrganizationClaim[]> => {
+    const headers = getRequestHeaders();
+    const session = await auth.api.getSession({ headers });
+    if (!session) return [];
+
+    try {
+      const tokenResult = await ensureFreshAccessToken({
+        getAccessToken: () =>
+          auth.api.getAccessToken({
+            body: { providerId: "omni" },
+            headers,
+          }),
+        refreshToken: () =>
+          auth.api.refreshToken({
+            body: { providerId: "omni" },
+            headers,
+          }),
+      });
+
+      if (!tokenResult?.idToken) return [];
+
+      const payload = decodeJwt(tokenResult.idToken);
+      const claims = payload[OMNI_CLAIMS_NAMESPACE];
+
+      if (!Array.isArray(claims)) return [];
+
+      return claims as OrganizationClaim[];
+    } catch {
+      return [];
+    }
   },
 );
