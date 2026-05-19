@@ -5,6 +5,9 @@ WORKDIR /app
 
 # Install dependencies
 FROM base AS deps
+# Skip puppeteer's chrome-headless-shell download (pulled in by @unlighthouse/cli devDep)
+# The base image lacks tar/unzip; we don't run puppeteer in this image anyway
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
