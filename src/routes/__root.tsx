@@ -102,6 +102,17 @@ export const Route = createRootRouteWithContext<{
         href: "/manifest.json",
       },
       {
+        rel: "icon",
+        type: "image/svg+xml",
+        href: "/favicon.svg",
+      },
+      // .ico fallback for surfaces that don't read SVG favicons (link previews, iMessage)
+      {
+        rel: "icon",
+        href: "/favicon.ico",
+        sizes: "any",
+      },
+      {
         rel: "apple-touch-icon",
         href: "/img/favicon-192x192.png",
       },
