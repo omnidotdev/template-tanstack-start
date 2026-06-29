@@ -1,6 +1,6 @@
+import { Button } from "@omnidotdev/thornberry/button";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   DialogBackdrop,
   DialogCloseTrigger,

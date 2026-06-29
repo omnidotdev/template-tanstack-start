@@ -1,7 +1,7 @@
+import { Button } from "@omnidotdev/thornberry/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2Icon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { cancelSubscription as cancelSubscriptionFn } from "@/server/functions/subscriptions";
 
 interface Props {

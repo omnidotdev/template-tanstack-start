@@ -1,4 +1,5 @@
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@omnidotdev/thornberry/button";
+
 import cn from "@/lib/utils";
 
 import type { VariantProps } from "class-variance-authority";

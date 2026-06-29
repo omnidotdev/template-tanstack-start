@@ -1,6 +1,6 @@
+import { buttonVariants } from "@omnidotdev/thornberry/button";
 import { createLink } from "@tanstack/react-router";
 
-import { buttonVariants } from "@/components/ui/button";
 import cn from "@/lib/utils";
 
 import type { LinkComponent } from "@tanstack/react-router";

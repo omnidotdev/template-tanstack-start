@@ -1,9 +1,13 @@
 import { TabsRootProvider, useTabs } from "@ark-ui/react";
+import {
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@omnidotdev/thornberry/tabs";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { FrequentlyAskedQuestions, PriceCard } from "@/components/pricing";
-import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserOrganizations } from "@/server/functions/auth";
 import { getPrices } from "@/server/functions/prices";
 import { getSubscription } from "@/server/functions/subscriptions";

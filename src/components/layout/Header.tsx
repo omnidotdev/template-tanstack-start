@@ -1,4 +1,5 @@
 import { MenuRootProvider, useMenu } from "@ark-ui/react";
+import { Button } from "@omnidotdev/thornberry/button";
 import { useMutation } from "@tanstack/react-query";
 import { useLocation, useRouteContext } from "@tanstack/react-router";
 
@@ -9,7 +10,6 @@ import {
   AvatarImage,
   AvatarRoot,
 } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   MenuContent,
   MenuItem,

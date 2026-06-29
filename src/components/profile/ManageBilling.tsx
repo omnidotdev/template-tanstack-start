@@ -1,6 +1,5 @@
+import { Button } from "@omnidotdev/thornberry/button";
 import { SettingsIcon } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 
 interface Props {
   workspaceId?: string;
