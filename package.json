@@ -71,7 +71,7 @@
     "@ark-ui/react": "^5.30.0",
     "@icons-pack/react-simple-icons": "^13.8.0",
     "@omnidotdev/providers": "github:omnidotdev/providers#49f2fc4",
-    "@omnidotdev/thornberry": "github:omnidotdev/thornberry#a71e4b5",
+    "@omnidotdev/thornberry": "github:omnidotdev/thornberry#4549481",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/nitro-v2-vite-plugin": "^1.154.7",
     "@tanstack/react-query": "^5.90.20",
