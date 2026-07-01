@@ -128,6 +128,22 @@ export const Route = createRootRouteWithContext<{
         sizes: "16x16",
         href: "/img/favicon-16x16.png",
       },
+      {
+        rel: "canonical",
+        href: app.url,
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: app.name,
+          url: app.url,
+          description: app.description,
+        }),
+      },
     ],
   }),
   loader: () => getThemeServerFn(),
