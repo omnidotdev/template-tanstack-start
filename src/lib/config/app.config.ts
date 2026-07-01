@@ -11,6 +11,11 @@ const app = {
     discord: "https://discord.gg/omnidotdev",
     x: "https://x.com/omnidotdev",
   },
+  // Legal links mirror the omni-api catalog SSOT
+  legal: {
+    privacy: "https://omni.dev/legal/privacy",
+    terms: "https://omni.dev/legal/terms",
+  },
   organization: {
     name: "Omni",
     supportEmailAddress: "support@omni.dev",

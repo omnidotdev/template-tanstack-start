@@ -23,6 +23,16 @@ const Footer = () => (
 
     <div className="h-1/2 w-px bg-muted-foreground/30" />
 
+    <ExternalLink variant="ghost" href={app.legal.privacy}>
+      Privacy
+    </ExternalLink>
+
+    <ExternalLink variant="ghost" href={app.legal.terms}>
+      Terms
+    </ExternalLink>
+
+    <div className="h-1/2 w-px bg-muted-foreground/30" />
+
     <div className="flex items-center gap-1">
       <ExternalLink variant="ghost" href={app.socials.discord}>
         <DiscordIcon className="size-5" />
