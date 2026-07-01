@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@omnidotdev/thornberry/base.css";
 @source "../../../node_modules/@omnidotdev/thornberry/build";
 @import "tw-animate-css";
 
@@ -197,9 +198,6 @@
 }
 
 @layer base {
-  html {
-    scrollbar-gutter: stable;
-  }
   * {
     @apply border-border outline-ring/50;
   }
