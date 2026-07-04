@@ -14,7 +14,6 @@ import {
   MenuContent,
   MenuItem,
   MenuItemGroup,
-  MenuItemGroupLabel,
   MenuItemText,
   MenuPositioner,
   MenuSeparator,
@@ -76,8 +75,6 @@ const Header = () => {
                 <MenuPositioner>
                   <MenuContent className="min-w-48">
                     <MenuItemGroup>
-                      <MenuItemGroupLabel>My Account</MenuItemGroupLabel>
-
                       <MenuItem value="profile" asChild>
                         <InternalLink
                           to="/profile"
