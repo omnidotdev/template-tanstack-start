@@ -10,7 +10,7 @@ import app from "@/lib/config/app.config";
  * Layout footer.
  */
 const Footer = () => (
-  <footer className="flex w-full items-center justify-center gap-1 p-4 text-muted-foreground">
+  <footer className="flex w-full flex-wrap items-center justify-center gap-x-1 gap-y-2 p-4 text-muted-foreground">
     <p className="px-3">
       &copy; {new Date().getFullYear()} {app.organization.name}
     </p>
