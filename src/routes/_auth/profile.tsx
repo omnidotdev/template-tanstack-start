@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CancelSubscription, ManageSubscription } from "@/components/profile";
+import {
+  CancelSubscription,
+  ManageSubscription,
+  RenewSubscription,
+} from "@/components/profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchSession } from "@/server/functions/auth";
 import { getSubscription } from "@/server/functions/subscriptions";
@@ -35,7 +39,9 @@ const SubscriptionCard = ({
         </CardTitle>
         <div className="flex gap-1">
           <ManageSubscription entityType={entityType} entityId={entityId} />
-          {!isPendingCancellation && (
+          {isPendingCancellation ? (
+            <RenewSubscription entityType={entityType} entityId={entityId} />
+          ) : (
             <CancelSubscription entityType={entityType} entityId={entityId} />
           )}
         </div>
