@@ -34,11 +34,17 @@ const Header = () => {
   const accountMenu = useMenu();
 
   const { mutateAsync: signIn, isPending: isSignInPending } = useMutation({
-    mutationFn: async () =>
+    mutationFn: async (action: "sign-in" | "sign-up" = "sign-in") =>
       await authClient.signIn.oauth2({
         providerId: "omni",
         callbackURL: location.pathname,
         disableRedirect: false,
+        // Flag a sign-up so the server promotes it to OIDC `prompt=create` (see
+        // `authorizationUrlParams` in auth.ts), opening the provider's sign-up
+        // page instead of the sign-in form
+        ...(action === "sign-up" && {
+          additionalData: { screen_hint: "signup" },
+        }),
       }),
   });
 
@@ -102,9 +108,21 @@ const Header = () => {
                 </MenuPositioner>
               </MenuRootProvider>
             ) : (
-              <Button onClick={() => signIn()} disabled={isSignInPending}>
-                Sign In
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => signIn("sign-in")}
+                  disabled={isSignInPending}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  onClick={() => signIn("sign-up")}
+                  disabled={isSignInPending}
+                >
+                  Sign Up
+                </Button>
+              </div>
             )}
           </div>
         </div>

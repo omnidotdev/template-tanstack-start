@@ -62,6 +62,16 @@ const auth = betterAuth({
           ],
           accessType: "offline",
           pkce: true,
+          // Promote a sign-up request to the OIDC `prompt=create` so the
+          // provider opens its sign-up page instead of the sign-in form. The
+          // client flags a sign-up via `additionalData: { screen_hint: "signup" }`
+          // (see signIn in Header), which Better Auth keeps in OAuth state but
+          // never puts on the authorization URL, so it must be promoted to a real
+          // auth-URL param here
+          authorizationUrlParams: (ctx): Record<string, string> =>
+            ctx.body?.additionalData?.screen_hint === "signup"
+              ? { prompt: "create" }
+              : {},
         },
       ],
     }),
