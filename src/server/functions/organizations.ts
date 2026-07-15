@@ -47,7 +47,6 @@ const removeOrganizationMemberSchema = z.object({
 
 /**
  * Create a new organization via Gatekeeper.
- * @knipignore
  */
 export const createOrganization = createServerFn({ method: "POST" })
   .inputValidator((data) => createOrganizationSchema.parse(data))
@@ -60,6 +59,23 @@ export const createOrganization = createServerFn({ method: "POST" })
     }
 
     return gatekeeperOrg.createOrganization(data, accessToken);
+  });
+
+const checkOrganizationHandleSchema = z.object({
+  slug: z.string().min(1),
+});
+
+/**
+ * Check whether an organization handle (slug) is available across the ecosystem
+ * namespace. Backs live validation in the create-organization form. Public
+ * check, so no auth middleware
+ */
+export const checkOrganizationHandleAvailability = createServerFn({
+  method: "GET",
+})
+  .inputValidator((data) => checkOrganizationHandleSchema.parse(data))
+  .handler(async ({ data }) => {
+    return gatekeeperOrg.checkNamespaceAvailability(data.slug);
   });
 
 /**
