@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 
+import CreateOrganizationButton from "@/components/organizations/CreateOrganizationButton";
 import { useOrganization } from "@/lib/context";
 
 export const Route = createFileRoute("/_auth/organizations/")({
@@ -15,7 +16,11 @@ function OrganizationsPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="mb-6 font-bold text-2xl">Organizations</h1>
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <h1 className="font-bold text-2xl">Organizations</h1>
+
+        {organizations.length > 0 && <CreateOrganizationButton />}
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {organizations.map((org) => (
@@ -46,10 +51,12 @@ function OrganizationsPage() {
       </div>
 
       {organizations.length === 0 && (
-        <p className="text-muted-foreground">
-          No organizations found. You should have at least a personal
-          organization.
-        </p>
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-16 text-center">
+          <p className="text-muted-foreground text-sm">
+            No organizations yet. Create one to get started.
+          </p>
+          <CreateOrganizationButton />
+        </div>
       )}
     </div>
   );

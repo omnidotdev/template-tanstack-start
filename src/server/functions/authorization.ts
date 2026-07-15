@@ -4,18 +4,32 @@ import { z } from "zod";
 import { authz } from "@/lib/providers";
 import { authMiddleware } from "@/server/middleware";
 
+import type {
+  PermissionCheck,
+  WardenRelation,
+  WardenResourceType,
+} from "@omnidotdev/providers/authz";
+
+// The authz provider types resourceType/permission as the Warden resource and
+// relation unions. Validate they are strings at runtime (the provider enforces
+// the actual values) while typing them to satisfy the strongly-typed API
+const resourceType = z.custom<WardenResourceType>((v) => typeof v === "string");
+const permission = z.custom<WardenRelation<WardenResourceType>>(
+  (v) => typeof v === "string",
+);
+
 const checkPermissionSchema = z.object({
-  resourceType: z.string(),
+  resourceType,
   resourceId: z.string().uuid(),
-  permission: z.string(),
+  permission,
 });
 
 const batchCheckSchema = z.object({
   checks: z.array(
     z.object({
-      resourceType: z.string(),
+      resourceType,
       resourceId: z.string().uuid(),
-      permission: z.string(),
+      permission,
     }),
   ),
 });
@@ -59,10 +73,12 @@ export const batchCheckPermissions = createServerFn()
     }
 
     const results = await authz.checkPermissionsBatch(
+      // Runtime-valid checks; cast bridges the broad validated unions to the
+      // provider's discriminated PermissionCheck type
       data.checks.map((check) => ({
         userId: context.session.user.id,
         ...check,
-      })),
+      })) as PermissionCheck[],
     );
     return results.map((r) => r.allowed);
   });

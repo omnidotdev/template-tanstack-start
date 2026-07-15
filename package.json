@@ -36,7 +36,7 @@
     "@graphql-codegen/typescript-graphql-request": "^6.4.0",
     "@graphql-codegen/typescript-msw": "^3.0.1",
     "@graphql-codegen/typescript-operations": "^5.0.7",
-    "@graphql-codegen/typescript-react-query": "^6.1.1",
+    "@graphql-codegen/typescript-react-query": "^7.0.5",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@happy-dom/global-registrator": "^20.3.7",
     "@playwright/test": "^1.58.0",
@@ -70,7 +70,7 @@
   "dependencies": {
     "@ark-ui/react": "^5.30.0",
     "@icons-pack/react-simple-icons": "^13.8.0",
-    "@omnidotdev/providers": "github:omnidotdev/providers#49f2fc4",
+    "@omnidotdev/providers": "github:omnidotdev/providers#67cb527",
     "@omnidotdev/thornberry": "github:omnidotdev/thornberry#eb634c7",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/nitro-v2-vite-plugin": "^1.154.7",
