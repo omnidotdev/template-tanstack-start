@@ -9,6 +9,7 @@ import type { Price } from "./PriceCard";
 // Spy on router hooks for this test file
 spyOn(TanStackRouter, "useRouteContext").mockReturnValue({ auth: null });
 spyOn(TanStackRouter, "useNavigate").mockReturnValue(mock());
+spyOn(TanStackRouter, "useSearch").mockReturnValue({});
 
 // Mock auth client
 mock.module("@/lib/auth/authClient", () => ({
@@ -19,9 +20,11 @@ mock.module("@/lib/auth/authClient", () => ({
   },
 }));
 
-// Mock server function
+// Mock server function (PriceCard imports `createCheckoutWithWorkspace`)
 mock.module("@/server/functions/subscriptions", () => ({
-  getCheckoutUrl: mock(() => Promise.resolve("https://checkout.stripe.com")),
+  createCheckoutWithWorkspace: mock(() =>
+    Promise.resolve({ checkoutUrl: "https://checkout.stripe.com" }),
+  ),
 }));
 
 // Import after mocking
@@ -49,7 +52,7 @@ const mockPrice: Price = {
     usage_type: "licensed",
     meter: null,
   },
-  metadata: {},
+  metadata: { tier: "pro" },
 };
 
 const renderPriceCard = (price: Price) => {
@@ -67,10 +70,12 @@ const renderPriceCard = (price: Price) => {
 };
 
 describe("PriceCard", () => {
-  test("renders price card with product name", () => {
+  test("renders the tier name", () => {
     renderPriceCard(mockPrice);
 
-    expect(screen.getByText("Pro")).toBeDefined();
+    // The tier name renders in more than one place (card title and the
+    // create-workspace dialog), so assert presence rather than uniqueness
+    expect(screen.getAllByText("Pro").length).toBeGreaterThan(0);
   });
 
   test("renders product description", () => {
@@ -93,14 +98,14 @@ describe("PriceCard", () => {
     expect(screen.getByText("Advanced analytics")).toBeDefined();
   });
 
-  test("renders Get Started button", () => {
+  test("renders the subscribe button for a paid tier", () => {
     renderPriceCard(mockPrice);
 
-    const button = screen.getByRole("button", { name: "Get Started" });
+    const button = screen.getByRole("button", { name: "Continue with Pro" });
     expect(button).toBeDefined();
   });
 
-  test("handles one-time payment (no recurring)", () => {
+  test("omits the interval suffix for a one-time (non-recurring) price", () => {
     const oneTimePrice: Price = {
       ...mockPrice,
       recurring: null,
@@ -108,6 +113,7 @@ describe("PriceCard", () => {
 
     renderPriceCard(oneTimePrice);
 
-    expect(screen.getByText("/forever")).toBeDefined();
+    // No `/interval` suffix is rendered when the price is not recurring
+    expect(screen.queryByText("/month")).toBeNull();
   });
 });

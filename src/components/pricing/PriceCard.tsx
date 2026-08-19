@@ -100,7 +100,7 @@ const PriceCard = ({
       return createCheckoutWithWorkspace({
         data: {
           priceId: price.id,
-          successUrl: `${BASE_URL}/organizations/__SLUG__/billing`,
+          successUrl: `${BASE_URL}/@__SLUG__/~/billing`,
           cancelUrl: `${BASE_URL}/pricing`,
           ...params,
         },
@@ -145,7 +145,7 @@ const PriceCard = ({
         navigate({ to: "/organizations" });
       } else {
         navigate({
-          to: "/organizations/$orgSlug",
+          to: "/@$orgSlug",
           params: { orgSlug: allOrgs[0].slug },
         });
       }

@@ -26,7 +26,7 @@ function OrganizationsPage() {
         {organizations.map((org) => (
           <Link
             key={org.id}
-            to="/organizations/$orgSlug"
+            to="/@$orgSlug"
             params={{ orgSlug: org.slug }}
             className="block rounded-lg border p-4 transition-colors hover:bg-muted"
           >

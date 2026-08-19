@@ -14,15 +14,23 @@ import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthProfileRouteImport } from './routes/_auth/profile'
 import { Route as AuthDashboardRouteImport } from './routes/_auth/dashboard'
+import { Route as AuthAtorgSlugRouteImport } from './routes/_auth/@$orgSlug'
 import { Route as AuthOrganizationsIndexRouteImport } from './routes/_auth/organizations/index'
+import { Route as AuthAtorgSlugIndexRouteImport } from './routes/_auth/@$orgSlug/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthOrganizationsOrgSlugRouteImport } from './routes/_auth/organizations/$orgSlug'
+import { Route as AuthAtorgSlugWorkspaceSlugRouteImport } from './routes/_auth/@$orgSlug/$workspaceSlug'
 import { Route as AuthOrganizationsOrgSlugIndexRouteImport } from './routes/_auth/organizations/$orgSlug/index'
+import { Route as AuthAtorgSlugWorkspaceSlugIndexRouteImport } from './routes/_auth/@$orgSlug/$workspaceSlug/index'
 import { Route as AuthOrganizationsOrgSlugSettingsRouteImport } from './routes/_auth/organizations/$orgSlug/settings'
 import { Route as AuthOrganizationsOrgSlugMembersRouteImport } from './routes/_auth/organizations/$orgSlug/members'
 import { Route as AuthOrganizationsOrgSlugBillingRouteImport } from './routes/_auth/organizations/$orgSlug/billing'
+import { Route as AuthAtorgSlugChar126SettingsRouteImport } from './routes/_auth/@$orgSlug/~/settings'
+import { Route as AuthAtorgSlugChar126MembersRouteImport } from './routes/_auth/@$orgSlug/~/members'
+import { Route as AuthAtorgSlugChar126BillingRouteImport } from './routes/_auth/@$orgSlug/~/billing'
 import { Route as AuthOrganizationsOrgSlugWorkspacesIndexRouteImport } from './routes/_auth/organizations/$orgSlug/workspaces/index'
 import { Route as AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugRouteImport } from './routes/_auth/organizations/$orgSlug/workspaces/$workspaceSlug'
+import { Route as AuthAtorgSlugWorkspaceSlugChar126SettingsRouteImport } from './routes/_auth/@$orgSlug/$workspaceSlug/~/settings'
 import { Route as AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugIndexRouteImport } from './routes/_auth/organizations/$orgSlug/workspaces/$workspaceSlug/index'
 import { Route as AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugSettingsRouteImport } from './routes/_auth/organizations/$orgSlug/workspaces/$workspaceSlug/settings'
 
@@ -50,10 +58,20 @@ const AuthDashboardRoute = AuthDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthAtorgSlugRoute = AuthAtorgSlugRouteImport.update({
+  id: '/@$orgSlug',
+  path: '/@$orgSlug',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthOrganizationsIndexRoute = AuthOrganizationsIndexRouteImport.update({
   id: '/organizations/',
   path: '/organizations/',
   getParentRoute: () => AuthRoute,
+} as any)
+const AuthAtorgSlugIndexRoute = AuthAtorgSlugIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthAtorgSlugRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -66,11 +84,23 @@ const AuthOrganizationsOrgSlugRoute =
     path: '/organizations/$orgSlug',
     getParentRoute: () => AuthRoute,
   } as any)
+const AuthAtorgSlugWorkspaceSlugRoute =
+  AuthAtorgSlugWorkspaceSlugRouteImport.update({
+    id: '/$workspaceSlug',
+    path: '/$workspaceSlug',
+    getParentRoute: () => AuthAtorgSlugRoute,
+  } as any)
 const AuthOrganizationsOrgSlugIndexRoute =
   AuthOrganizationsOrgSlugIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthOrganizationsOrgSlugRoute,
+  } as any)
+const AuthAtorgSlugWorkspaceSlugIndexRoute =
+  AuthAtorgSlugWorkspaceSlugIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthAtorgSlugWorkspaceSlugRoute,
   } as any)
 const AuthOrganizationsOrgSlugSettingsRoute =
   AuthOrganizationsOrgSlugSettingsRouteImport.update({
@@ -90,6 +120,24 @@ const AuthOrganizationsOrgSlugBillingRoute =
     path: '/billing',
     getParentRoute: () => AuthOrganizationsOrgSlugRoute,
   } as any)
+const AuthAtorgSlugChar126SettingsRoute =
+  AuthAtorgSlugChar126SettingsRouteImport.update({
+    id: '/~/settings',
+    path: '/~/settings',
+    getParentRoute: () => AuthAtorgSlugRoute,
+  } as any)
+const AuthAtorgSlugChar126MembersRoute =
+  AuthAtorgSlugChar126MembersRouteImport.update({
+    id: '/~/members',
+    path: '/~/members',
+    getParentRoute: () => AuthAtorgSlugRoute,
+  } as any)
+const AuthAtorgSlugChar126BillingRoute =
+  AuthAtorgSlugChar126BillingRouteImport.update({
+    id: '/~/billing',
+    path: '/~/billing',
+    getParentRoute: () => AuthAtorgSlugRoute,
+  } as any)
 const AuthOrganizationsOrgSlugWorkspacesIndexRoute =
   AuthOrganizationsOrgSlugWorkspacesIndexRouteImport.update({
     id: '/workspaces/',
@@ -101,6 +149,12 @@ const AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugRoute =
     id: '/workspaces/$workspaceSlug',
     path: '/workspaces/$workspaceSlug',
     getParentRoute: () => AuthOrganizationsOrgSlugRoute,
+  } as any)
+const AuthAtorgSlugWorkspaceSlugChar126SettingsRoute =
+  AuthAtorgSlugWorkspaceSlugChar126SettingsRouteImport.update({
+    id: '/~/settings',
+    path: '/~/settings',
+    getParentRoute: () => AuthAtorgSlugWorkspaceSlugRoute,
   } as any)
 const AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugIndexRoute =
   AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugIndexRouteImport.update({
@@ -118,15 +172,23 @@ const AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugSettingsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
+  '/@$orgSlug': typeof AuthAtorgSlugRouteWithChildren
   '/dashboard': typeof AuthDashboardRoute
   '/profile': typeof AuthProfileRoute
+  '/@$orgSlug/$workspaceSlug': typeof AuthAtorgSlugWorkspaceSlugRouteWithChildren
   '/organizations/$orgSlug': typeof AuthOrganizationsOrgSlugRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/@$orgSlug/': typeof AuthAtorgSlugIndexRoute
   '/organizations/': typeof AuthOrganizationsIndexRoute
+  '/@$orgSlug/~/billing': typeof AuthAtorgSlugChar126BillingRoute
+  '/@$orgSlug/~/members': typeof AuthAtorgSlugChar126MembersRoute
+  '/@$orgSlug/~/settings': typeof AuthAtorgSlugChar126SettingsRoute
   '/organizations/$orgSlug/billing': typeof AuthOrganizationsOrgSlugBillingRoute
   '/organizations/$orgSlug/members': typeof AuthOrganizationsOrgSlugMembersRoute
   '/organizations/$orgSlug/settings': typeof AuthOrganizationsOrgSlugSettingsRoute
+  '/@$orgSlug/$workspaceSlug/': typeof AuthAtorgSlugWorkspaceSlugIndexRoute
   '/organizations/$orgSlug/': typeof AuthOrganizationsOrgSlugIndexRoute
+  '/@$orgSlug/$workspaceSlug/~/settings': typeof AuthAtorgSlugWorkspaceSlugChar126SettingsRoute
   '/organizations/$orgSlug/workspaces/$workspaceSlug': typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugRouteWithChildren
   '/organizations/$orgSlug/workspaces/': typeof AuthOrganizationsOrgSlugWorkspacesIndexRoute
   '/organizations/$orgSlug/workspaces/$workspaceSlug/settings': typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugSettingsRoute
@@ -138,11 +200,17 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthDashboardRoute
   '/profile': typeof AuthProfileRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/@$orgSlug': typeof AuthAtorgSlugIndexRoute
   '/organizations': typeof AuthOrganizationsIndexRoute
+  '/@$orgSlug/~/billing': typeof AuthAtorgSlugChar126BillingRoute
+  '/@$orgSlug/~/members': typeof AuthAtorgSlugChar126MembersRoute
+  '/@$orgSlug/~/settings': typeof AuthAtorgSlugChar126SettingsRoute
   '/organizations/$orgSlug/billing': typeof AuthOrganizationsOrgSlugBillingRoute
   '/organizations/$orgSlug/members': typeof AuthOrganizationsOrgSlugMembersRoute
   '/organizations/$orgSlug/settings': typeof AuthOrganizationsOrgSlugSettingsRoute
+  '/@$orgSlug/$workspaceSlug': typeof AuthAtorgSlugWorkspaceSlugIndexRoute
   '/organizations/$orgSlug': typeof AuthOrganizationsOrgSlugIndexRoute
+  '/@$orgSlug/$workspaceSlug/~/settings': typeof AuthAtorgSlugWorkspaceSlugChar126SettingsRoute
   '/organizations/$orgSlug/workspaces': typeof AuthOrganizationsOrgSlugWorkspacesIndexRoute
   '/organizations/$orgSlug/workspaces/$workspaceSlug/settings': typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugSettingsRoute
   '/organizations/$orgSlug/workspaces/$workspaceSlug': typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugIndexRoute
@@ -152,15 +220,23 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/pricing': typeof PricingRoute
+  '/_auth/@$orgSlug': typeof AuthAtorgSlugRouteWithChildren
   '/_auth/dashboard': typeof AuthDashboardRoute
   '/_auth/profile': typeof AuthProfileRoute
+  '/_auth/@$orgSlug/$workspaceSlug': typeof AuthAtorgSlugWorkspaceSlugRouteWithChildren
   '/_auth/organizations/$orgSlug': typeof AuthOrganizationsOrgSlugRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_auth/@$orgSlug/': typeof AuthAtorgSlugIndexRoute
   '/_auth/organizations/': typeof AuthOrganizationsIndexRoute
+  '/_auth/@$orgSlug/~/billing': typeof AuthAtorgSlugChar126BillingRoute
+  '/_auth/@$orgSlug/~/members': typeof AuthAtorgSlugChar126MembersRoute
+  '/_auth/@$orgSlug/~/settings': typeof AuthAtorgSlugChar126SettingsRoute
   '/_auth/organizations/$orgSlug/billing': typeof AuthOrganizationsOrgSlugBillingRoute
   '/_auth/organizations/$orgSlug/members': typeof AuthOrganizationsOrgSlugMembersRoute
   '/_auth/organizations/$orgSlug/settings': typeof AuthOrganizationsOrgSlugSettingsRoute
+  '/_auth/@$orgSlug/$workspaceSlug/': typeof AuthAtorgSlugWorkspaceSlugIndexRoute
   '/_auth/organizations/$orgSlug/': typeof AuthOrganizationsOrgSlugIndexRoute
+  '/_auth/@$orgSlug/$workspaceSlug/~/settings': typeof AuthAtorgSlugWorkspaceSlugChar126SettingsRoute
   '/_auth/organizations/$orgSlug/workspaces/$workspaceSlug': typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugRouteWithChildren
   '/_auth/organizations/$orgSlug/workspaces/': typeof AuthOrganizationsOrgSlugWorkspacesIndexRoute
   '/_auth/organizations/$orgSlug/workspaces/$workspaceSlug/settings': typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugSettingsRoute
@@ -171,15 +247,23 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/pricing'
+    | '/@$orgSlug'
     | '/dashboard'
     | '/profile'
+    | '/@$orgSlug/$workspaceSlug'
     | '/organizations/$orgSlug'
     | '/api/auth/$'
+    | '/@$orgSlug/'
     | '/organizations/'
+    | '/@$orgSlug/~/billing'
+    | '/@$orgSlug/~/members'
+    | '/@$orgSlug/~/settings'
     | '/organizations/$orgSlug/billing'
     | '/organizations/$orgSlug/members'
     | '/organizations/$orgSlug/settings'
+    | '/@$orgSlug/$workspaceSlug/'
     | '/organizations/$orgSlug/'
+    | '/@$orgSlug/$workspaceSlug/~/settings'
     | '/organizations/$orgSlug/workspaces/$workspaceSlug'
     | '/organizations/$orgSlug/workspaces/'
     | '/organizations/$orgSlug/workspaces/$workspaceSlug/settings'
@@ -191,11 +275,17 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/api/auth/$'
+    | '/@$orgSlug'
     | '/organizations'
+    | '/@$orgSlug/~/billing'
+    | '/@$orgSlug/~/members'
+    | '/@$orgSlug/~/settings'
     | '/organizations/$orgSlug/billing'
     | '/organizations/$orgSlug/members'
     | '/organizations/$orgSlug/settings'
+    | '/@$orgSlug/$workspaceSlug'
     | '/organizations/$orgSlug'
+    | '/@$orgSlug/$workspaceSlug/~/settings'
     | '/organizations/$orgSlug/workspaces'
     | '/organizations/$orgSlug/workspaces/$workspaceSlug/settings'
     | '/organizations/$orgSlug/workspaces/$workspaceSlug'
@@ -204,15 +294,23 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/pricing'
+    | '/_auth/@$orgSlug'
     | '/_auth/dashboard'
     | '/_auth/profile'
+    | '/_auth/@$orgSlug/$workspaceSlug'
     | '/_auth/organizations/$orgSlug'
     | '/api/auth/$'
+    | '/_auth/@$orgSlug/'
     | '/_auth/organizations/'
+    | '/_auth/@$orgSlug/~/billing'
+    | '/_auth/@$orgSlug/~/members'
+    | '/_auth/@$orgSlug/~/settings'
     | '/_auth/organizations/$orgSlug/billing'
     | '/_auth/organizations/$orgSlug/members'
     | '/_auth/organizations/$orgSlug/settings'
+    | '/_auth/@$orgSlug/$workspaceSlug/'
     | '/_auth/organizations/$orgSlug/'
+    | '/_auth/@$orgSlug/$workspaceSlug/~/settings'
     | '/_auth/organizations/$orgSlug/workspaces/$workspaceSlug'
     | '/_auth/organizations/$orgSlug/workspaces/'
     | '/_auth/organizations/$orgSlug/workspaces/$workspaceSlug/settings'
@@ -263,12 +361,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/@$orgSlug': {
+      id: '/_auth/@$orgSlug'
+      path: '/@$orgSlug'
+      fullPath: '/@$orgSlug'
+      preLoaderRoute: typeof AuthAtorgSlugRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/organizations/': {
       id: '/_auth/organizations/'
       path: '/organizations'
       fullPath: '/organizations/'
       preLoaderRoute: typeof AuthOrganizationsIndexRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/_auth/@$orgSlug/': {
+      id: '/_auth/@$orgSlug/'
+      path: '/'
+      fullPath: '/@$orgSlug/'
+      preLoaderRoute: typeof AuthAtorgSlugIndexRouteImport
+      parentRoute: typeof AuthAtorgSlugRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -284,12 +396,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthOrganizationsOrgSlugRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/@$orgSlug/$workspaceSlug': {
+      id: '/_auth/@$orgSlug/$workspaceSlug'
+      path: '/$workspaceSlug'
+      fullPath: '/@$orgSlug/$workspaceSlug'
+      preLoaderRoute: typeof AuthAtorgSlugWorkspaceSlugRouteImport
+      parentRoute: typeof AuthAtorgSlugRoute
+    }
     '/_auth/organizations/$orgSlug/': {
       id: '/_auth/organizations/$orgSlug/'
       path: '/'
       fullPath: '/organizations/$orgSlug/'
       preLoaderRoute: typeof AuthOrganizationsOrgSlugIndexRouteImport
       parentRoute: typeof AuthOrganizationsOrgSlugRoute
+    }
+    '/_auth/@$orgSlug/$workspaceSlug/': {
+      id: '/_auth/@$orgSlug/$workspaceSlug/'
+      path: '/'
+      fullPath: '/@$orgSlug/$workspaceSlug/'
+      preLoaderRoute: typeof AuthAtorgSlugWorkspaceSlugIndexRouteImport
+      parentRoute: typeof AuthAtorgSlugWorkspaceSlugRoute
     }
     '/_auth/organizations/$orgSlug/settings': {
       id: '/_auth/organizations/$orgSlug/settings'
@@ -312,6 +438,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthOrganizationsOrgSlugBillingRouteImport
       parentRoute: typeof AuthOrganizationsOrgSlugRoute
     }
+    '/_auth/@$orgSlug/~/settings': {
+      id: '/_auth/@$orgSlug/~/settings'
+      path: '/~/settings'
+      fullPath: '/@$orgSlug/~/settings'
+      preLoaderRoute: typeof AuthAtorgSlugChar126SettingsRouteImport
+      parentRoute: typeof AuthAtorgSlugRoute
+    }
+    '/_auth/@$orgSlug/~/members': {
+      id: '/_auth/@$orgSlug/~/members'
+      path: '/~/members'
+      fullPath: '/@$orgSlug/~/members'
+      preLoaderRoute: typeof AuthAtorgSlugChar126MembersRouteImport
+      parentRoute: typeof AuthAtorgSlugRoute
+    }
+    '/_auth/@$orgSlug/~/billing': {
+      id: '/_auth/@$orgSlug/~/billing'
+      path: '/~/billing'
+      fullPath: '/@$orgSlug/~/billing'
+      preLoaderRoute: typeof AuthAtorgSlugChar126BillingRouteImport
+      parentRoute: typeof AuthAtorgSlugRoute
+    }
     '/_auth/organizations/$orgSlug/workspaces/': {
       id: '/_auth/organizations/$orgSlug/workspaces/'
       path: '/workspaces'
@@ -325,6 +472,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/organizations/$orgSlug/workspaces/$workspaceSlug'
       preLoaderRoute: typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugRouteImport
       parentRoute: typeof AuthOrganizationsOrgSlugRoute
+    }
+    '/_auth/@$orgSlug/$workspaceSlug/~/settings': {
+      id: '/_auth/@$orgSlug/$workspaceSlug/~/settings'
+      path: '/~/settings'
+      fullPath: '/@$orgSlug/$workspaceSlug/~/settings'
+      preLoaderRoute: typeof AuthAtorgSlugWorkspaceSlugChar126SettingsRouteImport
+      parentRoute: typeof AuthAtorgSlugWorkspaceSlugRoute
     }
     '/_auth/organizations/$orgSlug/workspaces/$workspaceSlug/': {
       id: '/_auth/organizations/$orgSlug/workspaces/$workspaceSlug/'
@@ -342,6 +496,43 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthAtorgSlugWorkspaceSlugRouteChildren {
+  AuthAtorgSlugWorkspaceSlugIndexRoute: typeof AuthAtorgSlugWorkspaceSlugIndexRoute
+  AuthAtorgSlugWorkspaceSlugChar126SettingsRoute: typeof AuthAtorgSlugWorkspaceSlugChar126SettingsRoute
+}
+
+const AuthAtorgSlugWorkspaceSlugRouteChildren: AuthAtorgSlugWorkspaceSlugRouteChildren =
+  {
+    AuthAtorgSlugWorkspaceSlugIndexRoute: AuthAtorgSlugWorkspaceSlugIndexRoute,
+    AuthAtorgSlugWorkspaceSlugChar126SettingsRoute:
+      AuthAtorgSlugWorkspaceSlugChar126SettingsRoute,
+  }
+
+const AuthAtorgSlugWorkspaceSlugRouteWithChildren =
+  AuthAtorgSlugWorkspaceSlugRoute._addFileChildren(
+    AuthAtorgSlugWorkspaceSlugRouteChildren,
+  )
+
+interface AuthAtorgSlugRouteChildren {
+  AuthAtorgSlugWorkspaceSlugRoute: typeof AuthAtorgSlugWorkspaceSlugRouteWithChildren
+  AuthAtorgSlugIndexRoute: typeof AuthAtorgSlugIndexRoute
+  AuthAtorgSlugChar126BillingRoute: typeof AuthAtorgSlugChar126BillingRoute
+  AuthAtorgSlugChar126MembersRoute: typeof AuthAtorgSlugChar126MembersRoute
+  AuthAtorgSlugChar126SettingsRoute: typeof AuthAtorgSlugChar126SettingsRoute
+}
+
+const AuthAtorgSlugRouteChildren: AuthAtorgSlugRouteChildren = {
+  AuthAtorgSlugWorkspaceSlugRoute: AuthAtorgSlugWorkspaceSlugRouteWithChildren,
+  AuthAtorgSlugIndexRoute: AuthAtorgSlugIndexRoute,
+  AuthAtorgSlugChar126BillingRoute: AuthAtorgSlugChar126BillingRoute,
+  AuthAtorgSlugChar126MembersRoute: AuthAtorgSlugChar126MembersRoute,
+  AuthAtorgSlugChar126SettingsRoute: AuthAtorgSlugChar126SettingsRoute,
+}
+
+const AuthAtorgSlugRouteWithChildren = AuthAtorgSlugRoute._addFileChildren(
+  AuthAtorgSlugRouteChildren,
+)
 
 interface AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugRouteChildren {
   AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugSettingsRoute: typeof AuthOrganizationsOrgSlugWorkspacesWorkspaceSlugSettingsRoute
@@ -389,6 +580,7 @@ const AuthOrganizationsOrgSlugRouteWithChildren =
   )
 
 interface AuthRouteChildren {
+  AuthAtorgSlugRoute: typeof AuthAtorgSlugRouteWithChildren
   AuthDashboardRoute: typeof AuthDashboardRoute
   AuthProfileRoute: typeof AuthProfileRoute
   AuthOrganizationsOrgSlugRoute: typeof AuthOrganizationsOrgSlugRouteWithChildren
@@ -396,6 +588,7 @@ interface AuthRouteChildren {
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthAtorgSlugRoute: AuthAtorgSlugRouteWithChildren,
   AuthDashboardRoute: AuthDashboardRoute,
   AuthProfileRoute: AuthProfileRoute,
   AuthOrganizationsOrgSlugRoute: AuthOrganizationsOrgSlugRouteWithChildren,
