@@ -13,7 +13,12 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { useEffect } from "react";
 import { Toaster, toast } from "sonner";
 
-import { DefaultCatchBoundary, Footer, Header } from "@/components/layout";
+import {
+  DefaultCatchBoundary,
+  Footer,
+  Header,
+  NotFound,
+} from "@/components/layout";
 import auth from "@/lib/auth/auth";
 import app from "@/lib/config/app.config";
 import { isDevEnv } from "@/lib/config/env.config";
@@ -40,7 +45,9 @@ function ComingSoon() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-sky-900 to-sky-800">
       <div className="text-center">
-        <div className="text-9xl">✨</div>
+        <h1 className="font-bold text-6xl text-white tracking-tight">
+          {app.name}
+        </h1>
       </div>
     </div>
   );
@@ -148,6 +155,10 @@ export const Route = createRootRouteWithContext<{
   }),
   loader: () => getThemeServerFn(),
   errorComponent: DefaultCatchBoundary,
+  // Render 404s in-shell: a thrown `notFound()` renders here inside RootDocument
+  // (globals + layout), not as a bare unstyled page. Pairs with the router's
+  // `defaultNotFoundComponent` for unmatched routes.
+  notFoundComponent: () => <NotFound />,
   component: RootComponent,
 });
 

@@ -1,33 +1,15 @@
-import type { PropsWithChildren } from "react";
+import { NotFoundPage } from "@omnidotdev/thornberry/not-found";
+
+import app from "@/lib/config/app.config";
 
 /**
- * 404 not found.
+ * 404 not found. Renders the shared Omni `<NotFoundPage>` (in-shell,
+ * theme-aware, prominent "404", a way home) branded with this app's identity.
+ *
+ * ! TODO: when scaffolding a real app, pass the product's logomark via `appLogo`
+ * ! (the same asset the Header uses, e.g. `<img src="/img/logo.svg" alt="" />`),
+ * ! so the 404 carries the product mark. Omit it to brand with the wordmark alone.
  */
-const NotFound = ({ children }: PropsWithChildren) => (
-  <div className="flex min-h-screen w-full flex-col items-center justify-center gap-4 p-2">
-    <div className="text-6xl">✨</div>
-
-    <div className="text-muted-foreground">
-      {children || <p>Page Not Found</p>}
-    </div>
-
-    <p className="flex flex-wrap items-center gap-2">
-      <button
-        type="button"
-        onClick={() => window.history.back()}
-        className="rounded-lg border border-border bg-card px-4 py-2 font-medium text-foreground text-sm transition-colors hover:bg-accent"
-      >
-        Go back
-      </button>
-
-      <a
-        href="/"
-        className="rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground text-sm transition-colors hover:bg-primary/90"
-      >
-        Go Home
-      </a>
-    </p>
-  </div>
-);
+const NotFound = () => <NotFoundPage appName={app.name} />;
 
 export default NotFound;
