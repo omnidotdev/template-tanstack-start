@@ -20,7 +20,6 @@ const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center p-8">
       <div className="text-center">
-        <div className="mb-6 text-6xl">✨</div>
         <h1 className="font-bold text-2xl text-destructive">
           Something went wrong
         </h1>
