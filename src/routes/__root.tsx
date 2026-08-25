@@ -10,8 +10,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
-import { useEffect } from "react";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 
 import {
   DefaultCatchBoundary,
@@ -188,73 +187,10 @@ void isDevEnv;
 void ComingSoon;
 
 /**
- * Register the service worker for PWA functionality.
- *
- * The service worker (sw.js) is built by @serwist/vite from src/sw.ts and provides:
- * - Precaching of static assets for offline access
- * - Runtime caching strategies for dynamic content
- * - Navigation preloading for faster page loads
- *
- * Update behavior:
- * - Checks for SW updates every hour via registration.update()
- * - When an update is found, shows a toast notification
- * - User can choose when to refresh (non-disruptive updates)
- * - skipWaiting + clientsClaim in sw.ts ensures immediate activation on refresh
- */
-const registerServiceWorker = async () => {
-  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
-
-  try {
-    const registration = await navigator.serviceWorker.register("/sw.js");
-    console.info("SW registered:", registration.scope);
-
-    // Check for updates hourly. This catches updates even if users keep the tab
-    // open for extended periods. The browser also checks on navigation events.
-    setInterval(
-      () => {
-        registration.update();
-      },
-      60 * 60 * 1000,
-    );
-
-    // Listen for new service worker installations
-    registration.addEventListener("updatefound", () => {
-      const newWorker = registration.installing;
-      if (!newWorker) return;
-
-      newWorker.addEventListener("statechange", () => {
-        // Only show update notification if there's an existing controller,
-        // meaning this is an update, not the initial installation
-        if (
-          newWorker.state === "installed" &&
-          navigator.serviceWorker.controller
-        ) {
-          toast("Update Available", {
-            description: "A new version is available. Refresh to update.",
-            action: {
-              label: "Refresh",
-              onClick: () => window.location.reload(),
-            },
-            duration: Number.POSITIVE_INFINITY,
-          });
-        }
-      });
-    });
-  } catch (error) {
-    console.error("SW registration failed:", error);
-  }
-};
-
-/**
  * Root document.
  */
 function RootDocument({ children }: PropsWithChildren) {
   const theme = Route.useLoaderData();
-
-  // Register service worker on client
-  useEffect(() => {
-    registerServiceWorker();
-  }, []);
 
   return (
     <html suppressHydrationWarning lang="en" className={theme}>

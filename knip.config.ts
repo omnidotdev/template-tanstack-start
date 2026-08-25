@@ -12,7 +12,6 @@ const knipConfig: KnipConfig = {
     "src/routes/**/*.{ts,tsx}",
     "src/router.tsx",
     "src/lib/graphql/graphqlFetch.ts",
-    "src/sw.ts",
   ],
   project: ["src/**/*.{ts,tsx,css}"],
   // based on https://knip.dev/reference/plugins/graphql-codegen

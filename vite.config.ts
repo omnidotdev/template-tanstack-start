@@ -1,5 +1,4 @@
 import { SECURITY_HEADERS } from "@omnidotdev/providers/server";
-import { serwist } from "@serwist/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { nitroV2Plugin } from "@tanstack/nitro-v2-vite-plugin";
@@ -44,13 +43,6 @@ const config = defineConfig(({ command }) => ({
     tailwindcss(),
     tanstackStart(),
     viteReact(),
-    serwist({
-      swSrc: "src/sw.ts",
-      swDest: "sw.js",
-      globDirectory: "dist",
-      injectionPoint: "self.__SW_MANIFEST",
-      rollupFormat: "iife",
-    }),
   ],
 }));
 
