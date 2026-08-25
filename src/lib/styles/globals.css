@@ -157,8 +157,13 @@
   --sidebar-accent-foreground: var(--base-800);
   --sidebar-border: var(--base-200);
   --sidebar-ring: var(--primary-400);
+  /*
+   * Default to the system sans stack. Products give themselves a brand
+   * typeface by pointing these at a self-hosted webface (see the Origin app
+   * for a Bricolage Grotesque + Inter example).
+   */
   --display-family: var(--font-sans);
-  --display-weight: 400;
+  --display-weight: 600;
   --text-family: var(--font-sans);
   --text-weight: 400;
 }
@@ -201,13 +206,72 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+    /* Offset in-page anchor jumps so a sticky header never covers the target */
+    scroll-padding-top: 5rem;
+  }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--text-family);
+    font-weight: var(--text-weight);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--display-family);
+    font-weight: var(--display-weight);
+    letter-spacing: -0.02em;
   }
   .font-display {
+    font-family: var(--display-family);
     font-weight: var(--display-weight);
   }
   .font-text {
+    font-family: var(--text-family);
     font-weight: var(--text-weight);
+  }
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+@layer components {
+  /*
+   * Subtle hero backdrop: a faint brand-tinted grid fading out toward the
+   * edges, plus a soft radial glow. Reusable across product landing surfaces.
+   */
+  .bg-hero-grid {
+    background-image:
+      radial-gradient(
+        60% 55% at 50% 0%,
+        color-mix(in oklch, var(--primary) 12%, transparent) 0%,
+        transparent 70%
+      ),
+      linear-gradient(
+        to right,
+        color-mix(in oklch, var(--foreground) 6%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--foreground) 6%, transparent) 1px,
+        transparent 1px
+      );
+    background-size:
+      100% 100%,
+      2.75rem 2.75rem,
+      2.75rem 2.75rem;
+    -webkit-mask-image: radial-gradient(
+      75% 70% at 50% 12%,
+      black 40%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(75% 70% at 50% 12%, black 40%, transparent 100%);
   }
 }
