@@ -203,7 +203,9 @@ function RootDocument({ children }: PropsWithChildren) {
           <Header />
 
           <div className="relative flex h-dvh w-full flex-col gap-0 pl-[calc(100vw-100%)]">
-            <main className="mt-16.5 flex-1">{children}</main>
+            {/* min-w-0 so a wide descendant (a long unbreakable string, a wide
+                table) is contained instead of forcing horizontal page overflow */}
+            <main className="mt-16.5 min-w-0 flex-1">{children}</main>
 
             <Footer />
           </div>
