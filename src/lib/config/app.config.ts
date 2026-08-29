@@ -3,6 +3,10 @@
  */
 const app = {
   name: "Omni TanStack Start Template",
+  // Product symbol, mirrors the omni-api catalog SSOT (`catalog/products.ts`
+  // `icon`). Used in the "Made with <symbol> by Omni" footer credit
+  // ! TODO: replace with this product's catalog symbol when the template is used
+  icon: "🧩",
   description: "Tanstack Start template. Designed and maintained by Omni.",
   // ! TODO: replace with application url when this template is used.
   url: "https://template-start.omni.dev",
@@ -10,6 +14,7 @@ const app = {
   socials: {
     discord: "https://discord.gg/omnidotdev",
     x: "https://x.com/omnidotdev",
+    threads: "https://www.threads.com/@omnidotdev",
   },
   // Legal links mirror the omni-api catalog SSOT
   legal: {
@@ -19,6 +24,7 @@ const app = {
   },
   organization: {
     name: "Omni",
+    url: "https://omni.dev",
     supportEmailAddress: "support@omni.dev",
   },
   /** PWA configuration. Values should match public/manifest.json. */
