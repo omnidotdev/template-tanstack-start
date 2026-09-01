@@ -145,8 +145,8 @@ const PriceCard = ({
         navigate({ to: "/organizations" });
       } else {
         navigate({
-          to: "/@$orgSlug",
-          params: { orgSlug: allOrgs[0].slug },
+          to: "/@{$workspaceSlug}",
+          params: { workspaceSlug: allOrgs[0].slug },
         });
       }
       return;

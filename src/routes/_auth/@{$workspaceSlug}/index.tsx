@@ -2,21 +2,21 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { useOrganization, useWorkspace } from "@/lib/context";
 
-export const Route = createFileRoute("/_auth/@$orgSlug/")({
-  component: OrgDashboard,
+export const Route = createFileRoute("/_auth/@{$workspaceSlug}/")({
+  component: WorkspaceHome,
 });
 
 /**
- * Organization home.
- * The org handle root (`/@$orgSlug`) lists the org's workspaces and links to
- * admin (behind the `~` sentinel).
+ * Workspace home.
+ * The workspace handle root (`/@{$workspaceSlug}`) lists the workspace's nested
+ * resources and links to admin (behind the `~` sentinel).
  */
-function OrgDashboard() {
-  const { orgSlug } = Route.useParams();
+function WorkspaceHome() {
+  const { workspaceSlug } = Route.useParams();
   const { organizations } = useOrganization();
   const { workspaces } = useWorkspace();
 
-  const org = organizations.find((o) => o.slug === orgSlug);
+  const org = organizations.find((o) => o.slug === workspaceSlug);
 
   if (!org) return null;
 
@@ -35,29 +35,27 @@ function OrgDashboard() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Workspaces Section */}
+        {/* Resources Section (nested resources under the workspace handle) */}
         <section>
-          <h2 className="mb-4 font-semibold text-lg">Workspaces</h2>
+          <h2 className="mb-4 font-semibold text-lg">Resources</h2>
 
           <div className="space-y-2">
-            {workspaces.map((ws) => (
+            {workspaces.map((resource) => (
               <Link
-                key={ws.id}
-                to="/@$orgSlug/$workspaceSlug"
-                params={{ orgSlug, workspaceSlug: ws.slug }}
+                key={resource.id}
+                to="/@{$workspaceSlug}/$resourceSlug"
+                params={{ workspaceSlug, resourceSlug: resource.slug }}
                 className="block rounded-lg border p-3 transition-colors hover:bg-muted"
               >
-                <span className="font-medium">{ws.name}</span>
+                <span className="font-medium">{resource.name}</span>
                 <span className="ml-2 text-muted-foreground text-sm">
-                  /{ws.slug}
+                  /{resource.slug}
                 </span>
               </Link>
             ))}
 
             {workspaces.length === 0 && (
-              <p className="text-muted-foreground text-sm">
-                No workspaces yet.
-              </p>
+              <p className="text-muted-foreground text-sm">No resources yet.</p>
             )}
           </div>
         </section>
@@ -67,22 +65,22 @@ function OrgDashboard() {
           <h2 className="mb-4 font-semibold text-lg">Settings</h2>
           <div className="space-y-2">
             <Link
-              to="/@$orgSlug/~/settings"
-              params={{ orgSlug }}
+              to="/@{$workspaceSlug}/~/settings"
+              params={{ workspaceSlug }}
               className="block rounded-lg border p-3 transition-colors hover:bg-muted"
             >
-              Organization Settings
+              Workspace Settings
             </Link>
             <Link
-              to="/@$orgSlug/~/members"
-              params={{ orgSlug }}
+              to="/@{$workspaceSlug}/~/members"
+              params={{ workspaceSlug }}
               className="block rounded-lg border p-3 transition-colors hover:bg-muted"
             >
               Members
             </Link>
             <Link
-              to="/@$orgSlug/~/billing"
-              params={{ orgSlug }}
+              to="/@{$workspaceSlug}/~/billing"
+              params={{ workspaceSlug }}
               className="block rounded-lg border p-3 transition-colors hover:bg-muted"
             >
               Billing

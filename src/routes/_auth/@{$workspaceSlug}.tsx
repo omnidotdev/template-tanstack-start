@@ -7,30 +7,31 @@ import { getOrganizationBySlug } from "@/server/functions/organizations";
 
 import type { Organization } from "@/lib/context";
 
-export const Route = createFileRoute("/_auth/@$orgSlug")({
+export const Route = createFileRoute("/_auth/@{$workspaceSlug}")({
   beforeLoad: async ({ params }) => {
-    return { orgSlug: params.orgSlug };
+    return { workspaceSlug: params.workspaceSlug };
   },
-  component: OrgLayout,
+  component: WorkspaceLayout,
 });
 
 /**
- * Organization layout.
- * Wraps all routes under the org handle (`/@$orgSlug/`).
+ * Workspace layout.
+ * Wraps all routes under the workspace handle (`/@{$workspaceSlug}/`). An org is
+ * 1:1 with a workspace, so the `@handle` IS the workspace, one level deep.
  */
-function OrgLayout() {
-  const { orgSlug } = Route.useParams();
+function WorkspaceLayout() {
+  const { workspaceSlug } = Route.useParams();
   const { organizations, activeOrganization, setActiveOrganization } =
     useOrganization();
 
-  const claimOrg = organizations.find((o) => o.slug === orgSlug);
+  const claimOrg = organizations.find((o) => o.slug === workspaceSlug);
 
-  // A just-created organization is not yet in the JWT claims (the org list is
+  // A just-created workspace is not yet in the JWT claims (the org list is
   // hydrated from a short-lived cache), so fall back to a live Gatekeeper lookup
-  // until claims catch up. Skipped once the org is present in claims.
+  // until claims catch up. Skipped once the workspace is present in claims.
   const { data: fallbackOrg, isLoading: isResolvingFallback } = useQuery({
-    queryKey: ["organization-fallback", orgSlug],
-    queryFn: () => getOrganizationBySlug({ data: { slug: orgSlug } }),
+    queryKey: ["organization-fallback", workspaceSlug],
+    queryFn: () => getOrganizationBySlug({ data: { slug: workspaceSlug } }),
     enabled: !claimOrg,
   });
 
@@ -58,10 +59,10 @@ function OrgLayout() {
     return (
       <div className="container mx-auto py-8">
         <h1 className="font-bold text-2xl text-destructive">
-          Organization not found
+          Workspace not found
         </h1>
         <p className="mt-2 text-muted-foreground">
-          You don't have access to organization "{orgSlug}"
+          You don't have access to workspace "{workspaceSlug}"
         </p>
       </div>
     );

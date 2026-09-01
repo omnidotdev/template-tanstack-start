@@ -111,8 +111,8 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
 
       await router.invalidate();
       navigate({
-        to: "/organizations/$orgSlug",
-        params: { orgSlug: org.slug },
+        to: "/@{$workspaceSlug}",
+        params: { workspaceSlug: org.slug },
       });
     } catch (err) {
       setError(

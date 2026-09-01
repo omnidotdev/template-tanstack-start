@@ -2,18 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { useOrganization } from "@/lib/context";
 
-export const Route = createFileRoute("/_auth/@$orgSlug/~/members")({
-  component: OrgMembersPage,
+export const Route = createFileRoute("/_auth/@{$workspaceSlug}/~/members")({
+  component: WorkspaceMembersPage,
 });
 
 /**
- * Organization members page.
+ * Workspace members page.
  */
-function OrgMembersPage() {
-  const { orgSlug } = Route.useParams();
+function WorkspaceMembersPage() {
+  const { workspaceSlug } = Route.useParams();
   const { organizations } = useOrganization();
 
-  const org = organizations.find((o) => o.slug === orgSlug);
+  const org = organizations.find((o) => o.slug === workspaceSlug);
 
   if (!org) return null;
 
@@ -36,7 +36,7 @@ function OrgMembersPage() {
       {isPersonal && (
         <div className="mb-6 rounded-lg border border-muted bg-muted/50 p-4">
           <p className="text-muted-foreground text-sm">
-            Personal organizations can only have one member (you).
+            Personal workspaces can only have one member (you).
           </p>
         </div>
       )}

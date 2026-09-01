@@ -2,47 +2,49 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { useOrganization, useWorkspace } from "@/lib/context";
 
-export const Route = createFileRoute("/_auth/@$orgSlug/$workspaceSlug/")({
-  component: WorkspaceDashboard,
-});
+export const Route = createFileRoute("/_auth/@{$workspaceSlug}/$resourceSlug/")(
+  {
+    component: ResourceHome,
+  },
+);
 
 /**
- * Workspace dashboard.
- * Main page for a workspace - shows app-specific content.
+ * Resource home.
+ * Main page for a nested resource - shows app-specific content.
  */
-function WorkspaceDashboard() {
-  const { orgSlug, workspaceSlug } = Route.useParams();
+function ResourceHome() {
+  const { workspaceSlug, resourceSlug } = Route.useParams();
   const { activeOrganization } = useOrganization();
   const { workspaces } = useWorkspace();
 
-  const workspace = workspaces.find((w) => w.slug === workspaceSlug);
+  const resource = workspaces.find((w) => w.slug === resourceSlug);
 
-  if (!workspace) return null;
+  if (!resource) return null;
 
   return (
     <div className="container mx-auto py-8">
       {/* Breadcrumb */}
       <nav className="mb-6 text-muted-foreground text-sm">
         <Link
-          to="/@$orgSlug"
-          params={{ orgSlug }}
+          to="/@{$workspaceSlug}"
+          params={{ workspaceSlug }}
           className="hover:text-foreground"
         >
           {activeOrganization?.slug}
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-foreground">{workspace.slug}</span>
+        <span className="text-foreground">{resource.slug}</span>
       </nav>
 
       <div className="mb-8">
-        <h1 className="font-bold text-2xl">{workspace.name}</h1>
-        <p className="text-muted-foreground">/{workspace.slug}</p>
+        <h1 className="font-bold text-2xl">{resource.name}</h1>
+        <p className="text-muted-foreground">/{resource.slug}</p>
       </div>
 
       {/* App-specific content goes here */}
       <div className="rounded-lg border border-dashed p-8 text-center">
         <p className="text-muted-foreground">
-          This is where your app-specific workspace content goes.
+          This is where your app-specific resource content goes.
         </p>
         <p className="mt-2 text-muted-foreground text-sm">
           Examples: projects list, dashboard widgets, activity feed, etc.
@@ -52,11 +54,11 @@ function WorkspaceDashboard() {
       {/* Quick links */}
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         <Link
-          to="/@$orgSlug/$workspaceSlug/~/settings"
-          params={{ orgSlug, workspaceSlug }}
+          to="/@{$workspaceSlug}/$resourceSlug/~/settings"
+          params={{ workspaceSlug, resourceSlug }}
           className="rounded-lg border p-4 text-center transition-colors hover:bg-muted"
         >
-          Workspace Settings
+          Resource Settings
         </Link>
       </div>
     </div>

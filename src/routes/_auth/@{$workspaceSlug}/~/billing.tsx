@@ -2,23 +2,23 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { useOrganization } from "@/lib/context";
 
-export const Route = createFileRoute("/_auth/@$orgSlug/~/billing")({
-  component: OrgBillingPage,
+export const Route = createFileRoute("/_auth/@{$workspaceSlug}/~/billing")({
+  component: WorkspaceBillingPage,
 });
 
 /**
- * Organization billing page.
+ * Workspace billing page.
  * Placeholder for Aether integration.
  *
  * In production, this would integrate with:
  * - Aether for entitlements and subscription management
  * - Stripe for payment processing
  */
-function OrgBillingPage() {
-  const { orgSlug } = Route.useParams();
+function WorkspaceBillingPage() {
+  const { workspaceSlug } = Route.useParams();
   const { organizations } = useOrganization();
 
-  const org = organizations.find((o) => o.slug === orgSlug);
+  const org = organizations.find((o) => o.slug === workspaceSlug);
 
   if (!org) return null;
 
@@ -59,7 +59,7 @@ function OrgBillingPage() {
         <section className="rounded-lg border border-dashed p-6">
           <h2 className="mb-2 font-semibold text-lg">Integration Guide</h2>
           <p className="text-muted-foreground text-sm">
-            This page is a placeholder for organization billing. To enable full
+            This page is a placeholder for workspace billing. To enable full
             billing functionality:
           </p>
           <ol className="mt-2 list-inside list-decimal space-y-1 text-muted-foreground text-sm">
