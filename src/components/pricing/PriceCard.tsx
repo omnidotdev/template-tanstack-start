@@ -204,7 +204,7 @@ const PriceCard = ({
           <div className="mb-8">
             <div className="flex items-baseline justify-center font-bold text-4xl">
               <Format.Number
-                value={price.unit_amount! / 100}
+                value={(price.unit_amount ?? 0) / 100}
                 style="currency"
                 notation="compact"
                 currency="USD"

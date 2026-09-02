@@ -1,7 +1,6 @@
+import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-
-import { describe, expect, test } from "bun:test";
 
 // The generated route tree is the source of truth for this app's URL surface.
 // These assertions guard the platform @handle URL grammar against regression:
