@@ -6,6 +6,11 @@ import { authMiddleware } from "@/server/middleware";
 
 export type { GatekeeperOrganization as Organization } from "@omnidotdev/providers";
 
+// Org/team membership (invite, roles, remove) is managed centrally at the
+// account hub (backed by Gatekeeper), not per product, so this template ships
+// no member-management server functions. See
+// plans/2026-09-02-org-membership-central-hub-adr.md.
+
 const createOrganizationSchema = z.object({
   name: z.string().min(3, "Organization name must be at least 3 characters"),
   slug: z.string().optional(),
@@ -13,36 +18,6 @@ const createOrganizationSchema = z.object({
 
 const getOrganizationBySlugSchema = z.object({
   slug: z.string().min(1),
-});
-
-const inviteOrganizationMemberSchema = z.object({
-  organizationId: z.string(),
-  email: z.string().email(),
-  role: z.enum(["admin", "member"]),
-});
-
-const listOrganizationInvitationsSchema = z.object({
-  organizationId: z.string(),
-});
-
-const cancelOrganizationInvitationSchema = z.object({
-  invitationId: z.string(),
-});
-
-const listOrganizationMembersSchema = z.object({
-  organizationId: z.string(),
-  accessToken: z.string(),
-});
-
-const updateOrganizationMemberRoleSchema = z.object({
-  organizationId: z.string(),
-  memberId: z.string(),
-  role: z.enum(["owner", "admin", "member"]),
-});
-
-const removeOrganizationMemberSchema = z.object({
-  organizationId: z.string(),
-  memberId: z.string(),
 });
 
 /**
@@ -108,121 +83,4 @@ export const fetchOrganizationBySlug = createServerFn()
       console.error("Error fetching organization by slug:", error);
       return null;
     }
-  });
-
-/**
- * Invite a member to an organization via Gatekeeper.
- * Runs server-side to avoid CORS issues with the IDP's Better Auth endpoint
- */
-export const inviteOrganizationMember = createServerFn({ method: "POST" })
-  .inputValidator((data) => inviteOrganizationMemberSchema.parse(data))
-  .middleware([authMiddleware])
-  .handler(async ({ data, context }) => {
-    const accessToken = context.session.accessToken;
-
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-
-    return gatekeeperOrg.inviteMember(data, accessToken);
-  });
-
-const resendOrganizationInvitationSchema = z.object({
-  organizationId: z.string(),
-  email: z.string().email(),
-  role: z.enum(["admin", "member"]),
-});
-
-/**
- * Resend an invitation (active or expired).
- * Gatekeeper's `cancelPendingInvitationsOnReInvite` auto-cancels the old one.
- * Membership validation is handled by Gatekeeper
- */
-export const resendOrganizationInvitation = createServerFn({ method: "POST" })
-  .inputValidator((data) => resendOrganizationInvitationSchema.parse(data))
-  .middleware([authMiddleware])
-  .handler(async ({ data, context }) => {
-    const accessToken = context.session.accessToken;
-
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-
-    return gatekeeperOrg.inviteMember(data, accessToken);
-  });
-
-/**
- * List invitations for an organization via Gatekeeper.
- * Runs server-side to avoid CORS issues with the IDP's Better Auth endpoint
- */
-export const listOrganizationInvitations = createServerFn({ method: "GET" })
-  .inputValidator((data) => listOrganizationInvitationsSchema.parse(data))
-  .middleware([authMiddleware])
-  .handler(async ({ data, context }) => {
-    const accessToken = context.session.accessToken;
-
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-
-    return gatekeeperOrg.listInvitations(data.organizationId, accessToken);
-  });
-
-/**
- * Cancel an organization invitation via Gatekeeper.
- * Runs server-side to avoid CORS issues with the IDP's Better Auth endpoint
- */
-export const cancelOrganizationInvitation = createServerFn({ method: "POST" })
-  .inputValidator((data) => cancelOrganizationInvitationSchema.parse(data))
-  .middleware([authMiddleware])
-  .handler(async ({ data, context }) => {
-    const accessToken = context.session.accessToken;
-
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-
-    return gatekeeperOrg.cancelInvitation(data.invitationId, accessToken);
-  });
-
-/**
- * List members of an organization via Gatekeeper.
- * Takes `accessToken` in data to support contexts without auth middleware
- */
-export const listOrganizationMembers = createServerFn({ method: "GET" })
-  .inputValidator((data) => listOrganizationMembersSchema.parse(data))
-  .handler(async ({ data }) => {
-    return gatekeeperOrg.listMembers(data.organizationId, data.accessToken);
-  });
-
-/**
- * Update the role of an organization member via Gatekeeper
- */
-export const updateOrganizationMemberRole = createServerFn({ method: "POST" })
-  .inputValidator((data) => updateOrganizationMemberRoleSchema.parse(data))
-  .middleware([authMiddleware])
-  .handler(async ({ data, context }) => {
-    const accessToken = context.session.accessToken;
-
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-
-    return gatekeeperOrg.updateMemberRole(data, accessToken);
-  });
-
-/**
- * Remove a member from an organization via Gatekeeper
- */
-export const removeOrganizationMember = createServerFn({ method: "POST" })
-  .inputValidator((data) => removeOrganizationMemberSchema.parse(data))
-  .middleware([authMiddleware])
-  .handler(async ({ data, context }) => {
-    const accessToken = context.session.accessToken;
-
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-
-    return gatekeeperOrg.removeMember(data, accessToken);
   });
