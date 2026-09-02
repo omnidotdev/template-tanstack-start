@@ -69,7 +69,7 @@
   "dependencies": {
     "@ark-ui/react": "^5.30.0",
     "@icons-pack/react-simple-icons": "^13.8.0",
-    "@omnidotdev/providers": "github:omnidotdev/providers#67cb527",
+    "@omnidotdev/providers": "github:omnidotdev/providers#ce5e90e0d0c40458d23b20c62a16568291c8b8cf",
     "@omnidotdev/thornberry": "github:omnidotdev/thornberry#372ebb2",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/nitro-v2-vite-plugin": "^1.154.7",
@@ -78,7 +78,7 @@
     "@tanstack/react-router-ssr-query": "^1.157.6",
     "@tanstack/react-start": "^1.157.6",
     "@tanstack/react-table": "^8.21.3",
-    "better-auth": "^1.5.6",
+    "better-auth": "1.7.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "graphql": "^16.12.0",

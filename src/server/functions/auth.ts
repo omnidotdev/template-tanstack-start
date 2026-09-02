@@ -36,12 +36,12 @@ export const fetchSession = createServerFn().handler(async () => {
     const tokenResult = await ensureFreshAccessToken({
       getAccessToken: () =>
         auth.api.getAccessToken({
-          body: { providerId: "omni" },
+          body: { useAccountCookie: true },
           headers,
         }),
       refreshToken: () =>
         auth.api.refreshToken({
-          body: { providerId: "omni" },
+          body: { useAccountCookie: true },
           headers,
         }),
     });
@@ -121,7 +121,7 @@ export const signOutLocal = createServerFn({ method: "POST" }).handler(
     let idToken: string | undefined;
     try {
       const tokenResult = await auth.api.getAccessToken({
-        body: { providerId: "omni" },
+        body: { useAccountCookie: true },
         headers,
       });
       idToken = tokenResult?.idToken;
@@ -149,12 +149,12 @@ export const getUserOrganizations = createServerFn().handler(
       const tokenResult = await ensureFreshAccessToken({
         getAccessToken: () =>
           auth.api.getAccessToken({
-            body: { providerId: "omni" },
+            body: { useAccountCookie: true },
             headers,
           }),
         refreshToken: () =>
           auth.api.refreshToken({
-            body: { providerId: "omni" },
+            body: { useAccountCookie: true },
             headers,
           }),
       });

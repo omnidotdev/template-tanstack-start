@@ -15,7 +15,7 @@ spyOn(TanStackRouter, "useSearch").mockReturnValue({});
 mock.module("@/lib/auth/authClient", () => ({
   default: {
     signIn: {
-      oauth2: mock(() => Promise.resolve()),
+      social: mock(() => Promise.resolve()),
     },
   },
 }));

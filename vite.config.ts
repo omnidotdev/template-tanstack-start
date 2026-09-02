@@ -24,8 +24,10 @@ const config = defineConfig(({ command }) => ({
     command === "serve" && mkcert(),
     nitroV2Plugin({
       preset: "node-server",
-      // Inline srvx to avoid module resolution issues with Bun runtime
-      externals: { inline: ["srvx"] },
+      // Inline srvx to avoid module resolution issues with Bun runtime;
+      // inline better-auth so nitro traces its subpath exports (e.g.
+      // `@better-auth/utils/random`), which externalizing drops at build time
+      externals: { inline: ["srvx", "better-auth", "@better-auth"] },
       routeRules: {
         "/**": {
           headers: {

@@ -20,7 +20,7 @@ const mockSignOut = mock(() => Promise.resolve());
 mock.module("@/lib/auth/authClient", () => ({
   default: {
     signIn: {
-      oauth2: mockSignIn,
+      social: mockSignIn,
     },
     signOut: mockSignOut,
   },

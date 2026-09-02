@@ -131,8 +131,8 @@ const PriceCard = ({
 
   const handleClick = () => {
     if (!auth) {
-      authClient.signIn.oauth2({
-        providerId: "omni",
+      authClient.signIn.social({
+        provider: "omni",
         callbackURL: `/pricing?tier=${tier}`,
         disableRedirect: false,
       });
