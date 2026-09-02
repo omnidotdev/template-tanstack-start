@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
 
 import { ExternalLink } from "@/components/core";
-import { AUTH_BASE_URL } from "@/lib/config/env.config";
+import { ACCOUNT_URL } from "@/lib/config/env.config";
 
 export const Route = createFileRoute("/_auth/@{$workspaceSlug}/~/members")({
   component: MembersPage,
@@ -20,8 +20,8 @@ export const Route = createFileRoute("/_auth/@{$workspaceSlug}/~/members")({
 function MembersPage() {
   const { workspaceSlug } = Route.useParams();
 
-  const manageUrl = AUTH_BASE_URL
-    ? gatekeeperOrgManageUrl(AUTH_BASE_URL, workspaceSlug)
+  const manageUrl = ACCOUNT_URL
+    ? gatekeeperOrgManageUrl(ACCOUNT_URL, workspaceSlug)
     : undefined;
 
   return (

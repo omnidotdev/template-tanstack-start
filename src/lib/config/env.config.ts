@@ -21,6 +21,7 @@ export const {
   VITE_VORTEX_API_KEY: VORTEX_API_KEY,
 } = { ...import.meta.env, ...process.env };
 
+export const ACCOUNT_URL = import.meta.env.VITE_ACCOUNT_URL;
 export const API_GRAPHQL_URL = `${API_BASE_URL}/graphql`;
 
 // Startup warnings for optional integrations
