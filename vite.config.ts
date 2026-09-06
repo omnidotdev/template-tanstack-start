@@ -26,8 +26,21 @@ const config = defineConfig(({ command }) => ({
       preset: "node-server",
       // Inline srvx to avoid module resolution issues with Bun runtime;
       // inline better-auth so nitro traces its subpath exports (e.g.
-      // `@better-auth/utils/random`), which externalizing drops at build time
-      externals: { inline: ["srvx", "better-auth", "@better-auth"] },
+      // `@better-auth/utils/random`), which externalizing drops at build time.
+      // Inline the TanStack SSR core packages too: externalizing
+      // `@tanstack/router-core/ssr/server` makes nitro emit a broken
+      // cross-chunk re-export of `attachRouterServerSsrUtils`, crashing SSR on
+      // the first request
+      externals: {
+        inline: [
+          "srvx",
+          "better-auth",
+          "@better-auth",
+          "@tanstack/router-core",
+          "@tanstack/start-server-core",
+          "@tanstack/start-client-core",
+        ],
+      },
       routeRules: {
         "/**": {
           headers: {
