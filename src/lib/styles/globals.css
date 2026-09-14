@@ -279,3 +279,19 @@
     );
   }
 }
+
+/*
+ * iOS Safari zooms the page when focusing a control whose font-size is below
+ * 16px (login inputs, search fields, any select), and never zooms back out.
+ * Force a 16px floor on small screens so focusing a field never triggers the
+ * zoom; desktop keeps its smaller design sizes. Unlayered so it wins over
+ * Tailwind's layered text-* utilities, and no maximum-scale on the viewport so
+ * pinch-zoom still works.
+ */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
