@@ -17,7 +17,7 @@ function OrganizationsPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="font-bold text-2xl">Organizations</h1>
+        <h1 className="font-bold text-2xl">Workspaces</h1>
 
         {organizations.length > 0 && <CreateOrganizationButton />}
       </div>
@@ -53,7 +53,7 @@ function OrganizationsPage() {
       {organizations.length === 0 && (
         <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-16 text-center">
           <p className="text-muted-foreground text-sm">
-            No organizations yet. Create one to get started.
+            No workspaces yet. Create one to get started.
           </p>
           <CreateOrganizationButton />
         </div>

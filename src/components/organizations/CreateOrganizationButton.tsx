@@ -20,7 +20,7 @@ const TRIGGER_CLASS =
   "inline-flex h-9 items-center gap-2 rounded-md border bg-background px-4 font-medium text-sm shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground";
 
 interface Props {
-  /** Trigger label (defaults to "New organization") */
+  /** Trigger label (defaults to "New workspace") */
   children?: ReactNode;
   /** Override the trigger button classes */
   className?: string;
@@ -116,7 +116,7 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
       });
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to create organization",
+        err instanceof Error ? err.message : "Failed to create workspace",
       );
     }
   };
@@ -134,14 +134,14 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
         className={className ?? TRIGGER_CLASS}
         onClick={() => setOpen(true)}
       >
-        {children ?? "New organization"}
+        {children ?? "New workspace"}
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-lg border bg-background p-6 shadow-lg">
             <div className="flex items-start justify-between gap-4">
-              <h2 className="font-semibold text-lg">Create organization</h2>
+              <h2 className="font-semibold text-lg">Create workspace</h2>
               <button
                 type="button"
                 onClick={close}
@@ -152,7 +152,7 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
               </button>
             </div>
             <p className="mt-1 text-muted-foreground text-sm">
-              An organization is where your projects and workspaces live.
+              A workspace is where your projects and members live.
             </p>
 
             <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-3">
@@ -161,7 +161,7 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
                 autoFocus
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Organization name"
+                placeholder="Workspace name"
                 autoComplete="off"
                 className="h-9 rounded-md border bg-background px-3 text-sm"
               />
@@ -186,7 +186,7 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
               {error && <p className="text-destructive text-xs">{error}</p>}
 
               <p className="text-muted-foreground text-xs">
-                Your organization is part of your Omni account and works across
+                Your workspace is part of your Omni account and works across
                 Omni products.
               </p>
 
@@ -205,7 +205,7 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
                   disabled={!canSubmit}
                   className="inline-flex h-9 items-center rounded-md bg-primary px-4 font-medium text-primary-foreground text-sm shadow-xs transition-colors hover:bg-primary/90 disabled:opacity-50"
                 >
-                  {isCreating ? "Creating..." : "Create organization"}
+                  {isCreating ? "Creating..." : "Create workspace"}
                 </button>
               </div>
             </form>
