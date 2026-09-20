@@ -14,6 +14,12 @@ RUN bun install --frozen-lockfile
 # Build
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
+# Bust the COPY cache per commit. The Fractal operator always builds
+# --cache-from <name>:buildcache and injects GIT_SHA; importing that registry
+# cache can false-hit "COPY . ." so a new commit reuses a stale source layer and
+# ships old code. Consuming GIT_SHA before the copy forces a re-copy every commit
+ARG GIT_SHA=unknown
+RUN echo "source-cache-bust ${GIT_SHA}"
 COPY . .
 RUN bun run build
 
@@ -24,6 +30,10 @@ RUN bun run build
 FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+# Bake the built commit so the running commit is observable and a stale build is
+# detectable (compare BUILD_SHA against the expected commit)
+ARG GIT_SHA=unknown
+ENV BUILD_SHA=${GIT_SHA}
 
 # Nitro bundles production deps into .output/server/node_modules.
 COPY --from=builder /app/.output ./.output
