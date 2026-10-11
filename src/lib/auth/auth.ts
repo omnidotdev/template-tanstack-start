@@ -44,6 +44,15 @@ const auth = betterAuth({
   advanced: {
     // use custom cookie prefix to avoid collision with IDP cookies
     cookiePrefix: "TODO_REPLACE_ME",
+    // resolve the real client IP from Cloudflare's `cf-connecting-ip` header so
+    // Better Auth rate-limit buckets are keyed per client. without it, getIp
+    // sees a multi-hop `x-forwarded-for` behind Cloudflare, resolves to null,
+    // and collapses every request into one global shared bucket, which shares
+    // the per-IP browser limits (e.g. /sign-in at 3/10s) across all users and
+    // breaks sign-in under modest concurrency
+    ipAddress: {
+      ipAddressHeaders: ["cf-connecting-ip"],
+    },
   },
   plugins: [
     genericOAuth({
