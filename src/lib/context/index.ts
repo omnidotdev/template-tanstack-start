@@ -1,2 +1,2 @@
-export * from "./organization.context";
+export * from "./resource.context";
 export * from "./workspace.context";

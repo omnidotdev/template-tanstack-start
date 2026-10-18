@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 
-import { useOrganization, useWorkspace } from "@/lib/context";
+import { useResource, useWorkspace } from "@/lib/context";
 
 export const Route = createFileRoute("/_auth/@{$workspaceSlug}/")({
   component: WorkspaceHome,
@@ -13,10 +13,10 @@ export const Route = createFileRoute("/_auth/@{$workspaceSlug}/")({
  */
 function WorkspaceHome() {
   const { workspaceSlug } = Route.useParams();
-  const { organizations } = useOrganization();
   const { workspaces } = useWorkspace();
+  const { resources } = useResource();
 
-  const org = organizations.find((o) => o.slug === workspaceSlug);
+  const org = workspaces.find((o) => o.slug === workspaceSlug);
 
   if (!org) return null;
 
@@ -40,7 +40,7 @@ function WorkspaceHome() {
           <h2 className="mb-4 font-semibold text-lg">Resources</h2>
 
           <div className="space-y-2">
-            {workspaces.map((resource) => (
+            {resources.map((resource) => (
               <Link
                 key={resource.id}
                 to="/@{$workspaceSlug}/$resourceSlug"
@@ -54,7 +54,7 @@ function WorkspaceHome() {
               </Link>
             ))}
 
-            {workspaces.length === 0 && (
+            {resources.length === 0 && (
               <p className="text-muted-foreground text-sm">No resources yet.</p>
             )}
           </div>

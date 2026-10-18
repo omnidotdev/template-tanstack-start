@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { useWorkspace } from "@/lib/context";
+import { useResource } from "@/lib/context";
 
 export const Route = createFileRoute(
   "/_auth/@{$workspaceSlug}/$resourceSlug/~/settings",
@@ -15,9 +15,9 @@ export const Route = createFileRoute(
  */
 function ResourceSettingsPage() {
   const { resourceSlug } = Route.useParams();
-  const { workspaces } = useWorkspace();
+  const { resources } = useResource();
 
-  const resource = workspaces.find((w) => w.slug === resourceSlug);
+  const resource = resources.find((r) => r.slug === resourceSlug);
 
   if (!resource) return null;
 

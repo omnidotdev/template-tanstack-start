@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 
-import { useOrganization } from "@/lib/context";
+import { useWorkspace } from "@/lib/context";
 
 export const Route = createFileRoute("/_auth/@{$workspaceSlug}/~/billing")({
   component: WorkspaceBillingPage,
@@ -16,9 +16,9 @@ export const Route = createFileRoute("/_auth/@{$workspaceSlug}/~/billing")({
  */
 function WorkspaceBillingPage() {
   const { workspaceSlug } = Route.useParams();
-  const { organizations } = useOrganization();
+  const { workspaces } = useWorkspace();
 
-  const org = organizations.find((o) => o.slug === workspaceSlug);
+  const org = workspaces.find((o) => o.slug === workspaceSlug);
 
   if (!org) return null;
 

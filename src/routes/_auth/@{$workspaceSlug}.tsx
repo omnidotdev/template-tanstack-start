@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-import { useOrganization } from "@/lib/context";
+import { useWorkspace } from "@/lib/context";
 import { getOrganizationBySlug } from "@/server/functions/organizations";
 
-import type { Organization } from "@/lib/context";
+import type { Workspace } from "@/lib/context";
 
 export const Route = createFileRoute("/_auth/@{$workspaceSlug}")({
   beforeLoad: async ({ params }) => {
@@ -21,10 +21,9 @@ export const Route = createFileRoute("/_auth/@{$workspaceSlug}")({
  */
 function WorkspaceLayout() {
   const { workspaceSlug } = Route.useParams();
-  const { organizations, activeOrganization, setActiveOrganization } =
-    useOrganization();
+  const { workspaces, activeWorkspace, setActiveWorkspace } = useWorkspace();
 
-  const claimOrg = organizations.find((o) => o.slug === workspaceSlug);
+  const claimOrg = workspaces.find((o) => o.slug === workspaceSlug);
 
   // A just-created workspace is not yet in the JWT claims (the org list is
   // hydrated from a short-lived cache), so fall back to a live Gatekeeper lookup
@@ -35,7 +34,7 @@ function WorkspaceLayout() {
     enabled: !claimOrg,
   });
 
-  const org: Organization | undefined =
+  const org: Workspace | undefined =
     claimOrg ??
     (fallbackOrg
       ? {
@@ -48,10 +47,10 @@ function WorkspaceLayout() {
       : undefined);
 
   useEffect(() => {
-    if (claimOrg && activeOrganization?.id !== claimOrg.id) {
-      setActiveOrganization(claimOrg.id);
+    if (claimOrg && activeWorkspace?.id !== claimOrg.id) {
+      setActiveWorkspace(claimOrg.id);
     }
-  }, [claimOrg, activeOrganization?.id, setActiveOrganization]);
+  }, [claimOrg, activeWorkspace?.id, setActiveWorkspace]);
 
   if (!org && isResolvingFallback) return null;
 

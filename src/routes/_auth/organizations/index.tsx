@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 
-import CreateOrganizationButton from "@/components/organizations/CreateOrganizationButton";
-import { useOrganization } from "@/lib/context";
+import CreateWorkspaceButton from "@/components/workspaces/CreateWorkspaceButton";
+import { useWorkspace } from "@/lib/context";
 
 export const Route = createFileRoute("/_auth/organizations/")({
   component: OrganizationsPage,
@@ -12,18 +12,18 @@ export const Route = createFileRoute("/_auth/organizations/")({
  * Shows all organizations the user is a member of.
  */
 function OrganizationsPage() {
-  const { organizations } = useOrganization();
+  const { workspaces } = useWorkspace();
 
   return (
     <div className="container mx-auto py-8">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h1 className="font-bold text-2xl">Workspaces</h1>
 
-        {organizations.length > 0 && <CreateOrganizationButton />}
+        {workspaces.length > 0 && <CreateWorkspaceButton />}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {organizations.map((org) => (
+        {workspaces.map((org) => (
           <Link
             key={org.id}
             to="/@{$workspaceSlug}"
@@ -50,12 +50,12 @@ function OrganizationsPage() {
         ))}
       </div>
 
-      {organizations.length === 0 && (
+      {workspaces.length === 0 && (
         <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-16 text-center">
           <p className="text-muted-foreground text-sm">
             No workspaces yet. Create one to get started.
           </p>
-          <CreateOrganizationButton />
+          <CreateWorkspaceButton />
         </div>
       )}
     </div>

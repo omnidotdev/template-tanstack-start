@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 
-import { useOrganization, useWorkspace } from "@/lib/context";
+import { useResource, useWorkspace } from "@/lib/context";
 
 export const Route = createFileRoute("/_auth/@{$workspaceSlug}/$resourceSlug/")(
   {
@@ -14,10 +14,10 @@ export const Route = createFileRoute("/_auth/@{$workspaceSlug}/$resourceSlug/")(
  */
 function ResourceHome() {
   const { workspaceSlug, resourceSlug } = Route.useParams();
-  const { activeOrganization } = useOrganization();
-  const { workspaces } = useWorkspace();
+  const { activeWorkspace } = useWorkspace();
+  const { resources } = useResource();
 
-  const resource = workspaces.find((w) => w.slug === resourceSlug);
+  const resource = resources.find((r) => r.slug === resourceSlug);
 
   if (!resource) return null;
 
@@ -30,7 +30,7 @@ function ResourceHome() {
           params={{ workspaceSlug }}
           className="hover:text-foreground"
         >
-          {activeOrganization?.slug}
+          {activeWorkspace?.slug}
         </Link>
         <span className="mx-2">/</span>
         <span className="text-foreground">{resource.slug}</span>

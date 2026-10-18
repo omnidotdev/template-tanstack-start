@@ -38,7 +38,7 @@ interface Props {
  * immediately via the route's `getOrganizationBySlug` fallback while the JWT
  * claims catch up.
  */
-const CreateOrganizationButton = ({ children, className }: Props) => {
+const CreateWorkspaceButton = ({ children, className }: Props) => {
   const router = useRouter();
   const navigate = useNavigate();
 
@@ -216,4 +216,4 @@ const CreateOrganizationButton = ({ children, className }: Props) => {
   );
 };
 
-export default CreateOrganizationButton;
+export default CreateWorkspaceButton;
