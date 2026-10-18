@@ -12,7 +12,7 @@ export type { GatekeeperOrganization as Organization } from "@omnidotdev/provide
 // plans/2026-09-02-org-membership-central-hub-adr.md.
 
 const createOrganizationSchema = z.object({
-  name: z.string().min(3, "Organization name must be at least 3 characters"),
+  name: z.string().min(3, "Workspace name must be at least 3 characters"),
   slug: z.string().optional(),
 });
 
