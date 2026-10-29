@@ -12,6 +12,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { Toaster } from "sonner";
 
+import CommandPalette from "@/components/CommandPalette";
 import {
   DefaultCatchBoundary,
   Footer,
@@ -209,6 +210,8 @@ function RootDocument({ children }: PropsWithChildren) {
 
             <Footer />
           </div>
+
+          <CommandPalette />
 
           <Toaster position="top-center" richColors />
         </ThemeProvider>
