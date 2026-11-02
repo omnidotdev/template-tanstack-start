@@ -27,6 +27,7 @@ import "@/lib/styles/globals.css";
 import appCss from "@/lib/styles/globals.css?url";
 import createMetaTags from "@/lib/util/createMetaTags";
 import ThemeProvider from "@/providers/ThemeProvider";
+import { getPublicEnvServerFn } from "@/server/functions/env";
 import { getThemeServerFn } from "@/server/functions/theme";
 
 import type { QueryClient } from "@tanstack/react-query";
@@ -64,7 +65,7 @@ export const Route = createRootRouteWithContext<{
 
     return { auth: session };
   },
-  head: () => ({
+  head: ({ loaderData }) => ({
     meta: [
       {
         charSet: "utf-8",
@@ -141,6 +142,15 @@ export const Route = createRootRouteWithContext<{
       },
     ],
     scripts: [
+      // Public runtime config for the client. Emitted as an inline classic
+      // script in <head> so it runs before the deferred client module bundle,
+      // making window.__ENV__ available when env.config first evaluates. The
+      // `<` escape prevents a value from closing the script tag early.
+      {
+        children: `window.__ENV__=${JSON.stringify(
+          loaderData?.publicEnv ?? {},
+        ).replace(/</g, "\\u003c")}`,
+      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -153,7 +163,10 @@ export const Route = createRootRouteWithContext<{
       },
     ],
   }),
-  loader: () => getThemeServerFn(),
+  loader: async () => ({
+    theme: await getThemeServerFn(),
+    publicEnv: await getPublicEnvServerFn(),
+  }),
   errorComponent: DefaultCatchBoundary,
   // Render 404s in-shell: a thrown `notFound()` renders here inside RootDocument
   // (globals + layout), not as a bare unstyled page. Pairs with the router's
@@ -191,7 +204,7 @@ void ComingSoon;
  * Root document.
  */
 function RootDocument({ children }: PropsWithChildren) {
-  const theme = Route.useLoaderData();
+  const { theme } = Route.useLoaderData();
 
   return (
     <html suppressHydrationWarning lang="en" className={theme}>
