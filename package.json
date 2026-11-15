@@ -4,6 +4,7 @@
   "type": "module",
   "packageManager": "bun@1.3.6",
   "scripts": {
+    "release": "changeset publish",
     "dev": "concurrently --kill-others --names \"GRAPHQL-CODEGEN,CLIENT\" -c \"bgBlue.bold,bgMagenta.bold\" \"bun run graphql:generate:watch\" \"vite dev\"",
     "build": "vite build",
     "serve": "vite preview",
