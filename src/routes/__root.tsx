@@ -1,3 +1,4 @@
+import { usePageview } from "@omnidotdev/providers/analytics";
 import { useSessionRefresh } from "@omnidotdev/providers/react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -6,6 +7,7 @@ import {
   Outlet,
   Scripts,
   createRootRouteWithContext,
+  useLocation,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
@@ -19,6 +21,7 @@ import {
   Header,
   NotFound,
 } from "@/components/layout";
+import prismClient from "@/lib/analytics/prism";
 import auth from "@/lib/auth/auth";
 import app from "@/lib/config/app.config";
 import { isDevEnv } from "@/lib/config/env.config";
@@ -178,6 +181,10 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   // Keep the OAuth access token fresh while the user is idle
   useSessionRefresh(fetchSession);
+
+  // Emit a Prism pageview on every route change (no-ops when analytics is unset)
+  const pathname = useLocation({ select: (location) => location.pathname });
+  usePageview(prismClient, pathname);
 
   // Note: Production teaser is intentionally disabled for this app
   // To enable, uncomment the isDevEnv check below

@@ -37,6 +37,10 @@ export const {
   // event streaming
   VITE_VORTEX_API_URL: VORTEX_API_URL,
   VITE_VORTEX_API_KEY: VORTEX_API_KEY,
+  // analytics
+  VITE_PRISM_COLLECTOR_URL: PRISM_COLLECTOR_URL,
+  // public Prism collector key (`pk_...`), not a secret: it ships in client JS
+  VITE_PRISM_PRODUCT_KEY: PRISM_PRODUCT_KEY,
 } = env;
 
 export const API_GRAPHQL_URL = `${API_BASE_URL}/graphql`;
@@ -57,6 +61,10 @@ if (typeof window === "undefined") {
     console.warn("VORTEX_API_URL not set, event streaming disabled");
   if (!VORTEX_API_KEY)
     console.warn("VORTEX_API_KEY not set, event streaming disabled");
+  if (!PRISM_COLLECTOR_URL)
+    console.warn("PRISM_COLLECTOR_URL not set, analytics disabled");
+  if (!PRISM_PRODUCT_KEY)
+    console.warn("PRISM_PRODUCT_KEY not set, analytics disabled");
 }
 
 // environment helpers

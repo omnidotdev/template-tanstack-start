@@ -70,7 +70,7 @@
   "dependencies": {
     "@ark-ui/react": "^5.30.0",
     "@icons-pack/react-simple-icons": "^13.8.0",
-    "@omnidotdev/providers": "github:omnidotdev/providers#ce5e90e0d0c40458d23b20c62a16568291c8b8cf",
+    "@omnidotdev/providers": "github:omnidotdev/providers#372b925d2d1364c3538807f19e683b22ea72eaf7",
     "@omnidotdev/thornberry": "github:omnidotdev/thornberry#372ebb2",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/nitro-v2-vite-plugin": "^1.154.7",
